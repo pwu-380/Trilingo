@@ -48,22 +48,43 @@ Built as a local web app — runs on your computer and works in any browser, inc
 
 ## Running
 
-Start both servers (in separate terminals):
+From PowerShell in the project root:
 
-**Backend:**
+```powershell
+.\server-startup.ps1
+```
+
+This starts both the backend and frontend in new windows, generates a session password, and prints a clickable link:
+
+```
+  Trilingo is starting up!
+
+  Password:  grove-pearl-swift-ember
+
+  Local:     http://localhost:8732?token=grove-pearl-swift-ember
+  Phone:     http://192.168.1.42:8732?token=grove-pearl-swift-ember
+
+  Run .\server-shutdown.ps1 to stop.
+```
+
+Open the local link in your browser. Use the phone link to play on your phone over Wi-Fi.
+
+To stop everything:
+
+```powershell
+.\server-shutdown.ps1
+```
+
+### Manual startup (advanced)
+
+If you prefer to run the servers yourself:
+
 ```
 uvicorn backend.main:app --reload --port 8731
+cd frontend && npm run dev
 ```
 
-**Frontend:**
-```
-cd frontend
-npm run dev
-```
-
-Open http://localhost:8732 in your browser.
-
-To use it on your phone, start the backend with `--host 0.0.0.0` and visit your computer's local IP address from your phone's browser.
+Without `TRILINGO_TOKEN` set, auth is disabled.
 
 ## Status
 
