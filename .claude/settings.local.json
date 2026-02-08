@@ -1,7 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "WebSearch"
+      "WebSearch",
+      "Bash(export PATH=\"$VENV/Scripts:$VENV/bin:$PATH\")",
+      "Bash(bd view:*)",
+      "Bash(wc:*)",
+      "Bash(export PATH=\"$VENV/Scripts:$VENV:$PATH\")",
+      "Bash(bd show:*)",
+      "Bash(PYTHONIOENCODING=utf-8 python:*)",
+      "Bash(bd ready:*)",
+      "Bash(bd help:*)",
+      "Bash(bd list:*)",
+      "Bash(bd create:*)",
+      "Bash(bd types:*)",
+      "Bash(bd dep:*)"
     ]
   }
 }

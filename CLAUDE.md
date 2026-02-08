@@ -53,8 +53,12 @@ Each feature owns its own files across every layer. Do NOT modify files belongin
 - Do not work on tasks that are blocked by incomplete dependencies
 
 ## Do NOT
+- Modify state on the user's computer outside of this project folder (under no circumstances)
 - Embed AI SDK imports outside of `backend/providers/`
 - Modify another feature's files without explicit cross-feature task
 - Commit .env, venv/, node_modules/, or *.db files
 - Block the chatbot or UI with synchronous asset generation
 - Add features, refactoring, or "improvements" beyond the task scope
+
+## Session Completion
+See `AGENTS.md` for mandatory end-of-session workflow (including git push).
