@@ -10,18 +10,18 @@ $session = Get-Content $sessionFile | ConvertFrom-Json
 $killed = 0
 
 foreach ($entry in @(
-    @{ Name = "Backend";  PID = $session.backend_pid },
-    @{ Name = "Frontend"; PID = $session.frontend_pid }
+    @{ Name = "Backend";  ProcessId = $session.backend_pid },
+    @{ Name = "Frontend"; ProcessId = $session.frontend_pid }
 )) {
-    $pid = $entry.PID
-    if (-not $pid) { continue }
-    $proc = Get-Process -Id $pid -ErrorAction SilentlyContinue
+    $procId = $entry.ProcessId
+    if (-not $procId) { continue }
+    $proc = Get-Process -Id $procId -ErrorAction SilentlyContinue
     if ($proc) {
-        Stop-Process -Id $pid -Force
-        Write-Host "Stopped $($entry.Name) ($($proc.ProcessName), PID $pid)"
+        Stop-Process -Id $procId -Force
+        Write-Host "Stopped $($entry.Name) ($($proc.ProcessName), PID $procId)"
         $killed++
     } else {
-        Write-Host "$($entry.Name) (PID $pid) was already stopped" -ForegroundColor DarkGray
+        Write-Host "$($entry.Name) (PID $procId) was already stopped" -ForegroundColor DarkGray
     }
 }
 
