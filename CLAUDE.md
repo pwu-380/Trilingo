@@ -3,10 +3,11 @@
 ## Quick Start
 1. Read this file
 2. Read `PLAN.md` for architecture context
-3. Run `bd ready` to see available tasks
-4. Claim a task with `bd update <id> --claim`
-5. Do the work
-6. Mark complete with `bd update <id> --status closed`
+3. Read the detailed sub-phase plan for the current phase (`.claude/PHASE1.md`, etc.)
+4. Run `bd ready` to see available tasks
+5. Claim a task with `bd update <id> --claim`
+6. Do the work
+7. Mark complete with `bd update <id> --status closed`
 
 ## Project Overview
 Personal Mandarin Chinese learning app. Three tabs: Chatbot, Flash Cards, Games.
