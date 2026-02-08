@@ -16,6 +16,7 @@ backend/assets/images/
 
 # Environment
 .env
+.trilingo.session
 
 # IDE
 .idea/
