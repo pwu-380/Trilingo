@@ -52,7 +52,7 @@ Start both servers (in separate terminals):
 
 **Backend:**
 ```
-uvicorn backend.main:app --reload
+uvicorn backend.main:app --reload --port 8731
 ```
 
 **Frontend:**
@@ -61,7 +61,7 @@ cd frontend
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser.
+Open http://localhost:8732 in your browser.
 
 To use it on your phone, start the backend with `--host 0.0.0.0` and visit your computer's local IP address from your phone's browser.
 

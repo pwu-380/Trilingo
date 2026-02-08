@@ -23,9 +23,9 @@ cd "D:/Documents/2026-01 to 12/Trilingo" && VENV="$(pwd)/venv" && export PATH="$
 ```
 
 ### Running the App
-- Backend: `uvicorn backend.main:app --reload` (from project root, with venv on PATH)
+- Backend: `uvicorn backend.main:app --reload --port 8731` (from project root, with venv on PATH)
 - Frontend: `cd frontend && npm run dev` (with venv on PATH)
-- Backend serves API on :8000, frontend on :5173 with proxy to backend
+- Backend serves API on :8731, frontend on :8732 with proxy to backend
 
 ## Conventions
 - Python: snake_case, type hints, async where possible
