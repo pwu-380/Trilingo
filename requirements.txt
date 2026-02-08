@@ -1,0 +1,9 @@
+fastapi>=0.115
+uvicorn[standard]>=0.34
+aiosqlite>=0.20
+pypinyin>=0.53
+jieba>=0.42
+httpx>=0.28
+google-genai>=1.0
+python-dotenv>=1.0
+pydantic>=2.10
