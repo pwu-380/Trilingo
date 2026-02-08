@@ -64,4 +64,4 @@ Each feature owns its own files across every layer. Do NOT modify files belongin
 After every commit, review `README.md` and update it if any user-facing behaviour changed (new features, changed commands, new setup steps, etc.). The README is written for end users, not developers.
 
 ## Session Completion
-See `AGENTS.md` for mandatory end-of-session workflow (including git push).
+See `.claude/AGENTS.md` for mandatory end-of-session workflow (including git push).

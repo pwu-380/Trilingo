@@ -164,7 +164,7 @@ CREATE TABLE flashcard_attempts (
 
 **Goal**: A fully bootstrapped, self-contained project folder with tooling, conventions, and a seeded backlog. Any agent can start a new session, read `CLAUDE.md`, and immediately know what to work on.
 
-**Detailed subplan**: See `PHASE0.md`
+**Detailed subplan**: See `.claude/PHASE0.md`
 
 **Acceptance criteria**:
 - `git init` done, `.gitignore` in place
