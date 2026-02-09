@@ -1,0 +1,14 @@
+.chinese-text {
+  font-size: 1.1em;
+  line-height: 2;
+}
+
+.chinese-text ruby {
+  ruby-position: over;
+}
+
+.chinese-text rt {
+  font-size: 0.55em;
+  color: var(--pinyin-color, #888);
+  font-weight: 400;
+}

@@ -1,0 +1,24 @@
+.feedback-panel {
+  margin-top: 6px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent-color, #646cff);
+  background: var(--feedback-bg, #1e1e2e);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.85em;
+  color: var(--feedback-fg, #aaa);
+}
+
+.feedback-panel .feedback-label {
+  font-weight: 600;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-color, #646cff);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.feedback-panel p {
+  margin: 0;
+  line-height: 1.5;
+}

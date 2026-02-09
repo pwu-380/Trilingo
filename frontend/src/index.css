@@ -1,11 +1,43 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Colors */
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --text-primary: #eee;
+  --text-secondary: #aaa;
+  --accent-color: #646cff;
+  --border-color: #333;
+  --pinyin-color: #8888cc;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Sidebar */
+  --sidebar-bg: #12122a;
+  --sidebar-hover: #1e1e3a;
+  --sidebar-active: #2a2a4a;
+
+  /* Bubbles */
+  --user-bubble-bg: #2a3a5c;
+  --user-bubble-fg: #dde;
+  --assistant-bubble-bg: #252538;
+  --assistant-bubble-fg: #ddd;
+
+  /* Input */
+  --input-bg: #12122a;
+  --input-field-bg: #1a1a2e;
+
+  /* Spoiler */
+  --spoiler-bg: #2a2a3a;
+  --spoiler-fg: #777;
+  --spoiler-bg-hover: #333348;
+  --spoiler-revealed-bg: #1e1e30;
+  --spoiler-revealed-fg: #bbc;
+
+  /* Feedback */
+  --feedback-bg: #1a1a30;
+  --feedback-fg: #99a;
+
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +45,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+#root {
+  height: 100vh;
 }

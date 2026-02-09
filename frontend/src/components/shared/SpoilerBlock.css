@@ -1,0 +1,27 @@
+.spoiler-block {
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 4px;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+}
+
+.spoiler-block:not(.revealed) {
+  background-color: var(--spoiler-bg, #333);
+  color: var(--spoiler-fg, #888);
+}
+
+.spoiler-block:not(.revealed):hover {
+  background-color: var(--spoiler-bg-hover, #444);
+}
+
+.spoiler-label {
+  font-style: italic;
+  user-select: none;
+}
+
+.spoiler-block.revealed {
+  background-color: var(--spoiler-revealed-bg, #2a2a3a);
+  color: var(--spoiler-revealed-fg, #ccc);
+}

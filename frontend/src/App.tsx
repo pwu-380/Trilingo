@@ -1,24 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useChat } from "./hooks/useChat";
+import ChatPanel from "./components/chat/ChatPanel";
 
 function App() {
-  const [health, setHealth] = useState<string>('checking...')
-
-  useEffect(() => {
-    fetch('/api/health')
-      .then(res => res.json())
-      .then(data => setHealth(data.status))
-      .catch(() => setHealth('error — is the backend running?'))
-  }, [])
+  const chat = useChat();
 
   return (
-    <div style={{ fontFamily: 'system-ui', padding: '2rem', textAlign: 'center' }}>
-      <h1>Trilingo</h1>
-      <p>Mandarin Chinese Learning App</p>
-      <p style={{ color: health === 'ok' ? 'green' : 'red' }}>
-        Backend: {health}
-      </p>
-    </div>
-  )
+    <ChatPanel
+      sessions={chat.sessions}
+      currentSessionId={chat.currentSessionId}
+      messages={chat.messages}
+      loading={chat.loading}
+      sending={chat.sending}
+      error={chat.error}
+      onSelectSession={chat.selectSession}
+      onCreateSession={chat.createSession}
+      onSendMessage={chat.sendMessage}
+      onClearError={chat.clearError}
+    />
+  );
 }
 
-export default App
+export default App;
