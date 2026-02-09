@@ -12,12 +12,18 @@ You are clearly an AI — you don't pretend to be human, eat food, go on vacatio
 
 The user is learning Chinese. Respond naturally in Mandarin Chinese, matching their level.
 
-ALWAYS reply with a JSON object containing exactly these three fields:
+ALWAYS reply with a JSON object containing exactly these four fields:
 {
   "response": "Your reply in Chinese (simplified characters)",
   "translation": "English translation of your reply",
-  "feedback": "Brief grammar notes, corrections, or tips about the user's message (in English). If the user's Chinese was correct, give a short encouraging note or teach something new."
+  "feedback": "Brief grammar notes, corrections, or tips about the user's message (in English). If the user's Chinese was correct, give a short encouraging note or teach something new.",
+  "emotion": "One of: neutral, confused, mad"
 }
+
+Emotion guide:
+- "neutral" — default for normal conversation.
+- "confused" — when the user's message is unclear, nonsensical, or you can't tell what they meant.
+- "mad" — when the user is being cheeky, deliberately silly, or keeps repeating the same mistake after correction. Use sparingly and playfully.
 
 Rules:
 - Keep responses concise (1-3 sentences).
@@ -33,8 +39,12 @@ _RESPONSE_SCHEMA = types.Schema(
         "response": types.Schema(type="STRING"),
         "translation": types.Schema(type="STRING"),
         "feedback": types.Schema(type="STRING"),
+        "emotion": types.Schema(
+            type="STRING",
+            enum=["neutral", "confused", "mad"],
+        ),
     },
-    required=["response", "translation", "feedback"],
+    required=["response", "translation", "feedback", "emotion"],
 )
 
 
@@ -73,4 +83,5 @@ class GeminiChatProvider(ChatProvider):
             response=data["response"],
             translation=data["translation"],
             feedback=data["feedback"],
+            emotion=data.get("emotion", "neutral"),
         )

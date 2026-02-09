@@ -7,6 +7,7 @@ class ChatResponse(BaseModel):
     response: str
     translation: str
     feedback: str
+    emotion: str = "neutral"
 
 
 class ChatProvider(ABC):

@@ -59,24 +59,28 @@ Wire up Gemini and build the complete chat backend. Testable via curl.
 
 Build the browser chat interface with shared components.
 
+**Available assets** (see `frontend/src/assets/MANIFEST.md`):
+- Al portrait icons for chat bubbles: neutral, confused, mad (mapped via `emotion` field on assistant messages)
+- Large Al profile pic for welcome/about screens
+
 **Files to create:**
 
 | File | Purpose |
 |------|---------|
-| `frontend/src/types/chat.ts` | TypeScript interfaces |
+| `frontend/src/types/chat.ts` | TypeScript interfaces (includes `emotion` field) |
 | `frontend/src/api/client.ts` | Shared fetch wrapper |
 | `frontend/src/api/chat.ts` | Chat API functions |
 | `frontend/src/hooks/useChat.ts` | Chat state management |
 | `frontend/src/components/shared/ChineseText.tsx` | `<ruby>` pinyin annotations |
 | `frontend/src/components/shared/SpoilerBlock.tsx` | Click-to-reveal translation |
 | `frontend/src/components/chat/ChatPanel.tsx` | Main layout |
-| `frontend/src/components/chat/MessageBubble.tsx` | Message display |
+| `frontend/src/components/chat/MessageBubble.tsx` | Message display (shows Al icon matching `emotion`) |
 | `frontend/src/components/chat/FeedbackPanel.tsx` | Grammar notes |
 | `frontend/src/components/chat/ChatInput.tsx` | Text input |
 
 **Files to modify:** `App.tsx`, `index.css`, `App.css`
 
-**Test:** Open browser → create session → send Chinese → see pinyin above characters → click spoiler for translation → feedback visible → refresh preserves state.
+**Test:** Open browser → create session → send Chinese → see pinyin above characters → click spoiler for translation → feedback visible → Al icon matches emotion → refresh preserves state.
 
 **Gate:** `P1-gate-C` — User does full browser walkthrough.
 

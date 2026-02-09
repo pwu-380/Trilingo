@@ -47,7 +47,7 @@ async def get_session(session_id: int) -> ChatSessionDetail | None:
             return None
         r = rows[0]
         msg_rows = await db.execute_fetchall(
-            "SELECT id, session_id, role, content, pinyin, translation, feedback, created_at "
+            "SELECT id, session_id, role, content, pinyin, translation, feedback, emotion, created_at "
             "FROM chat_messages WHERE session_id = ? ORDER BY id",
             (session_id,),
         )
@@ -100,14 +100,15 @@ async def send_message(
 
         # Save assistant message
         cursor = await db.execute(
-            "INSERT INTO chat_messages (session_id, role, content, pinyin, translation, feedback) "
-            "VALUES (?, 'assistant', ?, ?, ?, ?)",
+            "INSERT INTO chat_messages (session_id, role, content, pinyin, translation, feedback, emotion) "
+            "VALUES (?, 'assistant', ?, ?, ?, ?, ?)",
             (
                 session_id,
                 ai_response.response,
                 pinyin_json,
                 ai_response.translation,
                 ai_response.feedback,
+                ai_response.emotion,
             ),
         )
         await db.commit()
@@ -130,12 +131,12 @@ async def send_message(
 
         # Fetch the saved rows to return
         user_row = await db.execute_fetchall(
-            "SELECT id, session_id, role, content, pinyin, translation, feedback, created_at "
+            "SELECT id, session_id, role, content, pinyin, translation, feedback, emotion, created_at "
             "FROM chat_messages WHERE id = ?",
             (user_msg_id,),
         )
         assistant_row = await db.execute_fetchall(
-            "SELECT id, session_id, role, content, pinyin, translation, feedback, created_at "
+            "SELECT id, session_id, role, content, pinyin, translation, feedback, emotion, created_at "
             "FROM chat_messages WHERE id = ?",
             (assistant_msg_id,),
         )
@@ -154,5 +155,6 @@ def _row_to_message(row) -> ChatMessageResponse:
         pinyin=pinyin_data,
         translation=row[5],
         feedback=row[6],
-        created_at=row[7],
+        emotion=row[7],
+        created_at=row[8],
     )

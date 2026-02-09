@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     pinyin      TEXT,
     translation TEXT,
     feedback    TEXT,
+    emotion     TEXT DEFAULT 'neutral',
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 """

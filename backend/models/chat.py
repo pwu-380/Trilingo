@@ -22,6 +22,7 @@ class ChatMessageResponse(BaseModel):
     pinyin: list[PinyinPair] | None = None
     translation: str | None = None
     feedback: str | None = None
+    emotion: str | None = None
     created_at: str
 
 
