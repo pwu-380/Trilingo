@@ -8,6 +8,6 @@ load_dotenv(_project_root / ".env")
 
 GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
 CHAT_PROVIDER: str = os.getenv("CHAT_PROVIDER", "gemini")
-CHAT_MODEL: str = os.getenv("CHAT_MODEL", "gemini-2.0-flash-lite")
+CHAT_MODEL: str = os.getenv("CHAT_MODEL", "gemini-2.5-flash")
 TRILINGO_TOKEN: str = os.getenv("TRILINGO_TOKEN", "")
 DB_PATH: str = os.getenv("DB_PATH", str(_project_root / "trilingo.db"))

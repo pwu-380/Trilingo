@@ -1,14 +1,17 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Query, Request
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import APIKeyHeader
 from starlette.responses import JSONResponse
 
-from backend.chinese.pinyin import annotate_pinyin
 from backend.config import TRILINGO_TOKEN
 from backend.database import init_db
+from backend.routers import chat
 
-PUBLIC_PATHS = {"/api/health"}
+PUBLIC_PATHS = {"/api/health", "/docs", "/openapi.json", "/redoc"}
+
+_token_scheme = APIKeyHeader(name="x-trilingo-token", auto_error=False)
 
 
 @asynccontextmanager
@@ -17,7 +20,12 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Trilingo", lifespan=lifespan)
+app = FastAPI(
+    title="Trilingo",
+    lifespan=lifespan,
+    swagger_ui_init_oauth={},
+    swagger_ui_parameters={"persistAuthorization": True},
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,12 +50,9 @@ async def check_token(request: Request, call_next):
     return await call_next(request)
 
 
+app.include_router(chat.router)
+
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
-
-
-@app.get("/api/debug/pinyin")
-async def debug_pinyin(text: str = Query(...)):
-    pairs = annotate_pinyin(text)
-    return {"pairs": [{"char": c, "pinyin": p} for c, p in pairs]}

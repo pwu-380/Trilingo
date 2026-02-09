@@ -6,7 +6,7 @@ Built as a local web app — runs on your computer and works in any browser, inc
 
 ## What It Does
 
-**Chatbot** — Have a conversation in Chinese with an AI tutor (powered by Google Gemini). Chinese responses show pinyin above each character. English translations are hidden behind a spoiler you can reveal when needed. After each exchange, you get grammar feedback and tips on your Chinese.
+**Chatbot** — Have a conversation in Chinese with Al, your AI tutor (powered by Google Gemini). Chinese responses show pinyin above each character. English translations are hidden behind a spoiler you can reveal when needed. After each exchange, you get grammar feedback and tips on your Chinese.
 
 **Flash Cards** — Build a deck of Chinese vocabulary. Quiz yourself with multiple-choice in both directions (Chinese-to-English and English-to-Chinese). Cards you've learned can be deactivated and brought back later.
 
