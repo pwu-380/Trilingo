@@ -9,6 +9,12 @@
 | `Al-profile-icon-small-confused.png` | Chat message avatar (confused emotion) | Small icon |
 | `Al-profile-icon-small-mad.png` | Chat message avatar (mad emotion) | Small icon |
 
+## Placeholders
+
+| File | Usage | Size |
+|------|-------|------|
+| `Al-under-construction.jpg` | Placeholder for unbuilt features (Flash Cards tab, Games tab, etc.) | Large |
+
 ### Emotion Mapping
 
 The chat API returns an `emotion` field on assistant messages: `"neutral"`, `"confused"`, or `"mad"`.

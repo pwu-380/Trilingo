@@ -97,6 +97,8 @@ Add tab navigation and polish the experience. Completes Phase 1.
 | `frontend/src/components/shared/TabShell.tsx` | Create — Tab bar with Chat active, others disabled |
 | `frontend/src/App.tsx` | Modify — Wrap in TabShell |
 
+**Available asset:** `Al-under-construction.jpg` — use as placeholder content for disabled Flash Cards and Games tabs.
+
 **Polish:** Loading spinner, error states, empty/welcome state, auto-title sessions, backend error responses (404, 400).
 
 **Test (Phase 1 acceptance criteria):**
