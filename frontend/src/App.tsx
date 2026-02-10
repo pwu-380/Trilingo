@@ -14,6 +14,7 @@ function App() {
       error={chat.error}
       onSelectSession={chat.selectSession}
       onCreateSession={chat.createSession}
+      onDeleteSession={chat.deleteSession}
       onSendMessage={chat.sendMessage}
       onClearError={chat.clearError}
     />

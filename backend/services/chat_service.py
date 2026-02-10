@@ -37,6 +37,23 @@ async def list_sessions() -> list[ChatSessionResponse]:
         ]
 
 
+async def delete_session(session_id: int) -> bool:
+    async with get_db() as db:
+        rows = await db.execute_fetchall(
+            "SELECT id FROM chat_sessions WHERE id = ?", (session_id,)
+        )
+        if not rows:
+            return False
+        await db.execute(
+            "DELETE FROM chat_messages WHERE session_id = ?", (session_id,)
+        )
+        await db.execute(
+            "DELETE FROM chat_sessions WHERE id = ?", (session_id,)
+        )
+        await db.commit()
+        return True
+
+
 async def get_session(session_id: int) -> ChatSessionDetail | None:
     async with get_db() as db:
         rows = await db.execute_fetchall(

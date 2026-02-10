@@ -1,6 +1,6 @@
 # Frontend Assets
 
-## Al (AI Tutor) Portraits
+## Alister (AI Tutor) Portraits
 
 | File | Usage | Size |
 |------|-------|------|

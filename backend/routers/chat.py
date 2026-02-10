@@ -36,6 +36,13 @@ async def get_session(session_id: int):
     return session
 
 
+@router.delete("/sessions/{session_id}", status_code=204)
+async def delete_session(session_id: int):
+    deleted = await chat_service.delete_session(session_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+
 @router.post("/sessions/{session_id}/messages")
 async def send_message(session_id: int, body: ChatMessageCreate):
     result = await chat_service.send_message(session_id, body.content)

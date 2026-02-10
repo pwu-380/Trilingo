@@ -54,18 +54,57 @@ export function useChat() {
     }
   }, []);
 
+  // Delete a session
+  const deleteSession = useCallback(
+    async (id: number) => {
+      setError(null);
+      try {
+        await chatApi.deleteSession(id);
+        setSessions((prev) => prev.filter((s) => s.id !== id));
+        if (currentSessionId === id) {
+          setCurrentSessionId(null);
+          setMessages([]);
+        }
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to delete session");
+      }
+    },
+    [currentSessionId]
+  );
+
   // Send a message
   const sendMessage = useCallback(
     async (content: string) => {
       if (!currentSessionId || sending) return;
       setSending(true);
       setError(null);
+
+      // Optimistically show the user message immediately
+      const optimistic: ChatMessage = {
+        id: -Date.now(),
+        session_id: currentSessionId,
+        role: "user",
+        content,
+        pinyin: null,
+        translation: null,
+        feedback: null,
+        emotion: null,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, optimistic]);
+
       try {
         const res = await chatApi.sendMessage(currentSessionId, content);
-        setMessages((prev) => [...prev, res.user_message, res.assistant_message]);
-        // Refresh session list to pick up auto-title
+        // Replace optimistic message with real one, append assistant reply
+        setMessages((prev) => [
+          ...prev.filter((m) => m.id !== optimistic.id),
+          res.user_message,
+          res.assistant_message,
+        ]);
         refreshSessions();
       } catch (e) {
+        // Remove optimistic message on error
+        setMessages((prev) => prev.filter((m) => m.id !== optimistic.id));
         setError(e instanceof Error ? e.message : "Failed to send message");
       } finally {
         setSending(false);
@@ -83,6 +122,7 @@ export function useChat() {
     error,
     selectSession,
     createSession,
+    deleteSession,
     sendMessage,
     clearError: () => setError(null),
   };

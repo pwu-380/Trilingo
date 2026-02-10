@@ -26,7 +26,7 @@ export default function MessageBubble({ message }: Props) {
         <img
           className="al-avatar"
           src={AL_ICONS[message.emotion ?? "neutral"]}
-          alt="Al"
+          alt="Alister"
         />
       )}
       <div className="message-content">

@@ -17,6 +17,10 @@ export function getSession(id: number): Promise<ChatSessionDetail> {
   return apiFetch(`/api/chat/sessions/${id}`);
 }
 
+export async function deleteSession(id: number): Promise<void> {
+  await apiFetch(`/api/chat/sessions/${id}`, { method: "DELETE" });
+}
+
 export function sendMessage(
   sessionId: number,
   content: string

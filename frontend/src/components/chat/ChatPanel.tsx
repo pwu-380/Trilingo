@@ -14,6 +14,7 @@ interface Props {
   error: string | null;
   onSelectSession: (id: number) => void;
   onCreateSession: () => void;
+  onDeleteSession: (id: number) => void;
   onSendMessage: (content: string) => void;
   onClearError: () => void;
 }
@@ -27,6 +28,7 @@ export default function ChatPanel({
   error,
   onSelectSession,
   onCreateSession,
+  onDeleteSession,
   onSendMessage,
   onClearError,
 }: Props) {
@@ -44,13 +46,23 @@ export default function ChatPanel({
         </button>
         <div className="session-list">
           {sessions.map((s) => (
-            <button
+            <div
               key={s.id}
               className={`session-item ${s.id === currentSessionId ? "active" : ""}`}
               onClick={() => onSelectSession(s.id)}
             >
-              {s.title || "New conversation"}
-            </button>
+              <span className="session-title">{s.title || "New conversation"}</span>
+              <button
+                className="session-delete"
+                title="Delete chat"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteSession(s.id);
+                }}
+              >
+                &times;
+              </button>
+            </div>
           ))}
         </div>
       </aside>
@@ -64,8 +76,8 @@ export default function ChatPanel({
 
         {!currentSessionId ? (
           <div className="chat-welcome">
-            <img src={AlProfilePic} alt="Al" className="welcome-avatar" />
-            <h2>Meet Al</h2>
+            <img src={AlProfilePic} alt="Alister" className="welcome-avatar" />
+            <h2>Meet Alister</h2>
             <p>Your AI Mandarin tutor. Start a new chat to begin practicing.</p>
             <button className="welcome-start-btn" onClick={onCreateSession}>
               Start Chatting
@@ -80,7 +92,7 @@ export default function ChatPanel({
                 <MessageBubble key={m.id} message={m} />
               ))}
               {sending && (
-                <div className="typing-indicator">Al is typing...</div>
+                <div className="typing-indicator">Alister is typing...</div>
               )}
               <div ref={messagesEndRef} />
             </div>
