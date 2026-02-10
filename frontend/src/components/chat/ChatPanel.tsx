@@ -92,7 +92,7 @@ export default function ChatPanel({
                 <MessageBubble key={m.id} message={m} />
               ))}
               {sending && (
-                <div className="typing-indicator">Alister is typing...</div>
+                <div className="typing-indicator">Alister is typing</div>
               )}
               <div ref={messagesEndRef} />
             </div>
