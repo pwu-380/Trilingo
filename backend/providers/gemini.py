@@ -86,3 +86,11 @@ class GeminiChatProvider(ChatProvider):
             feedback=data["feedback"],
             emotion=data.get("emotion", "neutral"),
         )
+
+    async def generate_text(self, prompt: str) -> str:
+        resp = await self._client.aio.models.generate_content(
+            model=CHAT_MODEL,
+            contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+            config=types.GenerateContentConfig(temperature=0.5),
+        )
+        return resp.text.strip()

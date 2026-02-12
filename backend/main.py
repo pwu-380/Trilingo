@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 
 from backend.config import TRILINGO_TOKEN
 from backend.database import init_db
-from backend.routers import chat
+from backend.routers import chat, flashcards
 
 PUBLIC_PATHS = {"/api/health", "/docs", "/openapi.json", "/redoc"}
 
@@ -51,6 +51,7 @@ async def check_token(request: Request, call_next):
 
 
 app.include_router(chat.router)
+app.include_router(flashcards.router)
 
 
 @app.get("/api/health")

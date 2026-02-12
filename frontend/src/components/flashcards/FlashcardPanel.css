@@ -1,0 +1,151 @@
+.fc-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.fc-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.fc-header h2 {
+  margin: 0;
+  font-size: 1.4em;
+}
+
+.fc-count {
+  color: var(--text-secondary, #aaa);
+  font-size: 0.9em;
+}
+
+.fc-error {
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  background: #5c2a2a;
+  color: #faa;
+  font-size: 0.9em;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fc-add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.fc-add-form input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: var(--input-field-bg, #1a1a2e);
+  color: var(--text-primary, #eee);
+  font-size: 0.95em;
+  font-family: inherit;
+}
+
+.fc-add-form input::placeholder {
+  color: var(--text-secondary, #666);
+}
+
+.fc-add-form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-color, #646cff);
+  color: #fff;
+  font-size: 0.95em;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fc-add-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fc-loading {
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+  padding: 24px;
+}
+
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.fc-card {
+  position: relative;
+  padding: 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 10px;
+  background: var(--assistant-bubble-bg, #252538);
+}
+
+.fc-card-delete {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  font-size: 1.2em;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.fc-card:hover .fc-card-delete {
+  opacity: 1;
+}
+
+.fc-card-delete:hover {
+  background: #5c2a2a;
+  color: #faa;
+}
+
+.fc-card-chinese {
+  font-size: 1.5em;
+  margin-bottom: 4px;
+}
+
+.fc-card-pinyin {
+  color: var(--pinyin-color, #8888cc);
+  font-size: 0.9em;
+  margin-bottom: 8px;
+}
+
+.fc-card-english {
+  color: var(--text-primary, #eee);
+  font-size: 1em;
+}
+
+.fc-card-notes {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, #333);
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+.fc-empty {
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+  padding: 48px 24px;
+  font-size: 1.1em;
+}

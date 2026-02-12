@@ -6,15 +6,16 @@ type Tab = "chat" | "flashcards" | "games";
 
 const TABS: { id: Tab; label: string; enabled: boolean }[] = [
   { id: "chat", label: "Chat", enabled: true },
-  { id: "flashcards", label: "Flash Cards", enabled: false },
+  { id: "flashcards", label: "Flash Cards", enabled: true },
   { id: "games", label: "Games", enabled: false },
 ];
 
 interface Props {
   children: React.ReactNode;
+  flashcardsContent?: React.ReactNode;
 }
 
-export default function TabShell({ children }: Props) {
+export default function TabShell({ children, flashcardsContent }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
 
   return (
@@ -33,7 +34,8 @@ export default function TabShell({ children }: Props) {
       </nav>
       <div className="tab-content">
         {activeTab === "chat" && children}
-        {activeTab !== "chat" && (
+        {activeTab === "flashcards" && flashcardsContent}
+        {activeTab === "games" && (
           <div className="tab-placeholder">
             <img src={UnderConstruction} alt="Under construction" />
             <p>Coming soon!</p>

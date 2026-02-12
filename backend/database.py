@@ -22,6 +22,27 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     emotion     TEXT DEFAULT 'neutral',
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS flashcards (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    chinese     TEXT NOT NULL,
+    pinyin      TEXT NOT NULL,
+    english     TEXT NOT NULL,
+    notes       TEXT,
+    audio_path  TEXT,
+    image_path  TEXT,
+    active      INTEGER NOT NULL DEFAULT 1,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now')),
+    source      TEXT DEFAULT 'manual'
+);
+
+CREATE TABLE IF NOT EXISTS flashcard_attempts (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id      INTEGER NOT NULL REFERENCES flashcards(id),
+    correct      INTEGER NOT NULL CHECK(correct IN (0, 1)),
+    quiz_type    TEXT NOT NULL CHECK(quiz_type IN ('en_to_zh', 'zh_to_en')),
+    attempted_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
 """
 
 
