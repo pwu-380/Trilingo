@@ -8,7 +8,7 @@ Built as a local web app — runs on your computer and works in any browser, inc
 
 **Chatbot** — Have a conversation in Chinese with Alister, your AI tutor (powered by Google Gemini). Chinese responses show pinyin above each character. English translations are hidden behind a spoiler you can reveal when needed. After each exchange, you get grammar feedback and tips on your Chinese.
 
-**Flash Cards** — Build a deck of Chinese vocabulary. Quiz yourself with multiple-choice in both directions (Chinese-to-English and English-to-Chinese). Cards you've learned can be deactivated and brought back later.
+**Flash Cards** — Build and review Chinese vocabulary. Comes pre-loaded with 30 HSK Level 2 words. Review in sessions of 10, 20, or endless cards — the quiz weights questions toward words you've gotten wrong more often. Cards you know can be shelved to the inactive pool and brought back later.
 
 **Games** — Duolingo-style language games using your flash card vocabulary. *(Coming soon)*
 
@@ -88,4 +88,4 @@ Without `TRILINGO_TOKEN` set, auth is disabled.
 
 ## Status
 
-This project is under active development. The chatbot is being built first, followed by flash cards, then games.
+The chatbot and flash cards are functional. Games tab coming next.
