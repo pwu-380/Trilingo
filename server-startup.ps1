@@ -34,9 +34,9 @@ $words = @(
 $token = ($words | Get-Random -Count 4) -join "-"
 $env:TRILINGO_TOKEN = $token
 
-# Start backend (new console window)
-$backend = Start-Process -PassThru -FilePath "python.exe" `
-    -ArgumentList "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8731" `
+# Start backend (new console window, passing token via env)
+$backend = Start-Process -PassThru -FilePath "cmd.exe" `
+    -ArgumentList "/c", "set TRILINGO_TOKEN=$token && python -m uvicorn backend.main:app --reload --port 8731" `
     -WorkingDirectory $projectRoot
 
 # Start frontend (new console window)
