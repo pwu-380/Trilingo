@@ -85,7 +85,8 @@ export function useFlashcards() {
     try {
       // For non-endless, exclude already-seen cards to avoid repeats
       const excludeIds = session.mode !== "endless" ? session.seenIds : undefined;
-      const question = await flashcardsApi.getQuiz(undefined, excludeIds);
+      const lastType = session.currentQuestion?.quiz_type;
+      const question = await flashcardsApi.getQuiz(undefined, excludeIds, lastType);
       setReview({ ...session, currentQuestion: question, lastResult: null });
     } catch {
       // No more cards — session finished

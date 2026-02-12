@@ -13,7 +13,24 @@
       "Bash(bd list:*)",
       "Bash(bd create:*)",
       "Bash(bd types:*)",
-      "Bash(bd dep:*)"
+      "Bash(bd dep:*)",
+      "Bash(cd D:Documents2026-01 to 12Trilingo)",
+      "Bash(bd close:*)",
+      "Bash(bd update:*)",
+      "Bash(git status:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nPhase 1A: Backend foundation — config, database, pinyin, provider abstraction\n\n- config.py: loads .env, exposes GEMINI_API_KEY, CHAT_PROVIDER, CHAT_MODEL, DB_PATH\n- database.py: init_db\\(\\) creates chat tables, get_db\\(\\) async context manager\n- chinese/pinyin.py: annotate_pinyin\\(\\) and pinyin_for_text\\(\\) via pypinyin\n- providers/base.py: abstract ChatProvider + ChatResponse model\n- providers/registry.py: get_chat_provider\\(\\) factory\n- models/chat.py: Pydantic request/response models for chat API\n- main.py: lifespan hook for DB init, temp /api/debug/pinyin endpoint\n- kill-servers.ps1: PowerShell utility to kill dev servers on ports 8000-8009\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nUpdate README for startup/shutdown scripts; add README update rule\n\nREADME now documents server-startup.ps1/server-shutdown.ps1 workflow\nwith session tokens. CLAUDE.md gains a rule requiring README updates\nafter commits that change user-facing behaviour.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(git mv:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nMove agent-only docs into .claude/\n\nAGENTS.md, PHASE0.md, PHASE1.md → .claude/\nUpdated references in CLAUDE.md and PLAN.md.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(curl:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdjust Alister tone to friendly high school tutor\n\nDial back from university TA to something more approachable.\nStill straightforward and not gushy, but warmer and simpler.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "WebFetch(domain:docs.openverse.org)",
+      "WebFetch(domain:api.openverse.org)"
     ]
   }
 }
