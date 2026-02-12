@@ -27,6 +27,8 @@ foreach ($entry in @(
 }
 
 Remove-Item $sessionFile -Force
+$tokenFile = Join-Path $projectRoot ".trilingo.token"
+if (Test-Path $tokenFile) { Remove-Item $tokenFile -Force }
 Write-Host ""
 if ($killed -gt 0) {
     Write-Host "Trilingo shut down ($killed process(es) stopped)." -ForegroundColor Green
