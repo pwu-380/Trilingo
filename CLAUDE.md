@@ -2,9 +2,10 @@
 
 ## Quick Start
 1. Read this file
-2. Read `PLAN.md` for architecture context
-3. Read the detailed sub-phase plan for the current phase (`.claude/PHASE1.md`, etc.)
-4. Run `bd ready` to see available tasks
+2. Read `.claude/SESSION_CONTEXT.md` for context from the previous session
+3. Read `PLAN.md` for architecture context
+4. Read the detailed sub-phase plan for the current phase (`.claude/PHASE1.md`, etc.)
+5. Run `bd ready` to see available tasks
 5. Claim a task with `bd update <id> --claim`
 6. Do the work
 7. Mark complete with `bd update <id> --status closed`
@@ -64,5 +65,14 @@ Each feature owns its own files across every layer. Do NOT modify files belongin
 ## README
 After every commit, review `README.md` and update it if any user-facing behaviour changed (new features, changed commands, new setup steps, etc.). The README is written for end users, not developers.
 
-## Session Completion
-See `.claude/AGENTS.md` for mandatory end-of-session workflow (including git push).
+## Session Handoff
+When starting a new session, read `.claude/SESSION_CONTEXT.md` for context from the previous session.
+
+When the user indicates the session is ending, write/update `.claude/SESSION_CONTEXT.md` with:
+- What was done this session
+- What was tried and didn't work
+- Outstanding bugs or issues
+- What to do next
+- Any key decisions the user made
+
+Then follow the full end-of-session workflow in `.claude/AGENTS.md` (including git push).

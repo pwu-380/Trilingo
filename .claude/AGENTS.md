@@ -30,7 +30,7 @@ bd sync               # Sync with git
    ```
 5. **Clean up** - Clear stashes, prune remote branches
 6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
+7. **Hand off** - Write/update `.claude/SESSION_CONTEXT.md` with what was done, what didn't work, outstanding issues, and next steps. Commit and push it.
 
 **CRITICAL RULES:**
 - Work is NOT complete until `git push` succeeds
