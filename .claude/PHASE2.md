@@ -74,8 +74,19 @@ Following `chat.py` pattern:
 
 Mount in `backend/main.py` via `app.include_router(flashcards.router)`.
 
+### AI-Generated Notes
+On card creation, optionally call Gemini (same `gemini-2.5-flash` model) in the background to generate a brief usage note (e.g. "More casual than 您好; common in everyday greetings"). Card is returned immediately — the `notes` field populates async. Uses the existing provider abstraction via a simple prompt, no new provider needed.
+
+### Temporary Validation UI
+To validate 2A without waiting for the full 2B frontend, include a minimal Flash Cards tab:
+- Enable the tab in `TabShell.tsx`
+- Simple card grid showing chinese, pinyin, english, notes
+- "Add Card" form (chinese + english fields, pinyin auto-generated via pypinyin)
+- X button to delete cards
+- No quiz UI yet — just CRUD validation in-browser
+
 ### Gate 2A
-Test all endpoints via Swagger: create cards, list/filter, update, delete, take a quiz.
+Test via Swagger + temp UI: create cards, verify notes generate async, list, delete.
 
 ---
 
