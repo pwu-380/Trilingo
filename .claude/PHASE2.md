@@ -92,7 +92,31 @@ Test via Swagger + temp UI: create cards, verify notes generate async, list, del
 
 ## Sub-Phase 2B: Frontend Flash Cards UI
 
-**Goal:** Working Flash Cards tab in the browser.
+**Goal:** Working Flash Cards tab with card management and quiz game.
+
+### Game Design
+
+#### Review Sessions
+- User selects session length: **10 cards**, **20 cards**, or **Endless**
+- Each round: either the English or Chinese component of a card is shown; user picks the matching counterpart from 4 multiple-choice options
+- When the Chinese component is shown, **pinyin is hidden by default** — user can click the word to reveal pinyin (and, when implemented, play TTS audio)
+
+#### Card Selection & Weighting
+- Cards are drawn randomly from the **active pool**
+- Weighted towards cards the user gets wrong more often — maintain a **windowed correctness average** (e.g. last 10 attempts per card) in the database
+- Cards with lower correctness scores appear more frequently
+
+#### Active / Inactive Pools
+- During a review session, any card can be **moved to the inactive pool** (e.g. "I know this one")
+- Cards in the inactive pool do not appear in review sessions
+- Cards can be **reactivated** from the inactive pool back to active
+- Cards can **only be deleted from the inactive pool** (prevents accidental deletion of study material)
+- UI must surface controls for managing active/inactive status and deletion
+
+#### Seed Data
+- Pre-populate the database with ~30 words from **HSK Level 2** so there's a playable game before Phase 3 (chatbot-driven card creation) is complete
+- Seed runs on first startup if the flashcards table is empty
+- Source field = `'seed'` for seeded cards
 
 ### Types (`frontend/src/types/flashcard.ts`)
 Interfaces matching backend models: `Flashcard`, `QuizQuestion`, `QuizAnswer`, `QuizResult`.
@@ -102,23 +126,29 @@ One function per endpoint, using `apiFetch()` from `client.ts`.
 
 ### Hook (`frontend/src/hooks/useFlashcards.ts`)
 Following `useChat.ts` pattern:
-- State: cards list, current quiz question, loading/sending flags, error
-- Actions: refreshCards, createCard, updateCard, deleteCard, loadQuiz, submitAnswer
+- State: cards list, current quiz question, session progress, loading/sending flags, error
+- Actions: refreshCards, createCard, updateCard, deleteCard, toggleActive, startReview, loadQuiz, submitAnswer
 
 ### Components (`frontend/src/components/flashcards/`)
 
 | Component | Purpose |
 |-----------|---------|
 | `FlashcardPanel.tsx` | Main layout — toggle between card manager and quiz mode |
-| `CardManager.tsx` | Browse cards, create new, activate/deactivate, delete |
-| `CardView.tsx` | Single card display (chinese + pinyin via `ChineseText`, english, notes) |
-| `QuizView.tsx` | Quiz interface — question, 4 multiple-choice options, result feedback |
+| `CardManager.tsx` | Browse cards in active/inactive pools; activate, deactivate, delete controls |
+| `CardView.tsx` | Single card display — chinese (click to reveal pinyin), english, notes |
+| `QuizView.tsx` | Review session — session length selector, question display, 4 MC options, result feedback, progress counter |
 
 ### Tab Shell
-Enable the Flash Cards tab in `TabShell.tsx` (`enabled: true`). Wire `FlashcardPanel` in `App.tsx`.
+Replace the temp 2A UI. Enable the Flash Cards tab in `TabShell.tsx` (`enabled: true`). Wire `FlashcardPanel` in `App.tsx`.
+
+### Backend Changes for 2B
+- Add `correctness_weight` computation to quiz endpoint (windowed average of last N attempts per card)
+- Add `PATCH /api/flashcards/{id}` support for `active` field toggle
+- Add seed data endpoint or startup hook for HSK Level 2 words
+- Enforce delete-only-from-inactive rule in `DELETE /api/flashcards/{id}`
 
 ### Gate 2B
-Full browser walkthrough: create cards, browse, quiz both directions, refresh persists.
+Full browser walkthrough: browse active/inactive pools, move cards between pools, delete from inactive, start 10/20/endless review, answer questions with weighted selection, click Chinese to reveal pinyin, refresh persists.
 
 ---
 
@@ -166,7 +196,9 @@ The asset worker (`backend/services/asset_worker.py`) for TTS audio and sprite i
 
 ## Verification
 
-1. **Backend**: Start server, open Swagger (`/docs`), test all 7 endpoints
-2. **Frontend**: Open app, click Flash Cards tab, create a card, browse it, start a quiz, answer questions
-3. **Persistence**: Refresh page, verify cards and quiz history survive
-4. **Edge cases**: Quiz with < 4 cards, empty card list, delete last card while in quiz
+1. **Backend**: Start server, open Swagger (`/docs`), test all 7 endpoints. Verify seed data populates on first run.
+2. **Card Management**: Browse active/inactive pools, move cards between pools, delete only from inactive
+3. **Review Session**: Start 10/20/endless review, verify weighted card selection, answer questions, see progress
+4. **Pinyin Reveal**: Chinese cards hide pinyin by default, click to reveal
+5. **Persistence**: Refresh page, verify cards, pool assignments, and quiz history survive
+6. **Edge cases**: Quiz with < 4 active cards, empty active pool, move card to inactive during review, delete last inactive card
