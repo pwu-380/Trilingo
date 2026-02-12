@@ -35,9 +35,12 @@ export async function deleteCard(id: number): Promise<void> {
   await apiFetch(`/api/flashcards/${id}`, { method: "DELETE" });
 }
 
-export function getQuiz(quizType?: string): Promise<QuizQuestion> {
-  const params = quizType ? `?quiz_type=${quizType}` : "";
-  return apiFetch(`/api/flashcards/quiz${params}`);
+export function getQuiz(quizType?: string, excludeIds?: number[]): Promise<QuizQuestion> {
+  const params = new URLSearchParams();
+  if (quizType) params.set("quiz_type", quizType);
+  if (excludeIds?.length) params.set("exclude", excludeIds.join(","));
+  const qs = params.toString();
+  return apiFetch(`/api/flashcards/quiz${qs ? `?${qs}` : ""}`);
 }
 
 export function submitAnswer(

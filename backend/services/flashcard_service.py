@@ -166,13 +166,20 @@ async def update_card(card_id: int, **fields) -> FlashcardResponse | None:
     return await get_card(card_id)
 
 
-async def delete_card(card_id: int) -> bool:
+async def delete_card(card_id: int) -> bool | str:
+    """Delete a card. Only inactive cards can be deleted.
+
+    Returns True on success, False if not found, or an error string
+    if the card is still active.
+    """
     async with get_db() as db:
         rows = await db.execute_fetchall(
-            "SELECT id FROM flashcards WHERE id = ?", (card_id,)
+            "SELECT id, active FROM flashcards WHERE id = ?", (card_id,)
         )
         if not rows:
             return False
+        if rows[0][1] == 1:
+            return "Cannot delete an active card. Deactivate it first."
         await db.execute(
             "DELETE FROM flashcard_attempts WHERE card_id = ?", (card_id,)
         )
@@ -184,15 +191,49 @@ async def delete_card(card_id: int) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# Quiz
+# Quiz — weighted card selection
 # ---------------------------------------------------------------------------
 
-async def get_quiz_question(quiz_type: str | None = None) -> QuizQuestion | None:
+_WINDOW_SIZE = 10  # look at last N attempts per card for weighting
+
+
+async def _get_card_weights(db) -> dict[int, float]:
+    """Compute selection weights for active cards based on correctness history.
+
+    Cards with lower correctness get higher weight (appear more often).
+    Cards with no history get weight 1.0 (same as 0% correct).
+    """
+    rows = await db.execute_fetchall(
+        "SELECT id FROM flashcards WHERE active = 1"
+    )
+    card_ids = [r[0] for r in rows]
+    if not card_ids:
+        return {}
+
+    weights: dict[int, float] = {}
+    for card_id in card_ids:
+        attempts = await db.execute_fetchall(
+            "SELECT correct FROM flashcard_attempts WHERE card_id = ? "
+            "ORDER BY id DESC LIMIT ?",
+            (card_id, _WINDOW_SIZE),
+        )
+        if not attempts:
+            weights[card_id] = 1.0  # no history — full weight
+        else:
+            correctness = sum(a[0] for a in attempts) / len(attempts)
+            # Invert: 100% correct → 0.1 weight, 0% correct → 1.0 weight
+            weights[card_id] = max(0.1, 1.0 - correctness * 0.9)
+    return weights
+
+
+async def get_quiz_question(
+    quiz_type: str | None = None,
+    exclude_ids: list[int] | None = None,
+) -> QuizQuestion | None:
     if quiz_type is None:
         quiz_type = random.choice(["en_to_zh", "zh_to_en"])
 
     async with get_db() as db:
-        # Get all active cards
         rows = await db.execute_fetchall(
             f"SELECT {_CARD_COLS} FROM flashcards WHERE active = 1"
         )
@@ -200,7 +241,17 @@ async def get_quiz_question(quiz_type: str | None = None) -> QuizQuestion | None
             return None
 
         cards = [_row_to_card(r) for r in rows]
-        target = random.choice(cards)
+
+        # Filter out already-seen cards in this session
+        available = [c for c in cards if c.id not in (exclude_ids or [])]
+        if not available:
+            return None  # session exhausted
+
+        # Weighted random selection
+        weights = await _get_card_weights(db)
+        pool = available
+        w = [weights.get(c.id, 1.0) for c in pool]
+        target = random.choices(pool, weights=w, k=1)[0]
 
         if quiz_type == "en_to_zh":
             prompt = target.english
@@ -211,7 +262,8 @@ async def get_quiz_question(quiz_type: str | None = None) -> QuizQuestion | None
             correct = target.english
             wrong_pool = [c.english for c in cards if c.id != target.id]
 
-        # Pick up to 3 wrong answers
+        # Deduplicate wrong options and pick up to 3
+        wrong_pool = list(set(wrong_pool) - {correct})
         wrong = random.sample(wrong_pool, min(3, len(wrong_pool)))
         options = wrong + [correct]
         random.shuffle(options)
@@ -220,6 +272,7 @@ async def get_quiz_question(quiz_type: str | None = None) -> QuizQuestion | None
             card_id=target.id,
             quiz_type=quiz_type,
             prompt=prompt,
+            pinyin=target.pinyin if quiz_type == "zh_to_en" else None,
             options=options,
         )
 
@@ -247,3 +300,61 @@ async def submit_answer(
         await db.commit()
 
     return QuizAnswerResponse(correct=is_correct, correct_answer=correct_answer)
+
+
+# ---------------------------------------------------------------------------
+# Seed data — HSK Level 2
+# ---------------------------------------------------------------------------
+
+_HSK2_SEED = [
+    ("因为", "yīn wèi", "because"),
+    ("所以", "suǒ yǐ", "so / therefore"),
+    ("但是", "dàn shì", "but / however"),
+    ("已经", "yǐ jīng", "already"),
+    ("一起", "yī qǐ", "together"),
+    ("准备", "zhǔn bèi", "to prepare"),
+    ("知道", "zhī dào", "to know"),
+    ("介绍", "jiè shào", "to introduce"),
+    ("希望", "xī wàng", "to hope / wish"),
+    ("觉得", "jué de", "to feel / think"),
+    ("生日", "shēng rì", "birthday"),
+    ("考试", "kǎo shì", "exam / test"),
+    ("问题", "wèn tí", "question / problem"),
+    ("旁边", "páng biān", "beside / next to"),
+    ("眼睛", "yǎn jīng", "eyes"),
+    ("身体", "shēn tǐ", "body / health"),
+    ("哥哥", "gē ge", "older brother"),
+    ("姐姐", "jiě jie", "older sister"),
+    ("弟弟", "dì di", "younger brother"),
+    ("妹妹", "mèi mei", "younger sister"),
+    ("丈夫", "zhàng fu", "husband"),
+    ("妻子", "qī zi", "wife"),
+    ("游泳", "yóu yǒng", "to swim"),
+    ("跑步", "pǎo bù", "to run / jog"),
+    ("唱歌", "chàng gē", "to sing"),
+    ("跳舞", "tiào wǔ", "to dance"),
+    ("公司", "gōng sī", "company"),
+    ("教室", "jiào shì", "classroom"),
+    ("机场", "jī chǎng", "airport"),
+    ("牛奶", "niú nǎi", "milk"),
+]
+
+
+async def seed_cards() -> int:
+    """Insert HSK Level 2 seed data if the flashcards table is empty.
+
+    Returns the number of cards seeded (0 if table already has data).
+    """
+    async with get_db() as db:
+        rows = await db.execute_fetchall("SELECT COUNT(*) FROM flashcards")
+        if rows[0][0] > 0:
+            return 0
+
+        for chinese, pinyin, english in _HSK2_SEED:
+            await db.execute(
+                "INSERT INTO flashcards (chinese, pinyin, english, source) "
+                "VALUES (?, ?, ?, 'seed')",
+                (chinese, pinyin, english),
+            )
+        await db.commit()
+        return len(_HSK2_SEED)

@@ -1,0 +1,163 @@
+.cm-add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cm-add-form input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: var(--input-field-bg, #1a1a2e);
+  color: var(--text-primary, #eee);
+  font-size: 0.95em;
+  font-family: inherit;
+}
+
+.cm-add-form input::placeholder {
+  color: var(--text-secondary, #666);
+}
+
+.cm-add-form button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-color, #646cff);
+  color: #fff;
+  font-size: 0.95em;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cm-add-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cm-pool-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.cm-pool-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.9em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cm-pool-btn.active {
+  background: var(--sidebar-active, #2a2a4a);
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+}
+
+.cm-loading {
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+  padding: 24px;
+}
+
+.cm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.cm-card {
+  padding: 14px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 10px;
+  background: var(--assistant-bubble-bg, #252538);
+}
+
+.cm-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 4px;
+}
+
+.cm-card-chinese {
+  font-size: 1.4em;
+}
+
+.cm-card-actions {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.cm-card-toggle {
+  padding: 2px 8px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  font-size: 0.75em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cm-card-toggle:hover {
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+}
+
+.cm-card-delete {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  font-size: 1.2em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cm-card-delete:hover {
+  background: #5c2a2a;
+  color: #faa;
+}
+
+.cm-card-pinyin {
+  color: var(--pinyin-color, #8888cc);
+  font-size: 0.85em;
+  margin-bottom: 6px;
+}
+
+.cm-card-english {
+  color: var(--text-primary, #eee);
+  font-size: 0.95em;
+}
+
+.cm-card-notes {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, #333);
+  color: var(--text-secondary, #aaa);
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.cm-card-source {
+  margin-top: 4px;
+  color: var(--text-secondary, #666);
+  font-size: 0.7em;
+  text-transform: uppercase;
+}
+
+.cm-empty {
+  text-align: center;
+  color: var(--text-secondary, #aaa);
+  padding: 48px 24px;
+}

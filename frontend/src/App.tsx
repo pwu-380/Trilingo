@@ -15,8 +15,16 @@ function App() {
           cards={fc.cards}
           loading={fc.loading}
           error={fc.error}
+          review={fc.review}
+          quizLoading={fc.quizLoading}
           onCreateCard={fc.createCard}
           onDeleteCard={fc.deleteCard}
+          onToggleActive={fc.toggleActive}
+          onStartReview={fc.startReview}
+          onSubmitAnswer={fc.submitAnswer}
+          onNextQuestion={fc.nextQuestion}
+          onEndReview={fc.endReview}
+          onDeactivateCard={fc.deactivateDuringReview}
           onClearError={fc.clearError}
           onRefresh={fc.refreshCards}
         />

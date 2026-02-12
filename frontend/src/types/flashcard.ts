@@ -15,6 +15,7 @@ export interface QuizQuestion {
   card_id: number;
   quiz_type: "en_to_zh" | "zh_to_en";
   prompt: string;
+  pinyin: string | null;
   options: string[];
 }
 

@@ -34,6 +34,7 @@ class QuizQuestion(BaseModel):
     card_id: int
     quiz_type: str  # 'en_to_zh' or 'zh_to_en'
     prompt: str  # the visible side
+    pinyin: str | None = None  # included for zh_to_en (hidden by default in UI)
     options: list[str]  # 4 choices (one correct)
 
 

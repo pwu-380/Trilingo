@@ -37,8 +37,12 @@ async def create_card(body: FlashcardCreate):
 
 
 @router.get("/quiz", response_model=QuizQuestion)
-async def get_quiz(quiz_type: str | None = Query(None)):
-    question = await flashcard_service.get_quiz_question(quiz_type)
+async def get_quiz(
+    quiz_type: str | None = Query(None),
+    exclude: str | None = Query(None, description="Comma-separated card IDs to exclude"),
+):
+    exclude_ids = [int(x) for x in exclude.split(",") if x.strip()] if exclude else None
+    question = await flashcard_service.get_quiz_question(quiz_type, exclude_ids=exclude_ids)
     if question is None:
         raise HTTPException(status_code=404, detail="No active cards available")
     return question
@@ -72,6 +76,8 @@ async def update_card(card_id: int, body: FlashcardUpdate):
 
 @router.delete("/{card_id}", status_code=204)
 async def delete_card(card_id: int):
-    deleted = await flashcard_service.delete_card(card_id)
-    if not deleted:
+    result = await flashcard_service.delete_card(card_id)
+    if result is False:
         raise HTTPException(status_code=404, detail="Card not found")
+    if isinstance(result, str):
+        raise HTTPException(status_code=400, detail=result)

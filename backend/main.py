@@ -8,6 +8,7 @@ from starlette.responses import JSONResponse
 from backend.config import TRILINGO_TOKEN
 from backend.database import init_db
 from backend.routers import chat, flashcards
+from backend.services.flashcard_service import seed_cards
 
 PUBLIC_PATHS = {"/api/health", "/docs", "/openapi.json", "/redoc"}
 
@@ -17,6 +18,9 @@ _token_scheme = APIKeyHeader(name="x-trilingo-token", auto_error=False)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    seeded = await seed_cards()
+    if seeded:
+        print(f"Seeded {seeded} HSK Level 2 flashcards")
     yield
 
 
