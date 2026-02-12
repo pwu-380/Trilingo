@@ -152,9 +152,77 @@ Full browser walkthrough: browse active/inactive pools, move cards between pools
 
 ---
 
-## Sub-Phase 2C: Asset Worker (Stretch — Deferred)
+## Sub-Phase 2C: Asset Worker
 
-The asset worker (`backend/services/asset_worker.py`) for TTS audio and sprite image generation is a stretch goal. Cards work fully without assets. **Recommend deferring this until after Phase 2B is stable**, then revisiting if desired.
+**Goal:** Auto-generate TTS audio and fetch images for flashcards in the background.
+
+Cards work fully without assets — 2C runs after 2B is stable. Assets are generated asynchronously; the card is usable immediately.
+
+### TTS Audio — Microsoft Edge TTS
+
+**Package:** `edge-tts` (pip install). Free, no API key, async Python API.
+
+#### How it works
+- On card creation (or for existing cards missing audio), generate an MP3 of the Chinese text
+- Use `edge_tts.Communicate(text, voice, rate="-15%")` for 15% slower speech
+- Save to `backend/assets/audio/{card_id}.mp3`
+- Update `flashcards.audio_path` column with the file path
+
+#### Voice Selection
+- Use Mandarin Chinese voices only (`zh-CN-*Neural`): XiaoxiaoNeural (F), YunxiNeural (M), YunyangNeural (M), XiaoyiNeural (F), etc.
+- **No Cantonese voices** (exclude `zh-HK-*`)
+- Can rotate voices across cards for variety, or stick with one default (e.g. `zh-CN-XiaoxiaoNeural`)
+
+#### Frontend Integration
+- In `QuizView`, when showing Chinese text, clicking the word reveals pinyin **and** plays the audio file (if available)
+- In `CardView`, add a small speaker button to play pronunciation
+- Audio served via a static files mount or a `/api/flashcards/{id}/audio` endpoint
+
+### Card Images — Openverse API
+
+**API:** `https://api.openverse.org/v1/images/` — Creative Commons licensed images, free.
+
+#### How it works
+- On card creation, search Openverse for the English word (e.g. `q=apple`)
+- Pick the first suitable result and download the image
+- Save to `backend/assets/images/{card_id}.jpg`
+- Update `flashcards.image_path` column with the file path
+
+#### Authentication & Rate Limits
+- **Anonymous:** 100 requests/day, 5/hour — sufficient for personal use
+- **Registered (optional):** Register app at Openverse API for 10,000 requests/day if needed
+- Store client credentials in `.env` if registering
+
+#### Attribution
+- Openverse images are CC-licensed; store `creator`, `license`, and `source` in a JSON field or separate columns
+- Display attribution text on card view (small text below image)
+
+#### Fallback
+- If no image found or API unavailable, card displays without image (no error)
+- `image_path` stays `NULL`
+
+### Asset Worker (`backend/services/asset_worker.py`)
+Background task runner — does NOT block card creation:
+
+- `generate_audio(card_id)` — calls edge-tts, saves MP3, updates DB
+- `fetch_image(card_id)` — calls Openverse, downloads image, updates DB
+- `process_card_assets(card_id)` — runs both for a new card
+- Called via `asyncio.create_task()` after card creation returns
+
+### New Dependencies
+- `edge-tts` — TTS generation
+- `httpx` (or `aiohttp`) — async HTTP for Openverse API (if not already available)
+
+### Files
+
+| File | Purpose |
+|------|---------|
+| `backend/services/asset_worker.py` | TTS + image generation logic |
+| `backend/assets/audio/` | Generated MP3 files |
+| `backend/assets/images/` | Downloaded card images |
+
+### Gate 2C
+Create a card, verify audio MP3 appears within seconds, verify image downloads. Play audio from quiz view. Check that card creation is not blocked by asset generation.
 
 ---
 
@@ -166,6 +234,9 @@ The asset worker (`backend/services/asset_worker.py`) for TTS audio and sprite i
 | `backend/models/flashcard.py` | Pydantic models |
 | `backend/services/flashcard_service.py` | Business logic |
 | `backend/routers/flashcards.py` | REST endpoints |
+| `backend/services/asset_worker.py` | TTS + image background tasks |
+| `backend/assets/audio/` | Generated MP3 files |
+| `backend/assets/images/` | Downloaded card images |
 | `frontend/src/types/flashcard.ts` | TypeScript interfaces |
 | `frontend/src/api/flashcards.ts` | API functions |
 | `frontend/src/hooks/useFlashcards.ts` | State management |
@@ -202,3 +273,6 @@ The asset worker (`backend/services/asset_worker.py`) for TTS audio and sprite i
 4. **Pinyin Reveal**: Chinese cards hide pinyin by default, click to reveal
 5. **Persistence**: Refresh page, verify cards, pool assignments, and quiz history survive
 6. **Edge cases**: Quiz with < 4 active cards, empty active pool, move card to inactive during review, delete last inactive card
+7. **TTS Audio**: Create card, verify MP3 generated async, play from quiz view and card view
+8. **Images**: Create card, verify Openverse image fetched, attribution displayed on card
+9. **Asset fallback**: Card still works if TTS or image fetch fails (graceful degradation)
