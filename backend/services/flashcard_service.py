@@ -229,15 +229,9 @@ async def _get_card_weights(db) -> dict[int, float]:
 async def get_quiz_question(
     quiz_type: str | None = None,
     exclude_ids: list[int] | None = None,
-    last_quiz_type: str | None = None,
 ) -> QuizQuestion | None:
     if quiz_type is None:
-        if last_quiz_type == "en_to_zh":
-            quiz_type = "zh_to_en"
-        elif last_quiz_type == "zh_to_en":
-            quiz_type = "en_to_zh"
-        else:
-            quiz_type = random.choice(["en_to_zh", "zh_to_en"])
+        quiz_type = random.choice(["en_to_zh", "zh_to_en"])
 
     async with get_db() as db:
         rows = await db.execute_fetchall(

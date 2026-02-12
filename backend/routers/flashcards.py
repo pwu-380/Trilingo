@@ -40,12 +40,9 @@ async def create_card(body: FlashcardCreate):
 async def get_quiz(
     quiz_type: str | None = Query(None),
     exclude: str | None = Query(None, description="Comma-separated card IDs to exclude"),
-    last_type: str | None = Query(None, description="Previous quiz type for alternation"),
 ):
     exclude_ids = [int(x) for x in exclude.split(",") if x.strip()] if exclude else None
-    question = await flashcard_service.get_quiz_question(
-        quiz_type, exclude_ids=exclude_ids, last_quiz_type=last_type
-    )
+    question = await flashcard_service.get_quiz_question(quiz_type, exclude_ids=exclude_ids)
     if question is None:
         raise HTTPException(status_code=404, detail="No active cards available")
     return question
