@@ -21,6 +21,10 @@ async def lifespan(app: FastAPI):
     seeded = await seed_cards()
     if seeded:
         print(f"Seeded {seeded} HSK Level 2 flashcards")
+    if TRILINGO_TOKEN:
+        print(f"Auth enabled (token: {TRILINGO_TOKEN[:4]}...)")
+    else:
+        print("Auth DISABLED — no TRILINGO_TOKEN set")
     yield
 
 

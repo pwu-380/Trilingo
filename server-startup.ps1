@@ -32,14 +32,11 @@ $words = @(
     "waltz",  "wren"
 )
 $token = ($words | Get-Random -Count 4) -join "-"
-
-# Write token to file so the backend can read it reliably
-# (Start-Process on Windows doesn't inherit env vars)
-$token | Out-File (Join-Path $projectRoot ".trilingo.token") -NoNewline -Encoding UTF8
+$env:TRILINGO_TOKEN = $token
 
 # Start backend (new console window)
-$backend = Start-Process -PassThru -FilePath "cmd.exe" `
-    -ArgumentList "/c", "python -m uvicorn backend.main:app --reload --port 8731" `
+$backend = Start-Process -PassThru -FilePath "python.exe" `
+    -ArgumentList "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8731" `
     -WorkingDirectory $projectRoot
 
 # Start frontend (new console window)
