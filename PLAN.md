@@ -129,6 +129,7 @@ CREATE TABLE chat_messages (
     pinyin      TEXT,                   -- pinyin-annotated form (assistant only)
     translation TEXT,                   -- English translation (assistant only)
     feedback    TEXT,                   -- grammar notes & tips (assistant only)
+    emotion     TEXT DEFAULT 'neutral', -- AI emotion for avatar (neutral/confused/mad)
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
@@ -227,12 +228,16 @@ CREATE TABLE flashcard_attempts (
 6. Add the Flash Cards tab to the tab shell
 
 **Acceptance criteria**:
-- User can create cards with Chinese, pinyin, and English
-- Card creation returns instantly — asset generation happens in the background
-- User can browse all cards and activate/deactivate them
-- Quiz mode shows a card with one component hidden and 4 multiple-choice options
+- User can create cards with Chinese and English (pinyin auto-generated via pypinyin)
+- Card creation returns instantly — AI notes generation happens in the background
+- User can browse cards in active and inactive pools, move cards between them
+- Cards can only be deleted from the inactive pool
+- Quiz mode supports review sessions of 10, 20, or endless cards
+- Quiz shows a card with one component hidden and 4 multiple-choice options
 - Quiz supports both directions (Chinese→English, English→Chinese)
-- Answers are recorded for future difficulty scaling
+- When showing Chinese, pinyin is hidden by default — click to reveal
+- Card selection is weighted: cards answered incorrectly more often appear more frequently
+- 30 HSK Level 2 words are seeded on first startup
 - Cards without assets still function correctly (assets are optional enhancements)
 
 ---
@@ -307,6 +312,6 @@ After each phase, verify by:
   - Assets that fail to generate are silently skipped (the card still works without them). Failed jobs can be retried later.
 - **Pinyin as server-side annotation**: `pypinyin` runs on the backend so the frontend receives pre-annotated text. The frontend just renders it — no Chinese NLP in the browser.
 - **SQLite for everything**: No need for Redis, Postgres, or any external service. The app is single-user and local. SQLite handles the load trivially.
-- **No authentication**: Single-user local app. No login, no sessions, no tokens.
+- **Optional token auth**: A session token can be set via `TRILINGO_TOKEN` env var. The startup script auto-generates one and passes it via URL query param. When unset, auth is disabled. Tokens are checked via middleware (header, query param, or cookie).
 - **Assets stored on disk, paths in DB**: Generated audio/images go in `backend/assets/` and the DB stores relative paths. This keeps the DB lean and assets easy to manage.
 - **Self-contained project folder**: All runtime dependencies live inside the project directory. The system-installed Python and Node are used only to bootstrap (create the venv, run `npm install`). After setup, the project runs entirely from its local `venv/` and `frontend/node_modules/`. A `.gitignore` excludes these bulky directories, the SQLite database, generated assets, and environment files.

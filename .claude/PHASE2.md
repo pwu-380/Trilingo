@@ -6,7 +6,7 @@ Phase 1 (Chatbot) is complete. Phase 2 adds the second core feature: flash cards
 
 ---
 
-## Sub-Phase 2A: Database + Backend Service
+## Sub-Phase 2A: Database + Backend Service ✓ COMPLETE
 
 **Goal:** Flashcard CRUD and quiz logic, testable via Swagger.
 
@@ -75,7 +75,7 @@ Following `chat.py` pattern:
 Mount in `backend/main.py` via `app.include_router(flashcards.router)`.
 
 ### AI-Generated Notes
-On card creation, optionally call Gemini (same `gemini-2.5-flash` model) in the background to generate a brief usage note (e.g. "More casual than 您好; common in everyday greetings"). Card is returned immediately — the `notes` field populates async. Uses the existing provider abstraction via a simple prompt, no new provider needed.
+On card creation, call Gemini in the background via `provider.generate_text()` to generate a brief usage note (e.g. "More casual than 您好; common in everyday greetings"). Card is returned immediately — the `notes` field populates async within seconds. The `generate_text()` method was added to `ChatProvider` base class and overridden in `GeminiChatProvider` to make a simple unstructured call (no JSON schema).
 
 ### Temporary Validation UI
 To validate 2A without waiting for the full 2B frontend, include a minimal Flash Cards tab:
@@ -85,12 +85,12 @@ To validate 2A without waiting for the full 2B frontend, include a minimal Flash
 - X button to delete cards
 - No quiz UI yet — just CRUD validation in-browser
 
-### Gate 2A
-Test via Swagger + temp UI: create cards, verify notes generate async, list, delete.
+### Gate 2A ✓ PASSED
+Tested via Swagger + temp UI: card CRUD, auto-pinyin, AI notes generation, quiz with MC, active/inactive filtering.
 
 ---
 
-## Sub-Phase 2B: Frontend Flash Cards UI
+## Sub-Phase 2B: Frontend Flash Cards UI ✓ COMPLETE
 
 **Goal:** Working Flash Cards tab with card management and quiz game.
 
@@ -147,8 +147,8 @@ Replace the temp 2A UI. Enable the Flash Cards tab in `TabShell.tsx` (`enabled: 
 - Add seed data endpoint or startup hook for HSK Level 2 words
 - Enforce delete-only-from-inactive rule in `DELETE /api/flashcards/{id}`
 
-### Gate 2B
-Full browser walkthrough: browse active/inactive pools, move cards between pools, delete from inactive, start 10/20/endless review, answer questions with weighted selection, click Chinese to reveal pinyin, refresh persists.
+### Gate 2B ✓ PASSED
+Full browser walkthrough: browse active/inactive pools, move cards between pools, delete from inactive, start 10/20/endless review, answer questions with weighted selection, click Chinese to reveal pinyin. 30 HSK2 seed cards auto-populated on fresh DB.
 
 ---
 
