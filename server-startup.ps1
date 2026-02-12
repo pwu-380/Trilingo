@@ -18,6 +18,20 @@ if (Test-Path $sessionFile) {
     Remove-Item $sessionFile -Force
 }
 
+# Kill any orphan processes on our ports
+foreach ($port in @(8731, 8732)) {
+    $lines = netstat -ano | Select-String ":$port\s.*LISTENING"
+    foreach ($line in $lines) {
+        if ($line -match '\s(\d+)\s*$') {
+            $orphanPid = [int]$Matches[1]
+            if ($orphanPid -gt 0) {
+                taskkill /PID $orphanPid /T /F >$null 2>&1
+                Write-Host "Killed orphan process on port $port (PID $orphanPid)" -ForegroundColor DarkGray
+            }
+        }
+    }
+}
+
 # Add venv to PATH for child processes
 $env:PATH = "$projectRoot\venv\Scripts;$projectRoot\venv;$env:PATH"
 
