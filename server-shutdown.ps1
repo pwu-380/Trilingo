@@ -17,7 +17,8 @@ foreach ($entry in @(
     if (-not $procId) { continue }
     $proc = Get-Process -Id $procId -ErrorAction SilentlyContinue
     if ($proc) {
-        Stop-Process -Id $procId -Force
+        # Kill the entire process tree (cmd.exe + child python/node processes)
+        taskkill /PID $procId /T /F >$null 2>&1
         Write-Host "Stopped $($entry.Name) ($($proc.ProcessName), PID $procId)"
         $killed++
     } else {
