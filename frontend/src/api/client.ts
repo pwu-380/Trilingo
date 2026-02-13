@@ -11,6 +11,15 @@ function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY);
 }
 
+export async function checkAuth(): Promise<boolean> {
+  const token = getToken();
+  if (!token) return false;
+  const res = await fetch("/api/auth/check", {
+    headers: { "x-trilingo-token": token },
+  });
+  return res.ok;
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {}

@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { checkAuth } from "./api/client";
 import { useChat } from "./hooks/useChat";
 import { useFlashcards } from "./hooks/useFlashcards";
 import ChatPanel from "./components/chat/ChatPanel";
@@ -5,6 +7,39 @@ import FlashcardPanel from "./components/flashcards/FlashcardPanel";
 import TabShell from "./components/shared/TabShell";
 
 function App() {
+  const [authState, setAuthState] = useState<
+    "checking" | "ok" | "forbidden"
+  >("checking");
+
+  useEffect(() => {
+    checkAuth().then((ok) => setAuthState(ok ? "ok" : "forbidden"));
+  }, []);
+
+  if (authState === "checking") return null;
+
+  if (authState === "forbidden") {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          flexDirection: "column",
+          color: "#666",
+          fontFamily: "monospace",
+        }}
+      >
+        <h1 style={{ fontSize: "5rem", margin: 0, color: "#444" }}>403</h1>
+        <p style={{ fontSize: "1.2rem" }}>Forbidden</p>
+      </div>
+    );
+  }
+
+  return <AuthenticatedApp />;
+}
+
+function AuthenticatedApp() {
   const chat = useChat();
   const fc = useFlashcards();
 

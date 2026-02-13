@@ -30,7 +30,8 @@
       "Bash(python -m json.tool:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nAdjust Alister tone to friendly high school tutor\n\nDial back from university TA to something more approachable.\nStill straightforward and not gushy, but warmer and simpler.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
       "WebFetch(domain:docs.openverse.org)",
-      "WebFetch(domain:api.openverse.org)"
+      "WebFetch(domain:api.openverse.org)",
+      "Bash(tasklist:*)"
     ]
   }
 }

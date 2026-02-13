@@ -1,24 +1,24 @@
-# Session Context — 2026-02-12
+# Session Context — 2026-02-12 (session 2)
 
 ## What Was Done This Session
 
 ### Bug Fixes
-1. **Quiz type not alternating** — User reported quiz was stuck showing the same type (zh_to_en) 9/10 times. Root cause: browser caching GET `/api/flashcards/quiz` responses. Fix: added `cache: "no-store"` to the fetch call in `frontend/src/api/flashcards.ts`. Quiz type selection remains `random.choice` on the backend (user explicitly wants random, NOT alternating).
+1. **`$pid` read-only variable in PowerShell** — `server-startup.ps1` used `$pid` as a loop variable in the "abort if already running" block, but `$pid` is a read-only automatic variable in PowerShell (current process ID). Renamed to `$p`.
 
-2. **Shutdown script not closing popup windows** — `Stop-Process` only killed the parent PID, not child processes. Fix: replaced with `taskkill /PID ... /T /F` in `server-shutdown.ps1` to kill entire process trees.
+### Auth Hardening
+2. **403 Forbidden gate for unauthenticated visitors** — Previously, unauthenticated users could see the full app UI (API calls just failed). Now:
+   - Backend returns **403** instead of 401 on bad/missing token
+   - Added `/api/auth/check` endpoint (auto-gated by existing middleware)
+   - Frontend `App.tsx` checks auth on mount; renders a minimal "403 Forbidden" page if the check fails — no app UI, no hooks initialized, no API calls leak
+   - `checkAuth()` helper added to `frontend/src/api/client.ts`
 
-3. **Auth bypass bug (ONGOING)** — User reports being able to access the app with a wrong token in incognito. Root cause identified: **orphan uvicorn processes** from previous sessions still listening on port 8731 WITHOUT `TRILINGO_TOKEN` set. Windows allows multiple processes to bind the same port, so the old no-auth process receives all requests while the new auth-enabled process sits idle.
-   - Confirmed via `netstat -ano | findstr 8731` showing two PIDs listening
-   - Added orphan-killing logic to `server-startup.ps1` (kills all processes on ports 8731/8732 before launching)
-   - However, `taskkill /F` didn't reliably kill the orphan on the user's machine
-   - **User is restarting their computer to clear all orphans**
-   - **AFTER RESTART**: Test auth in incognito with wrong token. If it still fails, the problem is elsewhere (not orphan processes). If it works, the fix is confirmed.
-   - The env var method (`$env:TRILINGO_TOKEN` + `Start-Process python.exe`) IS working — confirmed via startup log `Auth enabled (token: cide...)`
+## What Was Tried and Didn't Work
+- Nothing reverted this session; both changes were clean.
 
-### Things That Were Tried and Reverted
-- Alternating quiz types (tracking `last_quiz_type`) — reverted, user wants random
-- Token file approach (`.trilingo.token`) — reverted, user prefers env var
-- `cmd.exe /c "set TOKEN=val&& python ..."` approach — reverted back to direct `Start-Process python.exe`
+## Outstanding Issues
+1. **Auth orphan process bug** — Last session identified orphan uvicorn processes as the cause. Startup script now kills processes on ports 8731/8732 before launch. User was going to verify after restart but hadn't confirmed by end of session.
+2. **Debug print in main.py** — `Auth enabled (token: xxxx...)` diagnostic print is still in the lifespan function. Fine to leave or remove later.
+3. **Beads repo ID mismatch** — `bd ready` fails with "DATABASE MISMATCH DETECTED" (repo ID 79eb694d vs 32d17cd9). Workaround: `bd --sandbox ready --allow-stale`. May need `bd migrate --update-repo-id` or a fresh `rm -rf .beads && bd init`.
 
 ## Current State
 
@@ -32,15 +32,12 @@
 - `Trilingo-wle: P2-asset-worker` — open, ready to start
 - `Trilingo-3pl: P3-segmentation` — open, unblocked
 
-### Outstanding Issues
-1. **Auth bug** — needs verification after computer restart. If orphan processes were the sole cause, the startup script's port-clearing logic should prevent recurrence. If auth still fails after clean restart, dig deeper into middleware or Vite proxy behavior.
-2. **Debug print in main.py** — `Auth enabled (token: xxxx...)` / `Auth DISABLED` print is still in the lifespan. Can be left as useful diagnostic or removed later.
+## What to Do Next
+1. **Start Phase 2C** — asset worker (`backend/services/asset_worker.py`): Edge TTS audio + Openverse images for flashcards. See PHASE2.md Sub-Phase 2C for full spec.
+2. **Fix beads repo ID mismatch** if it persists — try `bd migrate --update-repo-id`.
 
-### Key Files Modified This Session
-- `server-startup.ps1` — orphan process cleanup on ports 8731/8732
-- `server-shutdown.ps1` — `taskkill /T /F` for process tree cleanup
-- `backend/main.py` — auth diagnostic print in lifespan
-- `frontend/src/api/flashcards.ts` — `cache: "no-store"` on quiz fetch
-- `backend/services/flashcard_service.py` — reverted to `random.choice` for quiz type
-- `backend/routers/flashcards.py` — removed `last_type` param (reverted)
-- `frontend/src/hooks/useFlashcards.ts` — removed `lastType` passing (reverted)
+## Key Files Modified This Session
+- `server-startup.ps1` — renamed `$pid` → `$p` in loop
+- `backend/main.py` — 401→403, added `/api/auth/check` endpoint
+- `frontend/src/api/client.ts` — added `checkAuth()` export
+- `frontend/src/App.tsx` — auth gate: checks auth on mount, shows 403 page or renders app

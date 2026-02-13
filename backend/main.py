@@ -54,7 +54,7 @@ async def check_token(request: Request, call_next):
         or request.cookies.get("trilingo_token")
     )
     if token != TRILINGO_TOKEN:
-        return JSONResponse({"detail": "Unauthorized"}, status_code=401)
+        return JSONResponse({"detail": "Forbidden"}, status_code=403)
     return await call_next(request)
 
 
@@ -65,3 +65,8 @@ app.include_router(flashcards.router)
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/api/auth/check")
+async def auth_check():
+    return {"ok": True}

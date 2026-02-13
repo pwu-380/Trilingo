@@ -5,9 +5,9 @@ $sessionFile = Join-Path $projectRoot ".trilingo.session"
 if (Test-Path $sessionFile) {
     $session = Get-Content $sessionFile | ConvertFrom-Json
     $alive = @()
-    foreach ($pid in @($session.backend_pid, $session.frontend_pid)) {
-        if ($pid -and (Get-Process -Id $pid -ErrorAction SilentlyContinue)) {
-            $alive += $pid
+    foreach ($p in @($session.backend_pid, $session.frontend_pid)) {
+        if ($p -and (Get-Process -Id $p -ErrorAction SilentlyContinue)) {
+            $alive += $p
         }
     }
     if ($alive.Count -gt 0) {
