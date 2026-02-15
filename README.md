@@ -86,6 +86,10 @@ cd frontend && npm run dev
 
 Without `TRILINGO_TOKEN` set, auth is disabled.
 
+## Project Structure
+
+Chinese language reference data (HSK curriculum, vocabulary lists) lives in `backend/chinese/hsk/`. See `.claude/HSK_LIBRARY_PLAN.md` for the schema and API design.
+
 ## Status
 
 The chatbot and flash cards are functional. Games tab coming next.

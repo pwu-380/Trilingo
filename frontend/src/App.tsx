@@ -66,6 +66,9 @@ function AuthenticatedApp() {
             addToast(`Added '${word}' to flash cards`, "success");
           }
           fc.refreshCards();
+          if (!result.duplicate && !result.card.notes) {
+            fc.pollForNotes(result.card.id);
+          }
         })
         .catch(() => {
           addToast(`Failed to add '${word}'`, "error");

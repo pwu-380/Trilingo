@@ -36,7 +36,6 @@ export default function CardManager({
     if (card) {
       setChinese("");
       setEnglish("");
-      setTimeout(onRefresh, 3000);
     }
     setCreating(false);
   };

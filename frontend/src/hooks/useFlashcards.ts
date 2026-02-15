@@ -21,6 +21,26 @@ export function useFlashcards() {
   const [review, setReview] = useState<ReviewSession | null>(null);
   const [quizLoading, setQuizLoading] = useState(false);
 
+  // Poll a card until notes are generated, then update it in state
+  const pollForNotes = useCallback((cardId: number) => {
+    let attempts = 0;
+    const maxAttempts = 10;
+    const interval = setInterval(async () => {
+      attempts++;
+      try {
+        const card = await flashcardsApi.getCard(cardId);
+        if (card.notes || attempts >= maxAttempts) {
+          clearInterval(interval);
+          if (card.notes) {
+            setCards((prev) => prev.map((c) => (c.id === cardId ? card : c)));
+          }
+        }
+      } catch {
+        clearInterval(interval);
+      }
+    }, 2000);
+  }, []);
+
   const refreshCards = useCallback(async () => {
     setLoading(true);
     try {
@@ -43,13 +63,14 @@ export function useFlashcards() {
       try {
         const card = await flashcardsApi.createCard(chinese, english);
         setCards((prev) => [...prev, card]);
+        if (!card.notes) pollForNotes(card.id);
         return card;
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to create card");
         return null;
       }
     },
-    [],
+    [pollForNotes],
   );
 
   const deleteCard = useCallback(async (id: number) => {
@@ -169,6 +190,7 @@ export function useFlashcards() {
     nextQuestion,
     endReview,
     deactivateDuringReview,
+    pollForNotes,
     clearError: () => setError(null),
   };
 }
