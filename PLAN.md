@@ -242,22 +242,27 @@ CREATE TABLE flashcard_attempts (
 
 ---
 
-### Phase 3 — Chatbot ↔ Flashcard Integration
+### Phase 3 — Chatbot ↔ Flashcard Integration ✓ COMPLETE
 
-**Goal**: Users can select Chinese words in the chatbot and add them as flash cards.
+**Goal**: Users can click Chinese words in the chatbot and add them as flash cards without disrupting chat flow.
 
-**Steps**:
-1. Implement `backend/chinese/segmentation.py` — jieba-based word segmentation
-2. Add endpoint `POST /api/chat/messages/{id}/segment` — returns word boundaries for a message's Chinese content
-3. Add endpoint `POST /api/flashcards/from-word` — accepts a Chinese word, auto-generates pinyin and English translation (via Gemini or dictionary lookup), creates a card
-4. Implement frontend text selection UX in `ChatPanel`: user highlights text → popup appears with "Add to Flash Cards" → calls the creation endpoint
+**What was built**:
+1. `backend/chinese/segmentation.py` — jieba-based word segmentation
+2. `POST /api/chat/messages/{id}/segment` — returns word boundaries for a message's Chinese content
+3. `POST /api/flashcards/from-word` — accepts a Chinese word, auto-generates pinyin (pypinyin) and English (Gemini), creates a card with duplicate detection
+4. Clickable-word UX: assistant messages are segmented into words, each word is clickable with hover highlight, popup offers "Add to Flash Cards"
 5. Cards created this way are tagged with `source='chat'`
+6. Cross-feature wiring via callback injection in `App.tsx` — chat components never import flashcard code
+
+**Detailed subplan**: See `.claude/PHASE3.md`
 
 **Acceptance criteria**:
-- User can highlight any Chinese text in the chat
-- A popup/tooltip offers to create a flash card from the selection
+- User can click any Chinese word in assistant messages
+- A popup shows word + pinyin + "Add to Flash Cards" button
 - The card is auto-populated with pinyin and English
-- The card appears in the Flash Cards tab immediately
+- Duplicate detection prevents adding the same word twice
+- The card appears in the Flash Cards tab after creation
+- Card creation must not block or disrupt the chat flow
 
 ---
 
@@ -314,4 +319,5 @@ After each phase, verify by:
 - **SQLite for everything**: No need for Redis, Postgres, or any external service. The app is single-user and local. SQLite handles the load trivially.
 - **Optional token auth**: A session token can be set via `TRILINGO_TOKEN` env var. The startup script auto-generates one and passes it via URL query param. When unset, auth is disabled. Tokens are checked via middleware (header, query param, or cookie).
 - **Assets stored on disk, paths in DB**: Generated audio/images go in `backend/assets/` and the DB stores relative paths. This keeps the DB lean and assets easy to manage.
+- **Non-blocking card creation from chat**: When a user adds a flashcard from a chat word, the process must not disrupt the chat flow. A notification can pop up to show status, but it must not prevent the user from continuing to type and send messages. Card creation (including AI translation and notes generation) should feel instant or happen in the background.
 - **Self-contained project folder**: All runtime dependencies live inside the project directory. The system-installed Python and Node are used only to bootstrap (create the venv, run `npm install`). After setup, the project runs entirely from its local `venv/` and `frontend/node_modules/`. A `.gitignore` excludes these bulky directories, the SQLite database, generated assets, and environment files.
