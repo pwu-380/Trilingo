@@ -1,23 +1,15 @@
-# Session Context — 2026-02-15 (session 4)
+# Session Context — 2026-02-15 (session 5)
 
 ## What Was Done This Session
 
-### Bug Fix: Flashcard tips not appearing without refresh
-Flashcard notes/tips are generated in a backend background task (`asyncio.create_task`) after the card creation API returns. The frontend was refreshing the card list immediately — before notes were written to the DB — so tips appeared as empty until the user manually refreshed.
-
-**Fix:** Added `pollForNotes(cardId)` in `useFlashcards.ts` — polls `GET /api/flashcards/{id}` every 2 seconds (up to 10 attempts) until notes appear, then patches the card in React state. Called automatically from both card creation paths:
-- `createCard()` (manual card form) — polls automatically after creation
-- `handleAddCardFromWord()` in `App.tsx` — polls for non-duplicate cards
-
-Removed the old `setTimeout(onRefresh, 3000)` hack from `CardManager.tsx`.
-
-### HSK Reference Library Plan
-Wrote and pushed `.claude/HSK_LIBRARY_PLAN.md` — design for a structured HSK curriculum dataset at `backend/chinese/hsk/` with vocab, grammar patterns, and conversation topics for HSK levels 1-6. Thin Python API with lazy-loaded JSON data files.
-
-### Housekeeping
-- Closed `Trilingo-90k` (P3-fix-nonblocking-card-creation) — was already fixed in a prior session
-- Created `Trilingo-aip` (HSK-reference-library-structure) — next task
-- Updated README with reference materials location
+### HSK Reference Library Implementation (Trilingo-aip) — COMPLETE
+Built out the HSK curriculum reference library at `backend/chinese/hsk/`:
+- **`__init__.py`** — Thin Python API with lazy-loaded, cached JSON data: `get_level()`, `get_vocab()`, `get_grammar()`, `get_topics()`, `LEVELS`
+- **`data/hsk1.json` through `hsk6.json`** — Starter curriculum data:
+  - HSK1: 50 vocab, 8 grammar, 5 topics
+  - HSK2: 50 vocab, 10 grammar, 6 topics (includes all original seed words + 20 more)
+  - HSK3-6: 20 vocab, 6-8 grammar, 5-6 topics each (starter entries, can be expanded)
+- **Migrated `flashcard_service.py`** — Replaced hardcoded `_HSK2_SEED` tuple with `get_vocab(2)` from the library. Seed now inserts 50 HSK2 words instead of the original 30.
 
 ## What Was Tried and Didn't Work
 - Nothing reverted; all changes were clean.
@@ -38,9 +30,9 @@ Wrote and pushed `.claude/HSK_LIBRARY_PLAN.md` — design for a structured HSK c
 - Phase 3 (chat↔flashcard integration): COMPLETE
 
 ## What to Do Next
-1. **HSK reference library structure** (`Trilingo-aip`) — Set up `backend/chinese/hsk/` with `__init__.py` (public API: `get_level`, `get_vocab`, `get_grammar`, `get_topics`, `LEVELS`) and stub `hsk1-6.json` data files following the schema in `.claude/HSK_LIBRARY_PLAN.md`. Just establish the file structure, schema, and Python API with a small number of example entries per level — don't populate full vocabulary yet.
-2. **Phase 2C** — asset worker (`Trilingo-wle`)
-3. **Remove debug print** (`Trilingo-40m`)
+1. **Remove debug print** (`Trilingo-40m`) — Quick cleanup
+2. **Phase 2C** — Asset worker (`Trilingo-wle`)
+3. **Expand HSK data** — The hsk3-6.json files have only 20 vocab entries each as starters; these can be expanded to full standard HSK word lists over time
 
 ## Key Decisions Made by User
 - Phase 3 was done before Phase 2C (asset worker).
@@ -48,8 +40,9 @@ Wrote and pushed `.claude/HSK_LIBRARY_PLAN.md` — design for a structured HSK c
 - HSK reference library: set up structure and schema first, populate data later.
 
 ## Key Files Modified This Session
-- `frontend/src/hooks/useFlashcards.ts` — added `pollForNotes()` callback
-- `frontend/src/App.tsx` — call `pollForNotes` after `createCardFromWord`
-- `frontend/src/components/flashcards/CardManager.tsx` — removed `setTimeout` hack
-- `.claude/HSK_LIBRARY_PLAN.md` — NEW: HSK reference library plan
-- `README.md` — added reference materials location
+- `backend/chinese/hsk/__init__.py` — NEW: HSK library public API
+- `backend/chinese/hsk/data/hsk1.json` through `hsk6.json` — NEW: curriculum data
+- `backend/services/flashcard_service.py` — migrated seed data to use HSK library
+
+## Note on Seed Data Change
+The seed now inserts 50 HSK2 words (up from 30). Existing databases with data are unaffected since `seed_cards()` skips seeding when the table is non-empty. Only fresh databases will get the expanded seed set.
