@@ -1,0 +1,84 @@
+{
+  "level": 6,
+  "vocab": [
+    {"chinese": "抽象", "pinyin": "chōu xiàng", "english": "abstract"},
+    {"chinese": "具体", "pinyin": "jù tǐ", "english": "concrete / specific"},
+    {"chinese": "本质", "pinyin": "běn zhì", "english": "essence / nature"},
+    {"chinese": "规律", "pinyin": "guī lǜ", "english": "law / pattern"},
+    {"chinese": "矛盾", "pinyin": "máo dùn", "english": "contradiction"},
+    {"chinese": "辩证", "pinyin": "biàn zhèng", "english": "dialectical"},
+    {"chinese": "演变", "pinyin": "yǎn biàn", "english": "to evolve / evolution"},
+    {"chinese": "融合", "pinyin": "róng hé", "english": "to fuse / integrate"},
+    {"chinese": "塑造", "pinyin": "sù zào", "english": "to shape / mold"},
+    {"chinese": "贡献", "pinyin": "gòng xiàn", "english": "contribution / to contribute"},
+    {"chinese": "启发", "pinyin": "qǐ fā", "english": "to inspire / enlighten"},
+    {"chinese": "领悟", "pinyin": "lǐng wù", "english": "to comprehend / grasp"},
+    {"chinese": "崇拜", "pinyin": "chóng bài", "english": "to worship / admire"},
+    {"chinese": "谦虚", "pinyin": "qiān xū", "english": "modest / humble"},
+    {"chinese": "含蓄", "pinyin": "hán xù", "english": "implicit / reserved"},
+    {"chinese": "深刻", "pinyin": "shēn kè", "english": "profound / deep"},
+    {"chinese": "微妙", "pinyin": "wēi miào", "english": "subtle"},
+    {"chinese": "繁荣", "pinyin": "fán róng", "english": "prosperous / flourishing"},
+    {"chinese": "衰退", "pinyin": "shuāi tuì", "english": "to decline / recession"},
+    {"chinese": "和谐", "pinyin": "hé xié", "english": "harmonious"}
+  ],
+  "grammar": [
+    {
+      "pattern": "何必",
+      "english": "Why bother / there's no need to",
+      "example": "何必这么着急呢？"
+    },
+    {
+      "pattern": "岂不是",
+      "english": "Wouldn't that be... (rhetorical)",
+      "example": "那岂不是更好？"
+    },
+    {
+      "pattern": "无非",
+      "english": "Nothing but / merely",
+      "example": "他无非想引起注意。"
+    },
+    {
+      "pattern": "与其说 A 不如说 B",
+      "english": "Rather than saying A, better to say B",
+      "example": "与其说他聪明，不如说他努力。"
+    },
+    {
+      "pattern": "就 A 而言",
+      "english": "As far as A is concerned",
+      "example": "就目前情况而言，形势不错。"
+    },
+    {
+      "pattern": "非 A 不可",
+      "english": "Must A / A is absolutely necessary",
+      "example": "这件事非做不可。"
+    }
+  ],
+  "topics": [
+    {
+      "id": "history",
+      "label": "History & civilization",
+      "description": "Chinese dynasties, historical figures, cultural evolution"
+    },
+    {
+      "id": "politics",
+      "label": "Governance & policy",
+      "description": "Government systems, policy debates, international relations"
+    },
+    {
+      "id": "aesthetics",
+      "label": "Aesthetics & philosophy",
+      "description": "Beauty in Chinese art, philosophical traditions, Confucianism and Taoism"
+    },
+    {
+      "id": "linguistics",
+      "label": "Language & linguistics",
+      "description": "Character origins, classical Chinese, language evolution, dialects"
+    },
+    {
+      "id": "current_affairs",
+      "label": "Current affairs & media",
+      "description": "News analysis, media literacy, forming and expressing complex opinions"
+    }
+  ]
+}

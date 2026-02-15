@@ -1,0 +1,124 @@
+{
+  "level": 1,
+  "vocab": [
+    {"chinese": "你好", "pinyin": "nǐ hǎo", "english": "hello"},
+    {"chinese": "谢谢", "pinyin": "xiè xie", "english": "thank you"},
+    {"chinese": "再见", "pinyin": "zài jiàn", "english": "goodbye"},
+    {"chinese": "是", "pinyin": "shì", "english": "to be / yes"},
+    {"chinese": "不", "pinyin": "bù", "english": "not / no"},
+    {"chinese": "我", "pinyin": "wǒ", "english": "I / me"},
+    {"chinese": "你", "pinyin": "nǐ", "english": "you"},
+    {"chinese": "他", "pinyin": "tā", "english": "he / him"},
+    {"chinese": "她", "pinyin": "tā", "english": "she / her"},
+    {"chinese": "我们", "pinyin": "wǒ men", "english": "we / us"},
+    {"chinese": "这", "pinyin": "zhè", "english": "this"},
+    {"chinese": "那", "pinyin": "nà", "english": "that"},
+    {"chinese": "什么", "pinyin": "shén me", "english": "what"},
+    {"chinese": "谁", "pinyin": "shuí", "english": "who"},
+    {"chinese": "哪", "pinyin": "nǎ", "english": "which / where"},
+    {"chinese": "多少", "pinyin": "duō shao", "english": "how many / how much"},
+    {"chinese": "几", "pinyin": "jǐ", "english": "how many (small numbers)"},
+    {"chinese": "怎么", "pinyin": "zěn me", "english": "how"},
+    {"chinese": "一", "pinyin": "yī", "english": "one"},
+    {"chinese": "二", "pinyin": "èr", "english": "two"},
+    {"chinese": "三", "pinyin": "sān", "english": "three"},
+    {"chinese": "十", "pinyin": "shí", "english": "ten"},
+    {"chinese": "百", "pinyin": "bǎi", "english": "hundred"},
+    {"chinese": "人", "pinyin": "rén", "english": "person / people"},
+    {"chinese": "大", "pinyin": "dà", "english": "big / large"},
+    {"chinese": "小", "pinyin": "xiǎo", "english": "small / little"},
+    {"chinese": "好", "pinyin": "hǎo", "english": "good / well"},
+    {"chinese": "吃", "pinyin": "chī", "english": "to eat"},
+    {"chinese": "喝", "pinyin": "hē", "english": "to drink"},
+    {"chinese": "看", "pinyin": "kàn", "english": "to look / to watch"},
+    {"chinese": "听", "pinyin": "tīng", "english": "to listen"},
+    {"chinese": "说", "pinyin": "shuō", "english": "to speak / to say"},
+    {"chinese": "读", "pinyin": "dú", "english": "to read"},
+    {"chinese": "写", "pinyin": "xiě", "english": "to write"},
+    {"chinese": "去", "pinyin": "qù", "english": "to go"},
+    {"chinese": "来", "pinyin": "lái", "english": "to come"},
+    {"chinese": "有", "pinyin": "yǒu", "english": "to have / there is"},
+    {"chinese": "没有", "pinyin": "méi yǒu", "english": "to not have / there isn't"},
+    {"chinese": "很", "pinyin": "hěn", "english": "very"},
+    {"chinese": "的", "pinyin": "de", "english": "possessive particle"},
+    {"chinese": "了", "pinyin": "le", "english": "completed action particle"},
+    {"chinese": "在", "pinyin": "zài", "english": "at / in / to be at"},
+    {"chinese": "家", "pinyin": "jiā", "english": "home / family"},
+    {"chinese": "学校", "pinyin": "xué xiào", "english": "school"},
+    {"chinese": "医院", "pinyin": "yī yuàn", "english": "hospital"},
+    {"chinese": "商店", "pinyin": "shāng diàn", "english": "shop / store"},
+    {"chinese": "中国", "pinyin": "zhōng guó", "english": "China"},
+    {"chinese": "今天", "pinyin": "jīn tiān", "english": "today"},
+    {"chinese": "明天", "pinyin": "míng tiān", "english": "tomorrow"},
+    {"chinese": "昨天", "pinyin": "zuó tiān", "english": "yesterday"}
+  ],
+  "grammar": [
+    {
+      "pattern": "Subject + 是 + Noun",
+      "english": "A is B (identity/equivalence)",
+      "example": "我是学生。"
+    },
+    {
+      "pattern": "Subject + 很 + Adjective",
+      "english": "Subject is [adjective]",
+      "example": "他很高。"
+    },
+    {
+      "pattern": "Subject + 不 + Verb/Adj",
+      "english": "Negation with 不",
+      "example": "我不喝咖啡。"
+    },
+    {
+      "pattern": "Subject + Verb + 了",
+      "english": "Completed action",
+      "example": "我吃了。"
+    },
+    {
+      "pattern": "Subject + 在 + Place + Verb",
+      "english": "Doing something at a location",
+      "example": "我在学校学习。"
+    },
+    {
+      "pattern": "…… 吗？",
+      "english": "Yes/no question particle",
+      "example": "你好吗？"
+    },
+    {
+      "pattern": "Subject + 有 + Object",
+      "english": "To have / there is",
+      "example": "我有一个哥哥。"
+    },
+    {
+      "pattern": "Noun + 的 + Noun",
+      "english": "Possessive / descriptive particle",
+      "example": "我的书。"
+    }
+  ],
+  "topics": [
+    {
+      "id": "greetings",
+      "label": "Greetings & introductions",
+      "description": "Saying hello, introducing yourself, asking someone's name and nationality"
+    },
+    {
+      "id": "family",
+      "label": "Family members",
+      "description": "Talking about parents, siblings, family size"
+    },
+    {
+      "id": "numbers_dates",
+      "label": "Numbers, dates & time",
+      "description": "Counting, telling the date, saying what time it is"
+    },
+    {
+      "id": "food_drink",
+      "label": "Food & drink",
+      "description": "Ordering food, saying what you like to eat and drink"
+    },
+    {
+      "id": "daily_life",
+      "label": "Daily activities",
+      "description": "Describing your day — going to school, eating, sleeping"
+    }
+  ]
+}

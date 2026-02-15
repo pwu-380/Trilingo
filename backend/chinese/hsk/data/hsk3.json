@@ -1,0 +1,99 @@
+{
+  "level": 3,
+  "vocab": [
+    {"chinese": "经验", "pinyin": "jīng yàn", "english": "experience"},
+    {"chinese": "关系", "pinyin": "guān xì", "english": "relationship / connection"},
+    {"chinese": "环境", "pinyin": "huán jìng", "english": "environment"},
+    {"chinese": "机会", "pinyin": "jī huì", "english": "opportunity"},
+    {"chinese": "决定", "pinyin": "jué dìng", "english": "to decide / decision"},
+    {"chinese": "办法", "pinyin": "bàn fǎ", "english": "method / way"},
+    {"chinese": "选择", "pinyin": "xuǎn zé", "english": "to choose / choice"},
+    {"chinese": "影响", "pinyin": "yǐng xiǎng", "english": "influence / to affect"},
+    {"chinese": "解决", "pinyin": "jiě jué", "english": "to solve"},
+    {"chinese": "讨论", "pinyin": "tǎo lùn", "english": "to discuss"},
+    {"chinese": "提高", "pinyin": "tí gāo", "english": "to improve / raise"},
+    {"chinese": "发现", "pinyin": "fā xiàn", "english": "to discover / find"},
+    {"chinese": "接受", "pinyin": "jiē shòu", "english": "to accept"},
+    {"chinese": "表示", "pinyin": "biǎo shì", "english": "to express / indicate"},
+    {"chinese": "保护", "pinyin": "bǎo hù", "english": "to protect"},
+    {"chinese": "改变", "pinyin": "gǎi biàn", "english": "to change"},
+    {"chinese": "丰富", "pinyin": "fēng fù", "english": "rich / abundant"},
+    {"chinese": "合适", "pinyin": "hé shì", "english": "suitable / appropriate"},
+    {"chinese": "积极", "pinyin": "jī jí", "english": "positive / active"},
+    {"chinese": "严格", "pinyin": "yán gé", "english": "strict"}
+  ],
+  "grammar": [
+    {
+      "pattern": "把 + Object + Verb + Complement",
+      "english": "Disposal construction (do something to an object)",
+      "example": "他把书放在桌子上。"
+    },
+    {
+      "pattern": "被 + Agent + Verb",
+      "english": "Passive voice",
+      "example": "蛋糕被他吃了。"
+    },
+    {
+      "pattern": "越来越 + Adj/Verb",
+      "english": "More and more",
+      "example": "天气越来越冷了。"
+    },
+    {
+      "pattern": "除了 A 以外，还/也 B",
+      "english": "Besides A, also B",
+      "example": "除了中文以外，我还学英文。"
+    },
+    {
+      "pattern": "Verb + 着",
+      "english": "Continuous state",
+      "example": "门开着。"
+    },
+    {
+      "pattern": "不但 A 而且 B",
+      "english": "Not only A but also B",
+      "example": "他不但聪明，而且努力。"
+    },
+    {
+      "pattern": "如果 A 就 B",
+      "english": "If A then B",
+      "example": "如果明天下雨，我就不去了。"
+    },
+    {
+      "pattern": "连 A 都/也 B",
+      "english": "Even A also B (emphasis)",
+      "example": "他连名字都不知道。"
+    }
+  ],
+  "topics": [
+    {
+      "id": "travel",
+      "label": "Travel & vacations",
+      "description": "Planning trips, booking hotels, describing travel experiences"
+    },
+    {
+      "id": "culture",
+      "label": "Chinese culture & holidays",
+      "description": "Spring Festival, Mid-Autumn, traditional customs"
+    },
+    {
+      "id": "opinions",
+      "label": "Expressing opinions",
+      "description": "Agreeing, disagreeing, giving reasons, debating simple topics"
+    },
+    {
+      "id": "environment",
+      "label": "Nature & environment",
+      "description": "Weather, animals, environmental protection"
+    },
+    {
+      "id": "media",
+      "label": "Movies, music & media",
+      "description": "Discussing favorite movies, music, TV shows, books"
+    },
+    {
+      "id": "relationships",
+      "label": "Relationships & feelings",
+      "description": "Talking about friends, describing emotions, giving advice"
+    }
+  ]
+}

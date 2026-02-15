@@ -1,0 +1,84 @@
+{
+  "level": 5,
+  "vocab": [
+    {"chinese": "现象", "pinyin": "xiàn xiàng", "english": "phenomenon"},
+    {"chinese": "理论", "pinyin": "lǐ lùn", "english": "theory"},
+    {"chinese": "概念", "pinyin": "gài niàn", "english": "concept"},
+    {"chinese": "制度", "pinyin": "zhì dù", "english": "system / institution"},
+    {"chinese": "结构", "pinyin": "jié gòu", "english": "structure"},
+    {"chinese": "趋势", "pinyin": "qū shì", "english": "trend"},
+    {"chinese": "发展", "pinyin": "fā zhǎn", "english": "to develop / development"},
+    {"chinese": "分析", "pinyin": "fēn xī", "english": "to analyze / analysis"},
+    {"chinese": "证明", "pinyin": "zhèng míng", "english": "to prove"},
+    {"chinese": "实现", "pinyin": "shí xiàn", "english": "to realize / achieve"},
+    {"chinese": "调整", "pinyin": "tiáo zhěng", "english": "to adjust"},
+    {"chinese": "维持", "pinyin": "wéi chí", "english": "to maintain"},
+    {"chinese": "促进", "pinyin": "cù jìn", "english": "to promote / facilitate"},
+    {"chinese": "承担", "pinyin": "chéng dān", "english": "to bear / undertake"},
+    {"chinese": "克服", "pinyin": "kè fú", "english": "to overcome"},
+    {"chinese": "显然", "pinyin": "xiǎn rán", "english": "obviously"},
+    {"chinese": "逐渐", "pinyin": "zhú jiàn", "english": "gradually"},
+    {"chinese": "彻底", "pinyin": "chè dǐ", "english": "thoroughly"},
+    {"chinese": "充分", "pinyin": "chōng fèn", "english": "fully / ample"},
+    {"chinese": "客观", "pinyin": "kè guān", "english": "objective"}
+  ],
+  "grammar": [
+    {
+      "pattern": "以 A 为 B",
+      "english": "Take A as B / regard A as B",
+      "example": "我们以质量为标准。"
+    },
+    {
+      "pattern": "即使 A 也 B",
+      "english": "Even if A, still B",
+      "example": "即使失败，也不要放弃。"
+    },
+    {
+      "pattern": "A 是 A，不过/但 B",
+      "english": "A is A (concessive), but B",
+      "example": "好是好，不过太贵了。"
+    },
+    {
+      "pattern": "否则 / 不然",
+      "english": "Otherwise / or else",
+      "example": "你快走吧，否则要迟到了。"
+    },
+    {
+      "pattern": "所 + Verb (+ 的)",
+      "english": "What is [verb]-ed (nominalization)",
+      "example": "我所了解的情况。"
+    },
+    {
+      "pattern": "至于",
+      "english": "As for / regarding",
+      "example": "至于价格，我们再讨论。"
+    }
+  ],
+  "topics": [
+    {
+      "id": "economics",
+      "label": "Economy & business",
+      "description": "Market trends, entrepreneurship, economic development"
+    },
+    {
+      "id": "technology",
+      "label": "Science & technology",
+      "description": "Internet, AI, smartphones, scientific discoveries"
+    },
+    {
+      "id": "philosophy",
+      "label": "Values & philosophy",
+      "description": "Life philosophy, success, happiness, traditional vs modern values"
+    },
+    {
+      "id": "global_issues",
+      "label": "Global issues",
+      "description": "Climate change, globalization, cultural exchange"
+    },
+    {
+      "id": "literature",
+      "label": "Literature & arts",
+      "description": "Chinese literature, poetry, calligraphy, modern art"
+    }
+  ]
+}

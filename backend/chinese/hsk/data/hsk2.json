@@ -1,0 +1,139 @@
+{
+  "level": 2,
+  "vocab": [
+    {"chinese": "因为", "pinyin": "yīn wèi", "english": "because"},
+    {"chinese": "所以", "pinyin": "suǒ yǐ", "english": "so / therefore"},
+    {"chinese": "但是", "pinyin": "dàn shì", "english": "but / however"},
+    {"chinese": "已经", "pinyin": "yǐ jīng", "english": "already"},
+    {"chinese": "一起", "pinyin": "yī qǐ", "english": "together"},
+    {"chinese": "准备", "pinyin": "zhǔn bèi", "english": "to prepare"},
+    {"chinese": "知道", "pinyin": "zhī dào", "english": "to know"},
+    {"chinese": "介绍", "pinyin": "jiè shào", "english": "to introduce"},
+    {"chinese": "希望", "pinyin": "xī wàng", "english": "to hope / wish"},
+    {"chinese": "觉得", "pinyin": "jué de", "english": "to feel / think"},
+    {"chinese": "生日", "pinyin": "shēng rì", "english": "birthday"},
+    {"chinese": "考试", "pinyin": "kǎo shì", "english": "exam / test"},
+    {"chinese": "问题", "pinyin": "wèn tí", "english": "question / problem"},
+    {"chinese": "旁边", "pinyin": "páng biān", "english": "beside / next to"},
+    {"chinese": "眼睛", "pinyin": "yǎn jīng", "english": "eyes"},
+    {"chinese": "身体", "pinyin": "shēn tǐ", "english": "body / health"},
+    {"chinese": "哥哥", "pinyin": "gē ge", "english": "older brother"},
+    {"chinese": "姐姐", "pinyin": "jiě jie", "english": "older sister"},
+    {"chinese": "弟弟", "pinyin": "dì di", "english": "younger brother"},
+    {"chinese": "妹妹", "pinyin": "mèi mei", "english": "younger sister"},
+    {"chinese": "丈夫", "pinyin": "zhàng fu", "english": "husband"},
+    {"chinese": "妻子", "pinyin": "qī zi", "english": "wife"},
+    {"chinese": "游泳", "pinyin": "yóu yǒng", "english": "to swim"},
+    {"chinese": "跑步", "pinyin": "pǎo bù", "english": "to run / jog"},
+    {"chinese": "唱歌", "pinyin": "chàng gē", "english": "to sing"},
+    {"chinese": "跳舞", "pinyin": "tiào wǔ", "english": "to dance"},
+    {"chinese": "公司", "pinyin": "gōng sī", "english": "company"},
+    {"chinese": "教室", "pinyin": "jiào shì", "english": "classroom"},
+    {"chinese": "机场", "pinyin": "jī chǎng", "english": "airport"},
+    {"chinese": "牛奶", "pinyin": "niú nǎi", "english": "milk"},
+    {"chinese": "鸡蛋", "pinyin": "jī dàn", "english": "egg"},
+    {"chinese": "西瓜", "pinyin": "xī guā", "english": "watermelon"},
+    {"chinese": "快乐", "pinyin": "kuài lè", "english": "happy"},
+    {"chinese": "便宜", "pinyin": "pián yi", "english": "cheap"},
+    {"chinese": "贵", "pinyin": "guì", "english": "expensive"},
+    {"chinese": "可能", "pinyin": "kě néng", "english": "possible / maybe"},
+    {"chinese": "聪明", "pinyin": "cōng ming", "english": "clever / smart"},
+    {"chinese": "努力", "pinyin": "nǔ lì", "english": "hardworking / to work hard"},
+    {"chinese": "帮忙", "pinyin": "bāng máng", "english": "to help"},
+    {"chinese": "告诉", "pinyin": "gào su", "english": "to tell"},
+    {"chinese": "开始", "pinyin": "kāi shǐ", "english": "to begin / start"},
+    {"chinese": "完成", "pinyin": "wán chéng", "english": "to complete / finish"},
+    {"chinese": "离开", "pinyin": "lí kāi", "english": "to leave"},
+    {"chinese": "经常", "pinyin": "jīng cháng", "english": "often"},
+    {"chinese": "一直", "pinyin": "yī zhí", "english": "always / continuously"},
+    {"chinese": "终于", "pinyin": "zhōng yú", "english": "finally / at last"},
+    {"chinese": "忽然", "pinyin": "hū rán", "english": "suddenly"},
+    {"chinese": "其实", "pinyin": "qí shí", "english": "actually / in fact"},
+    {"chinese": "特别", "pinyin": "tè bié", "english": "especially / special"},
+    {"chinese": "非常", "pinyin": "fēi cháng", "english": "very / extremely"}
+  ],
+  "grammar": [
+    {
+      "pattern": "因为 A 所以 B",
+      "english": "Because A, therefore B",
+      "example": "因为下雨，所以我没去。"
+    },
+    {
+      "pattern": "虽然 A 但是 B",
+      "english": "Although A, but B",
+      "example": "虽然很累，但是很开心。"
+    },
+    {
+      "pattern": "比 (comparison)",
+      "english": "A is more [adj] than B",
+      "example": "他比我高。"
+    },
+    {
+      "pattern": "Subject + 正在 + Verb",
+      "english": "In the process of doing (progressive)",
+      "example": "他正在吃饭。"
+    },
+    {
+      "pattern": "Subject + 要 + Verb",
+      "english": "Want to / going to",
+      "example": "我要去中国。"
+    },
+    {
+      "pattern": "可以 / 能 + Verb",
+      "english": "Can / may (permission or ability)",
+      "example": "你可以坐这儿。"
+    },
+    {
+      "pattern": "Subject + 得 + complement",
+      "english": "Degree complement (how well something is done)",
+      "example": "他说得很好。"
+    },
+    {
+      "pattern": "从 A 到 B",
+      "english": "From A to B (time or place)",
+      "example": "从北京到上海。"
+    },
+    {
+      "pattern": "Subject + 给 + Indirect Object + Verb + Direct Object",
+      "english": "Give / do something for someone",
+      "example": "他给我买了一本书。"
+    },
+    {
+      "pattern": "一边 A 一边 B",
+      "english": "Do A and B at the same time",
+      "example": "她一边唱歌一边跳舞。"
+    }
+  ],
+  "topics": [
+    {
+      "id": "shopping",
+      "label": "Shopping & prices",
+      "description": "Buying things, asking prices, bargaining, using 多少钱"
+    },
+    {
+      "id": "transport",
+      "label": "Transport & directions",
+      "description": "Taking buses, taxis, trains; asking for directions"
+    },
+    {
+      "id": "hobbies",
+      "label": "Hobbies & sports",
+      "description": "Talking about what you like to do — swimming, singing, dancing, reading"
+    },
+    {
+      "id": "weather",
+      "label": "Weather & seasons",
+      "description": "Describing weather, talking about favorite seasons"
+    },
+    {
+      "id": "health",
+      "label": "Health & body",
+      "description": "Describing how you feel, seeing a doctor, body parts"
+    },
+    {
+      "id": "school_work",
+      "label": "School & work",
+      "description": "Talking about classes, exams, your job, colleagues"
+    }
+  ]
+}
