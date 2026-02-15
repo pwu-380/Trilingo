@@ -18,7 +18,7 @@ const AL_ICONS: Record<Emotion, string> = {
 
 interface Props {
   message: ChatMessage;
-  onAddCardFromWord?: (word: string) => Promise<{ duplicate: boolean }>;
+  onAddCardFromWord?: (word: string) => void;
 }
 
 interface PopupInfo {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { checkAuth } from "./api/client";
 import { createCardFromWord } from "./api/flashcards";
 import { useChat } from "./hooks/useChat";
@@ -6,6 +6,7 @@ import { useFlashcards } from "./hooks/useFlashcards";
 import ChatPanel from "./components/chat/ChatPanel";
 import FlashcardPanel from "./components/flashcards/FlashcardPanel";
 import TabShell from "./components/shared/TabShell";
+import ToastContainer, { type ToastData } from "./components/shared/Toast";
 
 function App() {
   const [authState, setAuthState] = useState<
@@ -43,17 +44,38 @@ function App() {
 function AuthenticatedApp() {
   const chat = useChat();
   const fc = useFlashcards();
+  const [toasts, setToasts] = useState<ToastData[]>([]);
+  const toastIdRef = useRef(0);
+
+  const addToast = useCallback((message: string, type: ToastData["type"]) => {
+    const id = ++toastIdRef.current;
+    setToasts((prev) => [...prev, { id, message, type }]);
+  }, []);
+
+  const removeToast = useCallback((id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
 
   const handleAddCardFromWord = useCallback(
-    async (word: string): Promise<{ duplicate: boolean }> => {
-      const result = await createCardFromWord(word);
-      fc.refreshCards();
-      return { duplicate: result.duplicate };
+    (word: string) => {
+      createCardFromWord(word)
+        .then((result) => {
+          if (result.duplicate) {
+            addToast(`'${word}' already in flash cards`, "info");
+          } else {
+            addToast(`Added '${word}' to flash cards`, "success");
+          }
+          fc.refreshCards();
+        })
+        .catch(() => {
+          addToast(`Failed to add '${word}'`, "error");
+        });
     },
-    [fc],
+    [fc, addToast],
   );
 
   return (
+    <>
     <TabShell
       flashcardsContent={
         <FlashcardPanel
@@ -90,6 +112,8 @@ function AuthenticatedApp() {
         onAddCardFromWord={handleAddCardFromWord}
       />
     </TabShell>
+    <ToastContainer toasts={toasts} onRemove={removeToast} />
+    </>
   );
 }
 

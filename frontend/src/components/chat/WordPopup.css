@@ -43,19 +43,3 @@
   background: #4d7df7;
 }
 
-.word-popup-status {
-  font-size: 0.85em;
-  color: #aaa;
-}
-
-.word-popup-status.success {
-  color: #4caf50;
-}
-
-.word-popup-status.info {
-  color: #ff9800;
-}
-
-.word-popup-status.error {
-  color: #f44336;
-}

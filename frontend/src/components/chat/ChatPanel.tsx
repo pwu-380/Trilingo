@@ -17,7 +17,7 @@ interface Props {
   onDeleteSession: (id: number) => void;
   onSendMessage: (content: string) => void;
   onClearError: () => void;
-  onAddCardFromWord?: (word: string) => Promise<{ duplicate: boolean }>;
+  onAddCardFromWord?: (word: string) => void;
 }
 
 export default function ChatPanel({
