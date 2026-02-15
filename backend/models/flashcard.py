@@ -47,3 +47,13 @@ class QuizAnswerRequest(BaseModel):
 class QuizAnswerResponse(BaseModel):
     correct: bool
     correct_answer: str
+
+
+class FlashcardFromWordRequest(BaseModel):
+    word: str
+    source: str = "chat"
+
+
+class FlashcardFromWordResponse(BaseModel):
+    card: FlashcardResponse
+    duplicate: bool = False

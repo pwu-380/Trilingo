@@ -6,6 +6,7 @@ from backend.models.chat import (
     ChatMessageResponse,
     ChatSessionDetail,
     ChatSessionResponse,
+    SegmentedMessageResponse,
 )
 from backend.services import chat_service
 
@@ -50,3 +51,17 @@ async def send_message(session_id: int, body: ChatMessageCreate):
         raise HTTPException(status_code=404, detail="Session not found")
     user_msg, assistant_msg = result
     return {"user_message": user_msg, "assistant_message": assistant_msg}
+
+
+@router.post(
+    "/messages/{message_id}/segment",
+    response_model=SegmentedMessageResponse,
+)
+async def segment_message(message_id: int):
+    result = await chat_service.segment_message(message_id)
+    if result is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Message not found or not an assistant message",
+        )
+    return result

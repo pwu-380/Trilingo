@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { checkAuth } from "./api/client";
+import { createCardFromWord } from "./api/flashcards";
 import { useChat } from "./hooks/useChat";
 import { useFlashcards } from "./hooks/useFlashcards";
 import ChatPanel from "./components/chat/ChatPanel";
@@ -43,6 +44,15 @@ function AuthenticatedApp() {
   const chat = useChat();
   const fc = useFlashcards();
 
+  const handleAddCardFromWord = useCallback(
+    async (word: string): Promise<{ duplicate: boolean }> => {
+      const result = await createCardFromWord(word);
+      fc.refreshCards();
+      return { duplicate: result.duplicate };
+    },
+    [fc],
+  );
+
   return (
     <TabShell
       flashcardsContent={
@@ -77,6 +87,7 @@ function AuthenticatedApp() {
         onDeleteSession={chat.deleteSession}
         onSendMessage={chat.sendMessage}
         onClearError={chat.clearError}
+        onAddCardFromWord={handleAddCardFromWord}
       />
     </TabShell>
   );

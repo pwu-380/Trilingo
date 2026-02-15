@@ -1,0 +1,61 @@
+.word-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.word-popup {
+  z-index: 100;
+  background: #1e1e2e;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 12px 16px;
+  min-width: 160px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.word-popup-word {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: #eee;
+  margin-bottom: 2px;
+}
+
+.word-popup-pinyin {
+  font-size: 0.9em;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.word-popup-add-btn {
+  background: #3a6cf4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.word-popup-add-btn:hover {
+  background: #4d7df7;
+}
+
+.word-popup-status {
+  font-size: 0.85em;
+  color: #aaa;
+}
+
+.word-popup-status.success {
+  color: #4caf50;
+}
+
+.word-popup-status.info {
+  color: #ff9800;
+}
+
+.word-popup-status.error {
+  color: #f44336;
+}

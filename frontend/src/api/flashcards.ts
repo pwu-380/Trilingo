@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import type { Flashcard, QuizQuestion, QuizAnswerResponse } from "../types/flashcard";
+import type { Flashcard, FromWordResponse, QuizQuestion, QuizAnswerResponse } from "../types/flashcard";
 
 export function listCards(active?: boolean): Promise<Flashcard[]> {
   const params = active !== undefined ? `?active=${active}` : "";
@@ -51,5 +51,15 @@ export function submitAnswer(
   return apiFetch("/api/flashcards/quiz/answer", {
     method: "POST",
     body: JSON.stringify({ card_id: cardId, answer, quiz_type: quizType }),
+  });
+}
+
+export function createCardFromWord(
+  word: string,
+  source: string = "chat",
+): Promise<FromWordResponse> {
+  return apiFetch("/api/flashcards/from-word", {
+    method: "POST",
+    body: JSON.stringify({ word, source }),
   });
 }

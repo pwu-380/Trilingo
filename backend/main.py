@@ -21,6 +21,10 @@ async def lifespan(app: FastAPI):
     seeded = await seed_cards()
     if seeded:
         print(f"Seeded {seeded} HSK Level 2 flashcards")
+    # Preload jieba dictionary to avoid cold-start delay
+    import jieba
+    jieba.initialize()
+    print("jieba dictionary loaded")
     if TRILINGO_TOKEN:
         print(f"Auth enabled (token: {TRILINGO_TOKEN[:4]}...)")
     else:

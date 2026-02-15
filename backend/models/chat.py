@@ -34,3 +34,14 @@ class ChatSessionResponse(BaseModel):
 
 class ChatSessionDetail(ChatSessionResponse):
     messages: list[ChatMessageResponse] = []
+
+
+class WordBoundary(BaseModel):
+    start: int
+    end: int
+    word: str
+
+
+class SegmentedMessageResponse(BaseModel):
+    message_id: int
+    words: list[WordBoundary]

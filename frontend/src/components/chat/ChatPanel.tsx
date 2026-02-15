@@ -17,6 +17,7 @@ interface Props {
   onDeleteSession: (id: number) => void;
   onSendMessage: (content: string) => void;
   onClearError: () => void;
+  onAddCardFromWord?: (word: string) => Promise<{ duplicate: boolean }>;
 }
 
 export default function ChatPanel({
@@ -31,6 +32,7 @@ export default function ChatPanel({
   onDeleteSession,
   onSendMessage,
   onClearError,
+  onAddCardFromWord,
 }: Props) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -89,7 +91,11 @@ export default function ChatPanel({
           <>
             <div className="messages-area">
               {messages.map((m) => (
-                <MessageBubble key={m.id} message={m} />
+                <MessageBubble
+                  key={m.id}
+                  message={m}
+                  onAddCardFromWord={onAddCardFromWord}
+                />
               ))}
               {sending && (
                 <div className="typing-indicator">Alister is typing</div>

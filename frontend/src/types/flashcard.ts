@@ -23,3 +23,8 @@ export interface QuizAnswerResponse {
   correct: boolean;
   correct_answer: string;
 }
+
+export interface FromWordResponse {
+  card: Flashcard;
+  duplicate: boolean;
+}

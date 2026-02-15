@@ -31,3 +31,14 @@ export interface SendMessageResponse {
   user_message: ChatMessage;
   assistant_message: ChatMessage;
 }
+
+export interface WordBoundary {
+  start: number;
+  end: number;
+  word: string;
+}
+
+export interface SegmentedMessageResponse {
+  message_id: number;
+  words: WordBoundary[];
+}

@@ -2,6 +2,7 @@ import { apiFetch } from "./client";
 import type {
   ChatSession,
   ChatSessionDetail,
+  SegmentedMessageResponse,
   SendMessageResponse,
 } from "../types/chat";
 
@@ -28,5 +29,13 @@ export function sendMessage(
   return apiFetch(`/api/chat/sessions/${sessionId}/messages`, {
     method: "POST",
     body: JSON.stringify({ content }),
+  });
+}
+
+export function segmentMessage(
+  messageId: number
+): Promise<SegmentedMessageResponse> {
+  return apiFetch(`/api/chat/messages/${messageId}/segment`, {
+    method: "POST",
   });
 }

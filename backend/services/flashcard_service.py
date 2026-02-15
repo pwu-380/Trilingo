@@ -5,6 +5,7 @@ import random
 from backend.chinese.pinyin import pinyin_for_text
 from backend.database import get_db
 from backend.models.flashcard import (
+    FlashcardFromWordResponse,
     FlashcardResponse,
     QuizAnswerResponse,
     QuizQuestion,
@@ -72,6 +73,54 @@ async def _generate_notes(card_id: int, chinese: str, pinyin: str, english: str)
                 await db.commit()
     except Exception:
         pass  # non-critical — card works without notes
+
+
+# ---------------------------------------------------------------------------
+# From-word creation (chat integration)
+# ---------------------------------------------------------------------------
+
+_TRANSLATE_PROMPT = """\
+Translate this Mandarin Chinese word or phrase to English. \
+Reply with ONLY the English translation (1-5 words), nothing else.
+
+Chinese: {word}"""
+
+
+async def create_card_from_word(
+    word: str, source: str = "chat"
+) -> FlashcardFromWordResponse:
+    """Create a flashcard from a single Chinese word.
+
+    Auto-generates pinyin (local) and English (via AI).
+    Returns existing card with duplicate=True if the word already exists.
+    """
+    # Check for duplicate
+    async with get_db() as db:
+        rows = await db.execute_fetchall(
+            f"SELECT {_CARD_COLS} FROM flashcards WHERE chinese = ?",
+            (word,),
+        )
+        if rows:
+            return FlashcardFromWordResponse(
+                card=_row_to_card(rows[0]), duplicate=True
+            )
+
+    # Auto-generate pinyin
+    pin = pinyin_for_text(word)
+
+    # Auto-generate English via AI
+    from backend.providers.registry import get_chat_provider
+
+    provider = get_chat_provider()
+    prompt = _TRANSLATE_PROMPT.format(word=word)
+    english = await provider.generate_text(prompt)
+    english = english.strip().strip('"').strip("'")
+
+    # Create the card (this also fires background notes generation)
+    card = await create_card(
+        chinese=word, pinyin=pin, english=english, source=source
+    )
+    return FlashcardFromWordResponse(card=card, duplicate=False)
 
 
 # ---------------------------------------------------------------------------

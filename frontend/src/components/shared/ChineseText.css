@@ -12,3 +12,13 @@
   color: var(--pinyin-color, #888);
   font-weight: 400;
 }
+
+.word-group.clickable {
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.15s;
+}
+
+.word-group.clickable:hover {
+  background-color: rgba(255, 230, 100, 0.25);
+}

@@ -3,6 +3,8 @@ from fastapi.security import APIKeyHeader
 
 from backend.models.flashcard import (
     FlashcardCreate,
+    FlashcardFromWordRequest,
+    FlashcardFromWordResponse,
     FlashcardResponse,
     FlashcardUpdate,
     QuizAnswerRequest,
@@ -46,6 +48,13 @@ async def get_quiz(
     if question is None:
         raise HTTPException(status_code=404, detail="No active cards available")
     return question
+
+
+@router.post("/from-word", response_model=FlashcardFromWordResponse)
+async def create_from_word(body: FlashcardFromWordRequest):
+    return await flashcard_service.create_card_from_word(
+        word=body.word, source=body.source
+    )
 
 
 @router.post("/quiz/answer", response_model=QuizAnswerResponse)

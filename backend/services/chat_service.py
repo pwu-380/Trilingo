@@ -1,12 +1,15 @@
 import json
 
 from backend.chinese.pinyin import annotate_pinyin
+from backend.chinese.segmentation import segment_to_word_boundaries
 from backend.database import get_db
 from backend.models.chat import (
     ChatMessageResponse,
     ChatSessionDetail,
     ChatSessionResponse,
     PinyinPair,
+    SegmentedMessageResponse,
+    WordBoundary,
 )
 from backend.providers.base import ChatResponse
 from backend.providers.registry import get_chat_provider
@@ -158,6 +161,28 @@ async def send_message(
             (assistant_msg_id,),
         )
         return _row_to_message(user_row[0]), _row_to_message(assistant_row[0])
+
+
+async def segment_message(message_id: int) -> SegmentedMessageResponse | None:
+    """Segment an assistant message's content into word boundaries."""
+    async with get_db() as db:
+        rows = await db.execute_fetchall(
+            "SELECT id, content, role FROM chat_messages WHERE id = ?",
+            (message_id,),
+        )
+        if not rows:
+            return None
+        row = rows[0]
+        if row[2] != "assistant":
+            return None
+
+        content = row[1]
+        boundaries = segment_to_word_boundaries(content)
+        words = [
+            WordBoundary(start=start, end=end, word=word)
+            for start, end, word in boundaries
+        ]
+        return SegmentedMessageResponse(message_id=message_id, words=words)
 
 
 def _row_to_message(row) -> ChatMessageResponse:
