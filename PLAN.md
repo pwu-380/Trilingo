@@ -242,7 +242,7 @@ CREATE TABLE flashcard_attempts (
 
 ---
 
-### Phase 3 — Chatbot ↔ Flashcard Integration ✓ COMPLETE
+### Phase 3 — Chatbot ↔ Flashcard Integration (1 issue remaining)
 
 **Goal**: Users can click Chinese words in the chatbot and add them as flash cards without disrupting chat flow.
 

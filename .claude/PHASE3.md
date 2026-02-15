@@ -123,6 +123,25 @@ When `words`/`onWordClick` props are absent, renders exactly as before (flat cha
 
 ---
 
+## Outstanding Issue — Non-blocking Card Creation (Trilingo-90k, P1)
+
+**Problem**: The `POST /from-word` endpoint calls Gemini synchronously for English translation before returning. The WordPopup overlay blocks chat interaction while the user waits (~1-3s). This violates the key design principle: *card creation must not disrupt chat flow*.
+
+**Symptoms**:
+- WordPopup shows "Adding..." with an overlay that prevents clicking/typing in chat
+- User cannot continue chatting until the Gemini translation call completes
+
+**Fix approach** (to be implemented):
+1. **Frontend**: Remove the blocking overlay from WordPopup. Replace with a non-modal toast notification that auto-dismisses. The popup should close immediately on "Add" click, and a small toast ("Card added!" / "Already in your cards") should appear without blocking interaction.
+2. **Backend** (optional): Could also make the endpoint fire-and-forget — return immediately with optimistic response and generate English translation in background. But frontend-only fix may be sufficient if the popup is simply made non-blocking.
+
+**Acceptance criteria**:
+- Clicking "Add to Flash Cards" does not prevent the user from continuing to chat
+- A non-modal notification confirms success/duplicate/error
+- Card still appears in Flash Cards tab after creation
+
+---
+
 ## Verification Checklist
 
 1. Segmentation returns correct jieba word boundaries for assistant messages
@@ -134,3 +153,4 @@ When `words`/`onWordClick` props are absent, renders exactly as before (flat cha
 7. No regressions in chat, flashcard CRUD, or quiz
 8. ChineseText backward-compatible (flashcard components unchanged)
 9. jieba preloads at startup (no cold-start delay)
+10. **Card creation does not block chat interaction** (Trilingo-90k)
