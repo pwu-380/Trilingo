@@ -163,6 +163,32 @@ async def create_card(
     return card
 
 
+async def regenerate_card_assets(card_id: int) -> FlashcardResponse | None:
+    """Clear existing assets/notes and re-queue generation."""
+    card = await get_card(card_id)
+    if card is None:
+        return None
+
+    # Clear existing fields so polling knows to wait
+    async with get_db() as db:
+        await db.execute(
+            "UPDATE flashcards SET notes = NULL, audio_path = NULL, image_path = NULL "
+            "WHERE id = ?",
+            (card_id,),
+        )
+        await db.commit()
+
+    # Fire background tasks
+    asyncio.create_task(
+        _generate_notes(card_id, card.chinese, card.pinyin, card.english)
+    )
+    from backend.services.asset_worker import process_card_assets
+    asyncio.create_task(process_card_assets(card_id, card.chinese, card.english))
+
+    # Return the card with cleared fields so the frontend starts polling
+    return await get_card(card_id)
+
+
 async def list_cards(active_only: bool | None = None) -> list[FlashcardResponse]:
     async with get_db() as db:
         if active_only is True:

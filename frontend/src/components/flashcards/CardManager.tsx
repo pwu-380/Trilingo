@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { authedUrl } from "../../api/client";
 import type { Flashcard } from "../../types/flashcard";
 import "./CardManager.css";
 
@@ -14,6 +15,7 @@ interface Props {
   onCreateCard: (chinese: string, english: string) => Promise<Flashcard | null>;
   onDeleteCard: (id: number) => void;
   onToggleActive: (id: number, active: boolean) => void;
+  onRegenerateAssets: (id: number) => void;
 }
 
 export default function CardManager({
@@ -22,6 +24,7 @@ export default function CardManager({
   onCreateCard,
   onDeleteCard,
   onToggleActive,
+  onRegenerateAssets,
 }: Props) {
   const [chinese, setChinese] = useState("");
   const [english, setEnglish] = useState("");
@@ -29,7 +32,7 @@ export default function CardManager({
   const [showPool, setShowPool] = useState<"active" | "inactive">("active");
 
   const playAudio = useCallback((cardId: number) => {
-    const audio = new Audio(`/api/flashcards/${cardId}/audio`);
+    const audio = new Audio(authedUrl(`/api/flashcards/${cardId}/audio`));
     audio.play().catch(() => {});
   }, []);
 
@@ -91,12 +94,6 @@ export default function CardManager({
       <div className="cm-grid">
         {displayCards.map((card) => (
           <div key={card.id} className="cm-card">
-            {(() => { const img = parseImagePath(card.image_path); return img ? (
-              <div className="cm-card-image">
-                <img src={`/assets/${img.path}`} alt={card.english} />
-                <span className="cm-card-attribution">{img.creator} / {img.license}</span>
-              </div>
-            ) : null; })()}
             <div className="cm-card-top">
               <div className="cm-card-chinese">
                 {card.chinese}
@@ -118,6 +115,13 @@ export default function CardManager({
                 >
                   {card.active ? "Shelve" : "Activate"}
                 </button>
+                <button
+                  className="cm-card-toggle"
+                  onClick={() => onRegenerateAssets(card.id)}
+                  title="Regenerate audio, image, and tip"
+                >
+                  Regen
+                </button>
                 {!card.active && (
                   <button
                     className="cm-card-delete"
@@ -130,6 +134,12 @@ export default function CardManager({
               </div>
             </div>
             <div className="cm-card-pinyin">{card.pinyin}</div>
+            {(() => { const img = parseImagePath(card.image_path); return img ? (
+              <div className="cm-card-image">
+                <img src={`/assets/${img.path}`} alt={card.english} />
+                <span className="cm-card-attribution">{img.creator} / {img.license}</span>
+              </div>
+            ) : null; })()}
             <div className="cm-card-english">{card.english}</div>
             {card.notes && <div className="cm-card-notes">{card.notes}</div>}
             {card.source !== "manual" && (

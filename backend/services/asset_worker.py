@@ -87,13 +87,21 @@ async def process_card_assets(card_id: int, chinese: str, english: str) -> None:
 
 
 async def backfill_assets(batch_size: int = 5) -> int:
-    """Queue asset generation for cards missing audio. Returns count queued."""
+    """Queue asset generation for all cards missing audio, in batches."""
     async with get_db() as db:
         rows = await db.execute_fetchall(
-            "SELECT id, chinese, english FROM flashcards WHERE audio_path IS NULL "
-            "LIMIT ?",
-            (batch_size,),
+            "SELECT id, chinese, english FROM flashcards WHERE audio_path IS NULL"
         )
-    for row in rows:
-        asyncio.create_task(process_card_assets(row[0], row[1], row[2]))
-    return len(rows)
+    if not rows:
+        return 0
+    total = len(rows)
+
+    async def _process_batches():
+        for i in range(0, len(rows), batch_size):
+            batch = rows[i : i + batch_size]
+            await asyncio.gather(
+                *(process_card_assets(r[0], r[1], r[2]) for r in batch)
+            )
+
+    asyncio.create_task(_process_batches())
+    return total

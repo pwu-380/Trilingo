@@ -86,13 +86,15 @@
 }
 
 .cm-card-chinese {
-  font-size: 1.4em;
+  font-size: 1.6em;
 }
 
 .cm-card-actions {
   display: flex;
+  flex-direction: column;
   gap: 4px;
   flex-shrink: 0;
+  align-items: flex-end;
 }
 
 .cm-card-toggle {

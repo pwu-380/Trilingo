@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { authedUrl } from "../../api/client";
 import type { QuizQuestion, QuizAnswerResponse } from "../../types/flashcard";
 import type { ReviewMode } from "../../hooks/useFlashcards";
 import "./QuizView.css";
@@ -34,7 +35,7 @@ export default function QuizView({
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
 
   const playAudio = useCallback((cardId: number) => {
-    const audio = new Audio(`/api/flashcards/${cardId}/audio`);
+    const audio = new Audio(authedUrl(`/api/flashcards/${cardId}/audio`));
     audio.play().catch(() => {});
   }, []);
 

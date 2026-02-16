@@ -96,6 +96,11 @@ function AuthenticatedApp() {
           onEndReview={fc.endReview}
           onDeactivateCard={fc.deactivateDuringReview}
           onClearError={fc.clearError}
+          onRegenerateAssets={(id: number) => {
+            fc.regenerateAssets(id).then(() => {
+              addToast("Regenerating assets...", "info");
+            });
+          }}
         />
       }
     >

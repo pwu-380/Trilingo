@@ -72,6 +72,14 @@ async def submit_answer(body: QuizAnswerRequest):
     return result
 
 
+@router.post("/{card_id}/regenerate", response_model=FlashcardResponse)
+async def regenerate_assets(card_id: int):
+    card = await flashcard_service.regenerate_card_assets(card_id)
+    if card is None:
+        raise HTTPException(status_code=404, detail="Card not found")
+    return card
+
+
 @router.get("/{card_id}/audio")
 async def get_card_audio(card_id: int):
     audio_path = ASSETS_DIR / "audio" / f"{card_id}.mp3"

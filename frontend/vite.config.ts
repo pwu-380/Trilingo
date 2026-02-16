@@ -6,7 +6,8 @@ export default defineConfig({
   server: {
     port: 8732,
     proxy: {
-      '/api': 'http://localhost:8731'
+      '/api': 'http://localhost:8731',
+      '/assets': 'http://localhost:8731'
     }
   }
 })

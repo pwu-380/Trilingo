@@ -54,6 +54,10 @@ export function submitAnswer(
   });
 }
 
+export function regenerateAssets(id: number): Promise<Flashcard> {
+  return apiFetch(`/api/flashcards/${id}/regenerate`, { method: "POST" });
+}
+
 export function createCardFromWord(
   word: string,
   source: string = "chat",

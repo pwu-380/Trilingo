@@ -91,6 +91,20 @@ export function useFlashcards() {
     }
   }, []);
 
+  const regenerateAssets = useCallback(
+    async (id: number) => {
+      setError(null);
+      try {
+        const updated = await flashcardsApi.regenerateAssets(id);
+        setCards((prev) => prev.map((c) => (c.id === id ? updated : c)));
+        pollForAssets(id);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to regenerate assets");
+      }
+    },
+    [pollForAssets],
+  );
+
   // --- Review session ---
 
   const loadNextQuestion = useCallback(async (session: ReviewSession) => {
@@ -189,6 +203,7 @@ export function useFlashcards() {
     endReview,
     deactivateDuringReview,
     pollForAssets,
+    regenerateAssets,
     clearError: () => setError(null),
   };
 }

@@ -20,6 +20,11 @@ export async function checkAuth(): Promise<boolean> {
   return res.ok;
 }
 
+export function authedUrl(path: string): string {
+  const token = getToken();
+  return token ? `${path}?token=${encodeURIComponent(token)}` : path;
+}
+
 export async function apiFetch<T>(
   path: string,
   options: RequestInit = {}
