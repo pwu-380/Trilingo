@@ -27,6 +27,11 @@ async def lifespan(app: FastAPI):
     import jieba
     jieba.initialize()
     print("jieba dictionary loaded")
+    # Normalize existing English to lowercase
+    from backend.database import get_db
+    async with get_db() as db:
+        await db.execute("UPDATE flashcards SET english = LOWER(english) WHERE english != LOWER(english)")
+        await db.commit()
     # Backfill assets for cards missing audio/images
     queued = await backfill_assets(batch_size=5)
     if queued:

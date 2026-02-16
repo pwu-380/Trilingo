@@ -138,6 +138,8 @@ async def create_card(
     if not pinyin.strip():
         pinyin = pinyin_for_text(chinese)
 
+    english = english.lower()
+
     async with get_db() as db:
         cursor = await db.execute(
             "INSERT INTO flashcards (chinese, pinyin, english, notes, source) "
