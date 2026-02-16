@@ -1014,78 +1014,70 @@
     {"chinese": "作者", "pinyin": "zuòzhě", "english": "author"},
     {"chinese": "做客", "pinyin": "zuò kè", "english": "be a guest"}
   ],
+  {
   "grammar": [
-    {
-      "pattern": "把 + Object + Verb + Complement",
-      "english": "Disposal construction (do something to an object)",
-      "example": "他把书放在桌子上。"
-    },
-    {
-      "pattern": "被 + Agent + Verb",
-      "english": "Passive voice",
-      "example": "蛋糕被他吃了。"
-    },
-    {
-      "pattern": "越来越 + Adj/Verb",
-      "english": "More and more",
-      "example": "天气越来越冷了。"
-    },
-    {
-      "pattern": "除了 A 以外，还/也 B",
-      "english": "Besides A, also B",
-      "example": "除了中文以外，我还学英文。"
-    },
-    {
-      "pattern": "Verb + 着",
-      "english": "Continuous state",
-      "example": "门开着。"
-    },
-    {
-      "pattern": "不但 A 而且 B",
-      "english": "Not only A but also B",
-      "example": "他不但聪明，而且努力。"
-    },
-    {
-      "pattern": "如果 A 就 B",
-      "english": "If A then B",
-      "example": "如果明天下雨，我就不去了。"
-    },
-    {
-      "pattern": "连 A 都/也 B",
-      "english": "Even A also B (emphasis)",
-      "example": "他连名字都不知道。"
-    }
+    { "pattern": "把 + Object + Verb + Result/Direction", "english": "The 'Ba' construction (Moving or disposing of something)", "example": "请把书放在桌子上。" },
+    { "pattern": "被 + Agent + Verb + Result", "english": "Passive voice (The subject is acted upon)", "example": "我的蛋糕被弟弟吃了。" },
+    { "pattern": "除了 ... 以外，还/也 ...", "english": "In addition to... also...", "example": "除了苹果以外，我还买了香蕉。" },
+    { "pattern": "除了 ... 以外，都 ...", "english": "Except for...", "example": "除了小明以外，大家都来了。" },
+    { "pattern": "不但 ... 而且 ...", "english": "Not only... but also...", "example": "她不但漂亮，而且很聪明。" },
+    { "pattern": "如果 ... 就 ...", "english": "Conditional (If... then...)", "example": "如果明天下雨，我们就不去爬山。" },
+    { "pattern": "只有 ... 才 ...", "english": "Only if... then...", "example": "只有努力学习，才能考好。" },
+    { "pattern": "越来越 + Adj/Verb", "english": "More and more... (Progressive change)", "example": "天气越来越热了。" },
+    { "pattern": "还是 ... 吧", "english": "Giving a suggestion (Had better...)", "example": "我们还是坐出租车吧。" },
+    { "pattern": "Verb + 起来", "english": "Starting an action or expressing a perspective", "example": "天阴了，快要下起雨来了。" },
+    { "pattern": "Verb + Direction (来/去)", "english": "Directional complement (Movement towards or away)", "example": "老师走进了教室来。" },
+    { "pattern": "一边 ... 一边 ...", "english": "Simultaneous actions (Doing two things at once)", "example": "我一边吃饭，一边看电视。" },
+    { "pattern": "先 ... 然后 ...", "english": "Sequential actions (First... then...)", "example": "我先洗澡，然后睡觉。" },
+    { "pattern": "地 (Particle)", "english": "Adverbial marker (How an action is performed)", "example": "他开心地笑了起来。" },
+    { "pattern": "或是 / 或者", "english": "Or (Used in statements, not questions)", "example": "我明天或是后天去你家。" },
+    { "pattern": "Verb + 结果补语 (Resultative Complements)", "english": "Expressing the result of an action (清楚, 懂, 到)", "example": "我听懂了老师说的话。" },
+    { "pattern": "关于 + Object", "english": "Preposition: About / Regarding", "example": "关于这个问题，我还不清楚。" },
+    { "pattern": "对 ... 感兴趣", "english": "To be interested in...", "example": "我对中国历史很感兴趣。" },
+    { "pattern": "越 ... 越 ...", "english": "The more... the more...", "example": "雨越下越大。" },
+    { "pattern": "快要 ... 了 / 就要 ... 了", "english": "Imminent action (About to happen)", "example": "火车快要开了。" }
   ],
   "topics": [
     {
-      "id": "travel",
-      "label": "Travel & vacations",
-      "description": "Planning trips, booking hotels, describing travel experiences"
+      "id": "travel_experience",
+      "label": "Travel & Exploration",
+      "description": "Discussing travel plans, buying tickets, luggage, and experiences in different cities."
     },
     {
-      "id": "culture",
-      "label": "Chinese culture & holidays",
-      "description": "Spring Festival, Mid-Autumn, traditional customs"
+      "id": "workplace_communication",
+      "label": "Workplace & Career",
+      "description": "Office interactions, meetings, using emails (邮件), and job responsibilities."
     },
     {
-      "id": "opinions",
-      "label": "Expressing opinions",
-      "description": "Agreeing, disagreeing, giving reasons, debating simple topics"
+      "id": "emotional_states",
+      "label": "Feelings & Emotions",
+      "description": "Expressing anxiety (着急), satisfaction (满意), happiness, and worry."
     },
     {
-      "id": "environment",
-      "label": "Nature & environment",
-      "description": "Weather, animals, environmental protection"
+      "id": "leisure_entertainment",
+      "label": "Entertainment & Media",
+      "description": "Discussing movies, TV shows (节目), news, and sports matches."
     },
     {
-      "id": "media",
-      "label": "Movies, music & media",
-      "description": "Discussing favorite movies, music, TV shows, books"
+      "id": "lifestyle_choices",
+      "label": "Environment & Lifestyle",
+      "description": "Comparing city life vs. countryside, environmental protection, and neighborhood surroundings."
     },
     {
-      "id": "relationships",
-      "label": "Relationships & feelings",
-      "description": "Talking about friends, describing emotions, giving advice"
+      "id": "problem_solving",
+      "label": "Solving Daily Problems",
+      "description": "Asking for repairs (修), finding lost items, and explaining accidents (意外)."
+    },
+    {
+      "id": "cultural_traditions",
+      "label": "Culture & Traditions",
+      "description": "Simple discussions on holidays, traditional food, and cultural differences."
+    },
+    {
+      "id": "academic_life",
+      "label": "Education & Self-Improvement",
+      "description": "University majors (专业), library research, and learning strategies (预习/复习)."
     }
   ]
+}
 }
