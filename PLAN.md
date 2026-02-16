@@ -53,8 +53,8 @@ Trilingo/
 │   │   ├── flashcard.py            # Pydantic models for flashcard API
 │   │   └── game.py                 # Pydantic models for game API (Phase 5)
 │   └── assets/                     # Locally saved generated assets
-│       ├── audio/                  # TTS audio files (stretch)
-│       └── images/                 # Sprite images (stretch)
+│       ├── audio/                  # TTS audio files (.mp3, via edge-tts)
+│       └── images/                 # CC images (.jpg, via Openverse API)
 ├── frontend/
 │   ├── index.html
 │   ├── vite.config.ts
@@ -237,8 +237,14 @@ CREATE TABLE flashcard_attempts (
 - Quiz supports both directions (Chinese→English, English→Chinese)
 - When showing Chinese, pinyin is hidden by default — click to reveal
 - Card selection is weighted: cards answered incorrectly more often appear more frequently
-- 30 HSK Level 2 words are seeded on first startup
+- 50 HSK Level 2 words are seeded on first startup
 - Cards without assets still function correctly (assets are optional enhancements)
+- TTS audio (edge-tts) and CC images (Openverse) are generated in the background for each card
+- Audio plays via speaker button on cards and when clicking answers during en_to_zh quiz
+- Images display on cards and as visual hints during en_to_zh quiz questions
+- Users can regenerate assets (audio, image, tip) for any card via a "Regen" button
+- English text is normalized to lowercase for consistency
+- Missing assets are backfilled on startup
 
 ---
 

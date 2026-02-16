@@ -57,6 +57,20 @@
   color: var(--accent-color, #646cff);
 }
 
+.qv-image {
+  margin-bottom: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.qv-image img {
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: cover;
+  display: block;
+}
+
 .qv-prompt-row {
   display: flex;
   align-items: center;

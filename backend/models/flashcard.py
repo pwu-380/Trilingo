@@ -36,6 +36,8 @@ class QuizQuestion(BaseModel):
     prompt: str  # the visible side
     pinyin: str | None = None  # included for zh_to_en (hidden by default in UI)
     options: list[str]  # 4 choices (one correct)
+    audio_path: str | None = None
+    image_path: str | None = None
 
 
 class QuizAnswerRequest(BaseModel):

@@ -4,6 +4,12 @@ import type { QuizQuestion, QuizAnswerResponse } from "../../types/flashcard";
 import type { ReviewMode } from "../../hooks/useFlashcards";
 import "./QuizView.css";
 
+function parseImagePath(imagePath: string | null) {
+  if (!imagePath) return null;
+  const [path, creator, license] = imagePath.split("|");
+  return { path, creator: creator || "Unknown", license: license || "CC" };
+}
+
 interface ReviewSession {
   mode: ReviewMode;
   answered: number;
@@ -74,6 +80,10 @@ export default function QuizView({
     if (hasResult) return;
     setSelectedAnswer(option);
     onSubmitAnswer(option);
+    // Play audio when clicking Chinese answers (en_to_zh)
+    if (!showingChinese && q.audio_path) {
+      playAudio(q.card_id);
+    }
   };
 
   const handleNext = () => {
@@ -110,6 +120,14 @@ export default function QuizView({
         <div className="qv-label">
           {showingChinese ? "What does this mean?" : "Which is the correct translation?"}
         </div>
+        {!showingChinese && (() => {
+          const img = parseImagePath(q.image_path);
+          return img ? (
+            <div className="qv-image">
+              <img src={`/assets/${img.path}`} alt="" />
+            </div>
+          ) : null;
+        })()}
         <div className="qv-prompt-row">
           <div
             className={`qv-prompt ${showingChinese ? "qv-prompt-chinese" : ""}`}

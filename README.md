@@ -8,7 +8,7 @@ Built as a local web app — runs on your computer and works in any browser, inc
 
 **Chatbot** — Have a conversation in Chinese with Alister, your AI tutor (powered by Google Gemini). Chinese responses show pinyin above each character. English translations are hidden behind a spoiler you can reveal when needed. After each exchange, you get grammar feedback and tips on your Chinese.
 
-**Flash Cards** — Build and review Chinese vocabulary. Comes pre-loaded with 30 HSK Level 2 words. Review in sessions of 10, 20, or endless cards — the quiz weights questions toward words you've gotten wrong more often. Cards you know can be shelved to the inactive pool and brought back later.
+**Flash Cards** — Build and review Chinese vocabulary. Comes pre-loaded with 50 HSK Level 2 words. Each card automatically gets TTS audio (via edge-tts) and a Creative Commons image (via Openverse) generated in the background. Review in sessions of 10, 20, or endless cards — the quiz weights questions toward words you've gotten wrong more often. During review, English-to-Chinese questions show the card's image as a visual hint, and clicking an answer plays the pronunciation. Cards you know can be shelved to the inactive pool and brought back later. Use the "Regen" button on any card to regenerate its audio, image, and study tip.
 
 **Games** — Duolingo-style language games using your flash card vocabulary. *(Coming soon)*
 

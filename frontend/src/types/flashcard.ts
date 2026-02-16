@@ -17,6 +17,8 @@ export interface QuizQuestion {
   prompt: string;
   pinyin: string | null;
   options: string[];
+  audio_path: string | null;
+  image_path: string | null;
 }
 
 export interface QuizAnswerResponse {

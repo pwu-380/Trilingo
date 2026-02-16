@@ -355,6 +355,8 @@ async def get_quiz_question(
             prompt=prompt,
             pinyin=target.pinyin if quiz_type == "zh_to_en" else None,
             options=options,
+            audio_path=target.audio_path,
+            image_path=target.image_path,
         )
 
 
