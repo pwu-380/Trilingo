@@ -57,6 +57,35 @@
   color: var(--accent-color, #646cff);
 }
 
+.qv-prompt-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.qv-speaker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  font-size: 1em;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.qv-speaker:hover {
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+  background: var(--sidebar-active, #2a2a4a);
+}
+
 .qv-pinyin-reveal {
   color: var(--pinyin-color, #8888cc);
   font-size: 0.95em;

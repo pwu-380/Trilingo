@@ -11,8 +11,10 @@ frontend/dist/
 *.db
 
 # Generated assets
-backend/assets/audio/
-backend/assets/images/
+backend/assets/audio/*
+!backend/assets/audio/.gitkeep
+backend/assets/images/*
+!backend/assets/images/.gitkeep
 
 # Environment
 .env

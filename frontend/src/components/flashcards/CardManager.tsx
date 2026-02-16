@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { Flashcard } from "../../types/flashcard";
 import "./CardManager.css";
+
+function parseImagePath(imagePath: string | null) {
+  if (!imagePath) return null;
+  const [path, creator, license] = imagePath.split("|");
+  return { path, creator: creator || "Unknown", license: license || "CC" };
+}
 
 interface Props {
   cards: Flashcard[];
@@ -8,7 +14,6 @@ interface Props {
   onCreateCard: (chinese: string, english: string) => Promise<Flashcard | null>;
   onDeleteCard: (id: number) => void;
   onToggleActive: (id: number, active: boolean) => void;
-  onRefresh: () => void;
 }
 
 export default function CardManager({
@@ -17,12 +22,16 @@ export default function CardManager({
   onCreateCard,
   onDeleteCard,
   onToggleActive,
-  onRefresh,
 }: Props) {
   const [chinese, setChinese] = useState("");
   const [english, setEnglish] = useState("");
   const [creating, setCreating] = useState(false);
   const [showPool, setShowPool] = useState<"active" | "inactive">("active");
+
+  const playAudio = useCallback((cardId: number) => {
+    const audio = new Audio(`/api/flashcards/${cardId}/audio`);
+    audio.play().catch(() => {});
+  }, []);
 
   const activeCards = cards.filter((c) => c.active);
   const inactiveCards = cards.filter((c) => !c.active);
@@ -82,8 +91,25 @@ export default function CardManager({
       <div className="cm-grid">
         {displayCards.map((card) => (
           <div key={card.id} className="cm-card">
+            {(() => { const img = parseImagePath(card.image_path); return img ? (
+              <div className="cm-card-image">
+                <img src={`/assets/${img.path}`} alt={card.english} />
+                <span className="cm-card-attribution">{img.creator} / {img.license}</span>
+              </div>
+            ) : null; })()}
             <div className="cm-card-top">
-              <div className="cm-card-chinese">{card.chinese}</div>
+              <div className="cm-card-chinese">
+                {card.chinese}
+                {card.audio_path && (
+                  <button
+                    className="cm-card-speaker"
+                    onClick={() => playAudio(card.id)}
+                    title="Play audio"
+                  >
+                    &#x1f50a;
+                  </button>
+                )}
+              </div>
               <div className="cm-card-actions">
                 <button
                   className="cm-card-toggle"

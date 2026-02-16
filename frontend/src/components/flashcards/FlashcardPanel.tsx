@@ -29,7 +29,6 @@ interface Props {
   onEndReview: () => void;
   onDeactivateCard: (cardId: number) => void;
   onClearError: () => void;
-  onRefresh: () => void;
 }
 
 export default function FlashcardPanel({
@@ -47,7 +46,6 @@ export default function FlashcardPanel({
   onEndReview,
   onDeactivateCard,
   onClearError,
-  onRefresh,
 }: Props) {
   const activeCount = cards.filter((c) => c.active).length;
   const inReview = review !== null;
@@ -86,7 +84,6 @@ export default function FlashcardPanel({
             onCreateCard={onCreateCard}
             onDeleteCard={onDeleteCard}
             onToggleActive={onToggleActive}
-            onRefresh={onRefresh}
           />
         </>
       )}

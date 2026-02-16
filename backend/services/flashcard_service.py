@@ -156,6 +156,10 @@ async def create_card(
     if not notes:
         asyncio.create_task(_generate_notes(card_id, chinese, pinyin, english))
 
+    # Fire-and-forget asset generation (TTS audio + CC image)
+    from backend.services.asset_worker import process_card_assets
+    asyncio.create_task(process_card_assets(card_id, chinese, english))
+
     return card
 
 

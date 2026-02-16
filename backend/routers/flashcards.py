@@ -1,5 +1,10 @@
+from pathlib import Path
+
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import FileResponse
 from fastapi.security import APIKeyHeader
+
+from backend.config import ASSETS_DIR
 
 from backend.models.flashcard import (
     FlashcardCreate,
@@ -65,6 +70,14 @@ async def submit_answer(body: QuizAnswerRequest):
     if result is None:
         raise HTTPException(status_code=404, detail="Card not found")
     return result
+
+
+@router.get("/{card_id}/audio")
+async def get_card_audio(card_id: int):
+    audio_path = ASSETS_DIR / "audio" / f"{card_id}.mp3"
+    if not audio_path.is_file():
+        raise HTTPException(status_code=404, detail="Audio not available")
+    return FileResponse(audio_path, media_type="audio/mpeg")
 
 
 @router.get("/{card_id}", response_model=FlashcardResponse)

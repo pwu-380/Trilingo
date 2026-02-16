@@ -3,11 +3,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader
+from fastapi.staticfiles import StaticFiles
 from starlette.responses import JSONResponse
 
-from backend.config import TRILINGO_TOKEN
+from backend.config import ASSETS_DIR, TRILINGO_TOKEN
 from backend.database import init_db
 from backend.routers import chat, flashcards
+from backend.services.asset_worker import backfill_assets
 from backend.services.flashcard_service import seed_cards
 
 PUBLIC_PATHS = {"/api/health", "/docs", "/openapi.json", "/redoc"}
@@ -25,6 +27,10 @@ async def lifespan(app: FastAPI):
     import jieba
     jieba.initialize()
     print("jieba dictionary loaded")
+    # Backfill assets for cards missing audio/images
+    queued = await backfill_assets(batch_size=5)
+    if queued:
+        print(f"Queued asset generation for {queued} cards")
     if TRILINGO_TOKEN:
         print(f"Auth enabled (token: {TRILINGO_TOKEN[:4]}...)")
     else:
@@ -49,7 +55,7 @@ app.add_middleware(
 
 @app.middleware("http")
 async def check_token(request: Request, call_next):
-    if not TRILINGO_TOKEN or request.url.path in PUBLIC_PATHS:
+    if not TRILINGO_TOKEN or request.url.path in PUBLIC_PATHS or request.url.path.startswith("/assets/"):
         return await call_next(request)
 
     token = (
@@ -64,6 +70,7 @@ async def check_token(request: Request, call_next):
 
 app.include_router(chat.router)
 app.include_router(flashcards.router)
+app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 
 
 @app.get("/api/health")

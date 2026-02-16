@@ -66,8 +66,8 @@ function AuthenticatedApp() {
             addToast(`Added '${word}' to flash cards`, "success");
           }
           fc.refreshCards();
-          if (!result.duplicate && !result.card.notes) {
-            fc.pollForNotes(result.card.id);
+          if (!result.duplicate && (!result.card.notes || !result.card.audio_path)) {
+            fc.pollForAssets(result.card.id);
           }
         })
         .catch(() => {
@@ -96,7 +96,6 @@ function AuthenticatedApp() {
           onEndReview={fc.endReview}
           onDeactivateCard={fc.deactivateDuringReview}
           onClearError={fc.clearError}
-          onRefresh={fc.refreshCards}
         />
       }
     >

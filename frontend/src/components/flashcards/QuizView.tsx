@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { QuizQuestion, QuizAnswerResponse } from "../../types/flashcard";
 import type { ReviewMode } from "../../hooks/useFlashcards";
 import "./QuizView.css";
@@ -32,6 +32,11 @@ export default function QuizView({
 }: Props) {
   const [pinyinRevealed, setPinyinRevealed] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+
+  const playAudio = useCallback((cardId: number) => {
+    const audio = new Audio(`/api/flashcards/${cardId}/audio`);
+    audio.play().catch(() => {});
+  }, []);
 
   const q = review.currentQuestion;
 
@@ -104,12 +109,23 @@ export default function QuizView({
         <div className="qv-label">
           {showingChinese ? "What does this mean?" : "Which is the correct translation?"}
         </div>
-        <div
-          className={`qv-prompt ${showingChinese ? "qv-prompt-chinese" : ""}`}
-          onClick={() => showingChinese && setPinyinRevealed((r) => !r)}
-          title={showingChinese ? "Click to reveal pinyin" : undefined}
-        >
-          {q.prompt}
+        <div className="qv-prompt-row">
+          <div
+            className={`qv-prompt ${showingChinese ? "qv-prompt-chinese" : ""}`}
+            onClick={() => showingChinese && setPinyinRevealed((r) => !r)}
+            title={showingChinese ? "Click to reveal pinyin" : undefined}
+          >
+            {q.prompt}
+          </div>
+          {showingChinese && (
+            <button
+              className="qv-speaker"
+              onClick={() => playAudio(q.card_id)}
+              title="Play audio"
+            >
+              &#x1f50a;
+            </button>
+          )}
         </div>
         {showingChinese && pinyinRevealed && q.pinyin && (
           <div className="qv-pinyin-reveal">{q.pinyin}</div>
