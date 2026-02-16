@@ -53,87 +53,67 @@
     {"chinese": "非常", "pinyin": "fēi cháng", "english": "very / extremely"}
   ],
   "grammar": [
-    {
-      "pattern": "因为 A 所以 B",
-      "english": "Because A, therefore B",
-      "example": "因为下雨，所以我没去。"
-    },
-    {
-      "pattern": "虽然 A 但是 B",
-      "english": "Although A, but B",
-      "example": "虽然很累，但是很开心。"
-    },
-    {
-      "pattern": "比 (comparison)",
-      "english": "A is more [adj] than B",
-      "example": "他比我高。"
-    },
-    {
-      "pattern": "Subject + 正在 + Verb",
-      "english": "In the process of doing (progressive)",
-      "example": "他正在吃饭。"
-    },
-    {
-      "pattern": "Subject + 要 + Verb",
-      "english": "Want to / going to",
-      "example": "我要去中国。"
-    },
-    {
-      "pattern": "可以 / 能 + Verb",
-      "english": "Can / may (permission or ability)",
-      "example": "你可以坐这儿。"
-    },
-    {
-      "pattern": "Subject + 得 + complement",
-      "english": "Degree complement (how well something is done)",
-      "example": "他说得很好。"
-    },
-    {
-      "pattern": "从 A 到 B",
-      "english": "From A to B (time or place)",
-      "example": "从北京到上海。"
-    },
-    {
-      "pattern": "Subject + 给 + Indirect Object + Verb + Direct Object",
-      "english": "Give / do something for someone",
-      "example": "他给我买了一本书。"
-    },
-    {
-      "pattern": "一边 A 一边 B",
-      "english": "Do A and B at the same time",
-      "example": "她一边唱歌一边跳舞。"
-    }
+    { "pattern": "A + 比 + B + Adj", "english": "Basic comparison (A is more [adj] than B)", "example": "哥哥比我高。" },
+    { "pattern": "A + 没有 + B + [这么/那么] + Adj", "english": "Negative comparison (A is not as [adj] as B)", "example": "今天没有昨天那么热。" },
+    { "pattern": "Subject + 正在 + Verb + (呢)", "english": "Progressive aspect (Action in progress right now)", "example": "妈妈正在做饭呢。" },
+    { "pattern": "Verb + 着", "english": "Continuous state (Action is ongoing or state is maintained)", "example": "她穿着红色的衣服。" },
+    { "pattern": "Verb + 过", "english": "Experiential aspect (Have done something before)", "example": "我过去过中国。" },
+    { "pattern": "Number + 多 / 左右", "english": "Approximation (More than / Around)", "example": "十多个人 / 五点左右。" },
+    { "pattern": "最 / 更 + Adj", "english": "Superlative and comparative adverbs (Most / More)", "example": "这是最好的电脑。" },
+    { "pattern": "虽然 ... 但是 ...", "english": "Conjunction: Although ... but ...", "example": "虽然天气不好，但是他还是去了。" },
+    { "pattern": "因为 ... 所以 ...", "english": "Conjunction: Because ... so ...", "example": "因为他生病了，所以没去上班。" },
+    { "pattern": "又 ... 又 ...", "english": "Both ... and ... (Two qualities simultaneously)", "example": "这个苹果又大又红。" },
+    { "pattern": "就 / 才", "english": "Adverbs of time (Early/Soon vs. Late/Slow)", "example": "他八点就来了。/ 他九点才来。" },
+    { "pattern": "Verb + 得 + Adj", "english": "Complement of state (Evaluating how an action is done)", "example": "她跑得很快。" },
+    { "pattern": "可能 / 能够 / 可以", "english": "Expanded modal verbs (Possibility and permission)", "example": "明天可能会下雪。" },
+    { "pattern": "A + 还是 + B？", "english": "Alternative question (A or B?)", "example": "你喝茶还是喝咖啡？" },
+    { "pattern": "从 ... 到 ...", "english": "From ... to ... (Time or space)", "example": "从我家到学校很近。" },
+    { "pattern": "离 ... [远/近]", "english": "Distance from a point", "example": "我家离公司很远。" },
+    { "pattern": "对 + Object + Verb/Adj", "english": "Preposition: Towards/To/For", "example": "跑步对身体很好。" },
+    { "pattern": "Verb + 完 / 好 / 错", "english": "Result complements (Finish / Finish well / Do wrongly)", "example": "我写完了。" },
+    { "pattern": "一 ... 就 ...", "english": "As soon as ... then ...", "example": "我一回家就睡觉。" },
+    { "pattern": "别 / 不要 + Verb", "english": "Negative commands (Don't...)", "example": "别说话。" }
   ],
   "topics": [
     {
-      "id": "shopping",
-      "label": "Shopping & prices",
-      "description": "Buying things, asking prices, bargaining, using 多少钱"
+      "id": "personal_description",
+      "label": "Advanced Personal Info",
+      "description": "Describing physical appearance (height, eyes, hair) and character traits."
     },
     {
-      "id": "transport",
-      "label": "Transport & directions",
-      "description": "Taking buses, taxis, trains; asking for directions"
+      "id": "daily_routines",
+      "label": "Daily Routines & Habits",
+      "description": "Waking up, hygiene, exercise habits, and work schedules."
     },
     {
-      "id": "hobbies",
-      "label": "Hobbies & sports",
-      "description": "Talking about what you like to do — swimming, singing, dancing, reading"
+      "id": "health_fitness",
+      "label": "Health & Body",
+      "description": "Parts of the body, describing illnesses (fever, cough), and visiting the doctor."
     },
     {
-      "id": "weather",
-      "label": "Weather & seasons",
-      "description": "Describing weather, talking about favorite seasons"
+      "id": "shopping_services",
+      "label": "Shopping & Public Services",
+      "description": "Buying clothes/groceries, weights and measures (kilograms), and asking for help in banks or shops."
     },
     {
-      "id": "health",
-      "label": "Health & body",
-      "description": "Describing how you feel, seeing a doctor, body parts"
+      "id": "travel_transport",
+      "label": "Travel & Directions",
+      "description": "Booking tickets, modes of transport (bus, boat, bike), and navigating using left/right/straight."
     },
     {
-      "id": "school_work",
-      "label": "School & work",
-      "description": "Talking about classes, exams, your job, colleagues"
+      "id": "work_school",
+      "label": "Work & Study Life",
+      "description": "Office tasks, school subjects, exams, and colleague relationships."
+    },
+    {
+      "id": "nature_environment",
+      "label": "Weather & Nature",
+      "description": "Seasons, specific weather (snow, cloudy, clear), and simple geographical descriptions."
+    },
+    {
+      "id": "social_leisure",
+      "label": "Socializing & Hobbies",
+      "description": "Making plans with friends, hobbies (singing, dancing, sports), and attending parties."
     }
   ]
 }
