@@ -237,7 +237,7 @@ CREATE TABLE flashcard_attempts (
 - Quiz supports both directions (Chinese→English, English→Chinese)
 - When showing Chinese, pinyin is hidden by default — click to reveal
 - Card selection is weighted: cards answered incorrectly more often appear more frequently
-- 50 HSK Level 2 words are seeded on first startup
+- Users can bulk-add HSK vocabulary (levels 1-3) via the "Autoseed" button in the card manager
 - Cards without assets still function correctly (assets are optional enhancements)
 - TTS audio (edge-tts) and CC images (Openverse) are generated in the background for each card
 - Audio plays via speaker button on cards and when clicking answers during en_to_zh quiz

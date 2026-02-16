@@ -51,6 +51,11 @@ class QuizAnswerResponse(BaseModel):
     correct_answer: str
 
 
+class SeedRequest(BaseModel):
+    level: int = 2
+    count: int = 10
+
+
 class FlashcardFromWordRequest(BaseModel):
     word: str
     source: str = "chat"

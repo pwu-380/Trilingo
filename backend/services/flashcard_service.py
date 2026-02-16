@@ -390,24 +390,33 @@ async def submit_answer(
 # ---------------------------------------------------------------------------
 
 
-async def seed_cards() -> int:
-    """Insert HSK Level 2 seed data if the flashcards table is empty.
+async def seed_cards(level: int = 2, count: int = 10) -> int:
+    """Insert HSK seed cards, skipping any that already exist.
 
-    Returns the number of cards seeded (0 if table already has data).
+    Returns the number of new cards actually seeded.
     """
     from backend.chinese.hsk import get_vocab
 
-    async with get_db() as db:
-        rows = await db.execute_fetchall("SELECT COUNT(*) FROM flashcards")
-        if rows[0][0] > 0:
-            return 0
+    vocab = get_vocab(level)
+    random.shuffle(vocab)
 
-        vocab = get_vocab(2)
+    seeded = 0
+    async with get_db() as db:
         for entry in vocab:
+            if seeded >= count:
+                break
+            # Skip duplicates
+            rows = await db.execute_fetchall(
+                "SELECT id FROM flashcards WHERE chinese = ?",
+                (entry["chinese"],),
+            )
+            if rows:
+                continue
             await db.execute(
                 "INSERT INTO flashcards (chinese, pinyin, english, source) "
                 "VALUES (?, ?, ?, 'seed')",
-                (entry["chinese"], entry["pinyin"], entry["english"]),
+                (entry["chinese"], entry["pinyin"], entry["english"].lower()),
             )
+            seeded += 1
         await db.commit()
-        return len(vocab)
+    return seeded

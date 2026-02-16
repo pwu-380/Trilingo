@@ -15,6 +15,7 @@ from backend.models.flashcard import (
     QuizAnswerRequest,
     QuizAnswerResponse,
     QuizQuestion,
+    SeedRequest,
 )
 from backend.services import flashcard_service
 
@@ -53,6 +54,16 @@ async def get_quiz(
     if question is None:
         raise HTTPException(status_code=404, detail="No active cards available")
     return question
+
+
+@router.post("/seed")
+async def seed_cards(body: SeedRequest):
+    if body.level < 1 or body.level > 3:
+        raise HTTPException(status_code=400, detail="HSK level must be 1-3")
+    if body.count < 1 or body.count > 50:
+        raise HTTPException(status_code=400, detail="Count must be 1-50")
+    seeded = await flashcard_service.seed_cards(level=body.level, count=body.count)
+    return {"seeded": seeded}
 
 
 @router.post("/from-word", response_model=FlashcardFromWordResponse)

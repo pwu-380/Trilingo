@@ -58,6 +58,16 @@ export function regenerateAssets(id: number): Promise<Flashcard> {
   return apiFetch(`/api/flashcards/${id}/regenerate`, { method: "POST" });
 }
 
+export function seedCards(
+  level: number,
+  count: number,
+): Promise<{ seeded: number }> {
+  return apiFetch("/api/flashcards/seed", {
+    method: "POST",
+    body: JSON.stringify({ level, count }),
+  });
+}
+
 export function createCardFromWord(
   word: string,
   source: string = "chat",

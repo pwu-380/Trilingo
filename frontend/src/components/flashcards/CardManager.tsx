@@ -15,6 +15,7 @@ interface Props {
   onCreateCard: (chinese: string, english: string) => Promise<Flashcard | null>;
   onDeleteCard: (id: number) => void;
   onToggleActive: (id: number, active: boolean) => void;
+  onSeedCards: (level: number, count: number) => Promise<number>;
   onRegenerateAssets: (id: number) => void;
 }
 
@@ -24,12 +25,15 @@ export default function CardManager({
   onCreateCard,
   onDeleteCard,
   onToggleActive,
+  onSeedCards,
   onRegenerateAssets,
 }: Props) {
   const [chinese, setChinese] = useState("");
   const [english, setEnglish] = useState("");
   const [creating, setCreating] = useState(false);
   const [showPool, setShowPool] = useState<"active" | "inactive">("active");
+  const [seedLevel, setSeedLevel] = useState(1);
+  const [seeding, setSeeding] = useState(false);
 
   const playAudio = useCallback((cardId: number) => {
     const audio = new Audio(authedUrl(`/api/flashcards/${cardId}/audio`));
@@ -74,19 +78,47 @@ export default function CardManager({
         </button>
       </form>
 
-      <div className="cm-pool-toggle">
-        <button
-          className={`cm-pool-btn ${showPool === "active" ? "active" : ""}`}
-          onClick={() => setShowPool("active")}
-        >
-          Active ({activeCards.length})
-        </button>
-        <button
-          className={`cm-pool-btn ${showPool === "inactive" ? "active" : ""}`}
-          onClick={() => setShowPool("inactive")}
-        >
-          Inactive ({inactiveCards.length})
-        </button>
+      <div className="cm-toolbar">
+        <div className="cm-pool-toggle">
+          <button
+            className={`cm-pool-btn ${showPool === "active" ? "active" : ""}`}
+            onClick={() => setShowPool("active")}
+          >
+            Active ({activeCards.length})
+          </button>
+          <button
+            className={`cm-pool-btn ${showPool === "inactive" ? "active" : ""}`}
+            onClick={() => setShowPool("inactive")}
+          >
+            Inactive ({inactiveCards.length})
+          </button>
+        </div>
+        <div className="cm-seed">
+          <button
+            className="cm-seed-btn"
+            disabled={seeding}
+            onClick={async () => {
+              setSeeding(true);
+              await onSeedCards(seedLevel, 10);
+              setSeeding(false);
+            }}
+          >
+            {seeding ? "Seeding..." : "Autoseed 10 Cards"}
+          </button>
+          <label className="cm-seed-label">
+            HSK Level:
+            <select
+              className="cm-seed-select"
+              value={seedLevel}
+              onChange={(e) => setSeedLevel(Number(e.target.value))}
+              disabled={seeding}
+            >
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+            </select>
+          </label>
+        </div>
       </div>
 
       {loading && <div className="cm-loading">Loading cards...</div>}

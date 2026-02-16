@@ -36,10 +36,16 @@
   cursor: not-allowed;
 }
 
+.cm-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .cm-pool-toggle {
   display: flex;
   gap: 4px;
-  margin-bottom: 16px;
 }
 
 .cm-pool-btn {
@@ -57,6 +63,54 @@
   background: var(--sidebar-active, #2a2a4a);
   color: var(--accent-color, #646cff);
   border-color: var(--accent-color, #646cff);
+}
+
+.cm-seed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cm-seed-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.9em;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cm-seed-btn:hover:not(:disabled) {
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+}
+
+.cm-seed-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cm-seed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  white-space: nowrap;
+}
+
+.cm-seed-select {
+  padding: 6px 8px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 6px;
+  background: var(--input-field-bg, #1a1a2e);
+  color: var(--text-primary, #eee);
+  font-size: 0.95em;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .cm-loading {

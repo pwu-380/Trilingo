@@ -105,6 +105,21 @@ export function useFlashcards() {
     [pollForAssets],
   );
 
+  const seedCards = useCallback(
+    async (level: number, count: number) => {
+      setError(null);
+      try {
+        const result = await flashcardsApi.seedCards(level, count);
+        if (result.seeded > 0) await refreshCards();
+        return result.seeded;
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to seed cards");
+        return 0;
+      }
+    },
+    [refreshCards],
+  );
+
   // --- Review session ---
 
   const loadNextQuestion = useCallback(async (session: ReviewSession) => {
@@ -204,6 +219,7 @@ export function useFlashcards() {
     deactivateDuringReview,
     pollForAssets,
     regenerateAssets,
+    seedCards,
     clearError: () => setError(null),
   };
 }
