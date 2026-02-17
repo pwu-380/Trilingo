@@ -1,12 +1,14 @@
 .matching-game {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  max-width: 500px;
+  max-width: 560px;
 }
 
 .matching-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 40px;
 }
 
 .matching-column {
@@ -16,6 +18,10 @@
 }
 
 .matching-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
   padding: 14px 16px;
   border: 1px solid var(--border-color, #333);
   border-radius: 10px;
@@ -48,19 +54,31 @@
 }
 
 .matching-card-zh {
-  display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2px;
-}
-
-.matching-chinese {
-  font-size: 1.2em;
 }
 
 .matching-pinyin {
   font-size: 0.75em;
   color: var(--text-secondary, #aaa);
+}
+
+.matching-pinyin-btn {
+  align-self: center;
+  margin-top: 16px;
+  padding: 6px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.matching-pinyin-btn:hover {
+  color: var(--text-primary, #eee);
+  border-color: var(--text-secondary, #aaa);
 }
 
 @keyframes shake {

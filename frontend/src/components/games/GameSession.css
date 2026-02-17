@@ -73,6 +73,11 @@
   min-width: 280px;
 }
 
+.game-summary-img {
+  max-width: 240px;
+  border-radius: 12px;
+}
+
 .game-summary-title {
   margin: 0;
   font-size: 1.4em;

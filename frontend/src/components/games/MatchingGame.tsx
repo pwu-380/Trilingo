@@ -9,14 +9,18 @@ interface Props {
 }
 
 export default function MatchingGame({ round, onComplete }: Props) {
-  const [selectedEnglish, setSelectedEnglish] = useState<number | null>(null);
-  const [selectedChinese, setSelectedChinese] = useState<number | null>(null);
+  const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
+  const [selectedRight, setSelectedRight] = useState<number | null>(null);
   const [matched, setMatched] = useState<Set<number>>(new Set());
-  const [shakeEnglish, setShakeEnglish] = useState<number | null>(null);
-  const [shakeChinese, setShakeChinese] = useState<number | null>(null);
+  const [shakeLeft, setShakeLeft] = useState<number | null>(null);
+  const [shakeRight, setShakeRight] = useState<number | null>(null);
+  const [showPinyin, setShowPinyin] = useState(false);
 
-  // Shuffle the Chinese side independently
-  const shuffledChinese = useMemo(() => {
+  // Randomly decide if Chinese is on the left or right for this round
+  const chineseOnLeft = useMemo(() => Math.random() < 0.5, [round]);
+
+  // Shuffle the right-side column independently
+  const shuffledRight = useMemo(() => {
     const indices = round.pairs.map((_, i) => i);
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -37,15 +41,16 @@ export default function MatchingGame({ round, onComplete }: Props) {
   );
 
   const tryMatch = useCallback(
-    (englishIdx: number, chineseIdx: number) => {
-      if (englishIdx === chineseIdx) {
+    (leftIdx: number, rightIdx: number) => {
+      // leftIdx and rightIdx are both original pair indices
+      if (leftIdx === rightIdx) {
         // Correct match
-        setMatched((prev) => new Set([...prev, englishIdx]));
-        setSelectedEnglish(null);
-        setSelectedChinese(null);
+        setMatched((prev) => new Set([...prev, leftIdx]));
+        setSelectedLeft(null);
+        setSelectedRight(null);
 
         // Play audio on correct match
-        playAudio(englishIdx);
+        playAudio(leftIdx);
 
         // Check if all matched
         if (matched.size + 1 === round.pairs.length) {
@@ -53,85 +58,122 @@ export default function MatchingGame({ round, onComplete }: Props) {
         }
       } else {
         // Wrong match — shake
-        setShakeEnglish(englishIdx);
-        setShakeChinese(chineseIdx);
+        setShakeLeft(leftIdx);
+        setShakeRight(rightIdx);
         setTimeout(() => {
-          setShakeEnglish(null);
-          setShakeChinese(null);
-          setSelectedEnglish(null);
-          setSelectedChinese(null);
+          setShakeLeft(null);
+          setShakeRight(null);
+          setSelectedLeft(null);
+          setSelectedRight(null);
         }, 500);
       }
     },
     [matched, round.pairs.length, onComplete, playAudio],
   );
 
-  const handleEnglishClick = useCallback(
-    (idx: number) => {
-      if (matched.has(idx)) return;
-      setSelectedEnglish(idx);
-      if (selectedChinese !== null) {
-        tryMatch(idx, selectedChinese);
-      }
-    },
-    [matched, selectedChinese, tryMatch],
-  );
-
-  const handleChineseClick = useCallback(
+  const handleLeftClick = useCallback(
     (pairIndex: number) => {
       if (matched.has(pairIndex)) return;
-      playAudio(pairIndex);
-      setSelectedChinese(pairIndex);
-      if (selectedEnglish !== null) {
-        tryMatch(selectedEnglish, pairIndex);
+      setSelectedLeft(pairIndex);
+      if (selectedRight !== null) {
+        tryMatch(pairIndex, selectedRight);
       }
     },
-    [matched, selectedEnglish, tryMatch, playAudio],
+    [matched, selectedRight, tryMatch],
   );
+
+  const handleRightClick = useCallback(
+    (pairIndex: number) => {
+      if (matched.has(pairIndex)) return;
+      setSelectedRight(pairIndex);
+      if (selectedLeft !== null) {
+        tryMatch(selectedLeft, pairIndex);
+      }
+    },
+    [matched, selectedLeft, tryMatch],
+  );
+
+  const renderEnglishCard = (pairIndex: number, side: "left" | "right") => {
+    const pair = round.pairs[pairIndex];
+    const isSelected = side === "left" ? selectedLeft === pairIndex : selectedRight === pairIndex;
+    const isShaking = side === "left" ? shakeLeft === pairIndex : shakeRight === pairIndex;
+    const onClick = side === "left" ? handleLeftClick : handleRightClick;
+
+    return (
+      <button
+        key={`en-${pairIndex}`}
+        className={[
+          "matching-card",
+          matched.has(pairIndex) ? "matched" : "",
+          isSelected ? "selected" : "",
+          isShaking ? "shake" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        onClick={() => onClick(pairIndex)}
+        disabled={matched.has(pairIndex)}
+      >
+        {pair.english}
+      </button>
+    );
+  };
+
+  const renderChineseCard = (pairIndex: number, side: "left" | "right") => {
+    const pair = round.pairs[pairIndex];
+    const isSelected = side === "left" ? selectedLeft === pairIndex : selectedRight === pairIndex;
+    const isShaking = side === "left" ? shakeLeft === pairIndex : shakeRight === pairIndex;
+    const onClick = side === "left" ? handleLeftClick : handleRightClick;
+
+    return (
+      <button
+        key={`zh-${pairIndex}`}
+        className={[
+          "matching-card matching-card-zh",
+          matched.has(pairIndex) ? "matched" : "",
+          isSelected ? "selected" : "",
+          isShaking ? "shake" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        onClick={() => onClick(pairIndex)}
+        disabled={matched.has(pairIndex)}
+      >
+        {pair.chinese}
+        {showPinyin && (
+          <span className="matching-pinyin">{pair.pinyin}</span>
+        )}
+      </button>
+    );
+  };
+
+  // Left column: original order, right column: shuffled
+  const leftIndices = round.pairs.map((_, i) => i);
+  const rightIndices = shuffledRight;
 
   return (
     <div className="matching-game">
       <div className="matching-columns">
         <div className="matching-column">
-          {round.pairs.map((pair, i) => (
-            <button
-              key={`en-${i}`}
-              className={[
-                "matching-card",
-                matched.has(i) ? "matched" : "",
-                selectedEnglish === i ? "selected" : "",
-                shakeEnglish === i ? "shake" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => handleEnglishClick(i)}
-              disabled={matched.has(i)}
-            >
-              {pair.english}
-            </button>
-          ))}
+          {leftIndices.map((idx) =>
+            chineseOnLeft
+              ? renderChineseCard(idx, "left")
+              : renderEnglishCard(idx, "left"),
+          )}
         </div>
         <div className="matching-column">
-          {shuffledChinese.map((pairIndex) => (
-            <button
-              key={`zh-${pairIndex}`}
-              className={[
-                "matching-card matching-card-zh",
-                matched.has(pairIndex) ? "matched" : "",
-                selectedChinese === pairIndex ? "selected" : "",
-                shakeChinese === pairIndex ? "shake" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              onClick={() => handleChineseClick(pairIndex)}
-              disabled={matched.has(pairIndex)}
-            >
-              <span className="matching-chinese">{round.pairs[pairIndex].chinese}</span>
-              <span className="matching-pinyin">{round.pairs[pairIndex].pinyin}</span>
-            </button>
-          ))}
+          {rightIndices.map((idx) =>
+            chineseOnLeft
+              ? renderEnglishCard(idx, "right")
+              : renderChineseCard(idx, "right"),
+          )}
         </div>
       </div>
+      <button
+        className="matching-pinyin-btn"
+        onClick={() => setShowPinyin((p) => !p)}
+      >
+        {showPinyin ? "Hide Pinyin" : "Show Pinyin"}
+      </button>
     </div>
   );
 }
