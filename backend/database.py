@@ -43,6 +43,15 @@ CREATE TABLE IF NOT EXISTS flashcard_attempts (
     quiz_type    TEXT NOT NULL CHECK(quiz_type IN ('en_to_zh', 'zh_to_en')),
     attempted_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS game_sentences (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    hsk_level   INTEGER NOT NULL,
+    vocab_word  TEXT NOT NULL,
+    sentence_zh TEXT NOT NULL,
+    sentence_en TEXT NOT NULL,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+);
 """
 
 

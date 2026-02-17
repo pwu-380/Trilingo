@@ -1,0 +1,110 @@
+.madlibs-game {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.madlibs-sentence-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-secondary, #16213e);
+  border: 1px solid var(--border-color, #333);
+}
+
+.madlibs-pinyin {
+  font-size: 0.85em;
+  color: var(--text-secondary, #aaa);
+  letter-spacing: 0.5px;
+}
+
+.madlibs-sentence {
+  font-size: 1.5em;
+  color: var(--text-primary, #eee);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.madlibs-english {
+  font-size: 0.9em;
+  color: var(--text-secondary, #aaa);
+  font-style: italic;
+}
+
+.madlibs-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.madlibs-option {
+  padding: 14px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 10px;
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-primary, #eee);
+  font-size: 1.1em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.madlibs-option:hover:not(.disabled):not(.correct):not(.wrong) {
+  border-color: var(--accent-color, #646cff);
+}
+
+.madlibs-option.correct {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.madlibs-option.wrong {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.madlibs-option.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.madlibs-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.madlibs-hint-btn,
+.madlibs-add-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.madlibs-hint-btn:hover {
+  color: var(--text-primary, #eee);
+  border-color: var(--text-secondary, #aaa);
+}
+
+.madlibs-add-btn {
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+}
+
+.madlibs-add-btn:hover {
+  background: rgba(100, 108, 255, 0.15);
+}

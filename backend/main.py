@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse
 
 from backend.config import ASSETS_DIR, TRILINGO_TOKEN
 from backend.database import init_db
-from backend.routers import chat, flashcards
+from backend.routers import chat, flashcards, games
 from backend.services.asset_worker import backfill_assets
 
 PUBLIC_PATHS = {"/api/health", "/docs", "/openapi.json", "/redoc"}
@@ -71,6 +71,7 @@ async def check_token(request: Request, call_next):
 
 app.include_router(chat.router)
 app.include_router(flashcards.router)
+app.include_router(games.router)
 app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
 
 

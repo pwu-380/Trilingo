@@ -3,8 +3,10 @@ import { checkAuth } from "./api/client";
 import { createCardFromWord } from "./api/flashcards";
 import { useChat } from "./hooks/useChat";
 import { useFlashcards } from "./hooks/useFlashcards";
+import { useGames } from "./hooks/useGames";
 import ChatPanel from "./components/chat/ChatPanel";
 import FlashcardPanel from "./components/flashcards/FlashcardPanel";
+import GamesPanel from "./components/games/GamesPanel";
 import TabShell from "./components/shared/TabShell";
 import ToastContainer, { type ToastData } from "./components/shared/Toast";
 
@@ -44,6 +46,7 @@ function App() {
 function AuthenticatedApp() {
   const chat = useChat();
   const fc = useFlashcards();
+  const games = useGames();
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const toastIdRef = useRef(0);
 
@@ -80,6 +83,19 @@ function AuthenticatedApp() {
   return (
     <>
     <TabShell
+      gamesContent={
+        <GamesPanel
+          session={games.session}
+          hskLevel={games.hskLevel}
+          totalRounds={games.totalRounds}
+          onSetHskLevel={games.setHskLevel}
+          onSetTotalRounds={games.setTotalRounds}
+          onStartSession={games.startSession}
+          onCompleteRound={games.completeRound}
+          onEndSession={games.endSession}
+          onAddCardFromWord={handleAddCardFromWord}
+        />
+      }
       flashcardsContent={
         <FlashcardPanel
           cards={fc.cards}

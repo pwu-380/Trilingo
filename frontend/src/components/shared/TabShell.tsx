@@ -1,5 +1,4 @@
 import { useState } from "react";
-import UnderConstruction from "../../assets/Al-under-construction.jpg";
 import "./TabShell.css";
 
 type Tab = "chat" | "flashcards" | "games";
@@ -7,15 +6,16 @@ type Tab = "chat" | "flashcards" | "games";
 const TABS: { id: Tab; label: string; enabled: boolean }[] = [
   { id: "chat", label: "Chat", enabled: true },
   { id: "flashcards", label: "Flash Cards", enabled: true },
-  { id: "games", label: "Games", enabled: false },
+  { id: "games", label: "Games", enabled: true },
 ];
 
 interface Props {
   children: React.ReactNode;
   flashcardsContent?: React.ReactNode;
+  gamesContent?: React.ReactNode;
 }
 
-export default function TabShell({ children, flashcardsContent }: Props) {
+export default function TabShell({ children, flashcardsContent, gamesContent }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
 
   return (
@@ -35,12 +35,7 @@ export default function TabShell({ children, flashcardsContent }: Props) {
       <div className="tab-content">
         {activeTab === "chat" && children}
         {activeTab === "flashcards" && flashcardsContent}
-        {activeTab === "games" && (
-          <div className="tab-placeholder">
-            <img src={UnderConstruction} alt="Under construction" />
-            <p>Coming soon!</p>
-          </div>
-        )}
+        {activeTab === "games" && gamesContent}
       </div>
     </div>
   );
