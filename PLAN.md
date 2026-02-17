@@ -82,10 +82,17 @@ Trilingo/
 │   │   │   │   ├── CardView.tsx          # Single card display
 │   │   │   │   ├── QuizView.tsx          # Multiple-choice quiz
 │   │   │   │   └── CardManager.tsx       # Browse/activate/deactivate
-│   │   │   └── games/                    # (Phase 5)
+│   │   │   └── games/
+│   │   │       ├── GamesPanel.tsx         # Lobby + session wrapper
+│   │   │       ├── GameSession.tsx        # Round orchestrator
+│   │   │       ├── GameSummary.tsx        # End-of-session score screen
+│   │   │       ├── MatchingGame.tsx       # Matching game component
+│   │   │       └── MadLibsGame.tsx        # MadLibs game component
 │   │   ├── hooks/
 │   │   │   ├── useChat.ts               # Chat state & actions
-│   │   │   └── useFlashcards.ts         # Flashcard state & actions
+│   │   │   ├── useFlashcards.ts         # Flashcard state & actions
+│   │   │   ├── useGames.ts             # Game session state & actions
+│   │   │   └── useSounds.ts            # Shared correct/incorrect sound effects
 │   │   └── types/
 │   │       ├── chat.ts                  # Chat TypeScript types
 │   │       ├── flashcard.ts             # Flashcard TypeScript types
@@ -154,6 +161,16 @@ CREATE TABLE flashcard_attempts (
     correct     INTEGER NOT NULL CHECK(correct IN (0, 1)),
     quiz_type   TEXT NOT NULL CHECK(quiz_type IN ('en_to_zh', 'zh_to_en')),
     attempted_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- Stored sentences for MadLibs (and future sentence-based games)
+CREATE TABLE game_sentences (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    hsk_level   INTEGER NOT NULL,
+    vocab_word  TEXT NOT NULL,
+    sentence_zh TEXT NOT NULL,
+    sentence_en TEXT NOT NULL,
+    created_at  TEXT NOT NULL DEFAULT (datetime('now'))
 );
 ```
 
@@ -284,15 +301,20 @@ CREATE TABLE flashcard_attempts (
 
 ---
 
-### Phase 5 — Other Games
+### Phase 5 — Games ✅
 
-**Goal**: Duolingo-style language games using the flash card corpus.
+**Goal**: Duolingo-style language games using the flash card corpus and HSK reference data.
 
-> Scope to be defined after Phases 1–4 are stable. Potential game types:
-> - Matching (pair Chinese with English from a set of cards)
-> - Listening (play audio, pick the correct card — requires audio stretch goal)
-> - Sentence building (arrange words into a sentence)
-> - Typing challenge (see English, type the Chinese)
+**What was built**:
+1. **Database**: `game_sentences` table for caching AI-generated MadLibs sentences
+2. **Backend**: `game_service.py` with matching (flashcard-sourced + HSK fallback) and MadLibs (LLM sentence generation with 70/30 reuse/generate ratio, stored in DB). `RateLimitError` in provider layer with graceful fallback.
+3. **Frontend**: Games lobby with HSK level/rounds config and game-type button grid (Matching, MadLibs, Random). `GameSession` orchestrator with progress bar, score tracking, and round routing. `GameSummary` end screen with congratulations image on perfect score.
+4. **Matching game**: Two-column matching with randomized Chinese/English sides, shake animation on wrong match, fade on correct, audio playback on correct match, single "Show Pinyin" toggle button
+5. **MadLibs game**: Fill-in-the-blank with 4 options, 2-level hints (pinyin → English), checkbox-based "Add to Flash Cards" UI, English shown on correct answer, 1.3s delay with sound effects
+6. **Sound effects**: Correct/incorrect sounds across all games and flashcard review
+7. **Rate limit handling**: Gemini 429 caught and raised as `RateLimitError`; MadLibs falls back to stored sentences with toast notification; chat returns 429 with user-friendly message
+
+**Detailed subplan**: See `.claude/PHASE5.md`
 
 ---
 

@@ -4,13 +4,64 @@ A personal Mandarin Chinese learning app with three modes: an AI-powered chatbot
 
 Built as a local web app — runs on your computer and works in any browser, including your phone over Wi-Fi.
 
-## What It Does
+## Features
 
-**Chatbot** — Have a conversation in Chinese with Alister, your AI tutor (powered by Google Gemini). Chinese responses show pinyin above each character. English translations are hidden behind a spoiler you can reveal when needed. After each exchange, you get grammar feedback and tips on your Chinese.
+### Chatbot
 
-**Flash Cards** — Build and review Chinese vocabulary. Use the "Autoseed" button to bulk-add HSK vocabulary (levels 1-3) or create cards manually. Each card automatically gets TTS audio (via edge-tts) and a Creative Commons image (via Openverse) generated in the background. Review in sessions of 10, 20, or endless cards — the quiz weights questions toward words you've gotten wrong more often. During review, English-to-Chinese questions show the card's image as a visual hint, and clicking an answer plays the pronunciation. Cards you know can be shelved to the inactive pool and brought back later. Use the "Regen" button on any card to regenerate its audio, image, and study tip.
+Converse in Mandarin Chinese with Alister, your AI tutor (powered by Google Gemini).
 
-**Games** — Duolingo-style language games using your flash card vocabulary. *(Coming soon)*
+- **Pinyin annotations** — Chinese responses display pinyin above each character automatically
+- **Hidden translations** — English translations are behind a spoiler you click to reveal, so you try to understand the Chinese first
+- **Grammar feedback** — After each exchange, Alister gives you tips and corrections on your Chinese in a feedback panel
+- **Emotion system** — Alister has three moods (neutral, confused, mad) with matching profile pictures — be cheeky and he'll get annoyed
+- **Session management** — Create, switch between, and delete conversation sessions; chat history persists across refreshes
+- **Click-to-add vocabulary** — Click any Chinese word in Alister's responses to see it segmented, then add it to your flash cards with one click (pinyin and English are auto-generated)
+
+### Flash Cards
+
+Build and review Chinese vocabulary with auto-generated multimedia cards.
+
+- **Card creation** — Add cards manually (Chinese + English, pinyin auto-generated) or click words in the chatbot to create them automatically
+- **Autoseed** — Bulk-add HSK vocabulary (levels 1-3) with the toolbar button; cards are shuffled and duplicates are skipped
+- **Auto-generated assets** — Each card gets TTS audio pronunciation (via edge-tts) and a Creative Commons image (via Openverse) generated in the background; cards work immediately while assets load
+- **Study tips** — AI-generated usage notes appear on each card (e.g. "More casual than 您好; common in everyday greetings")
+- **Regenerate** — Hit the "Regen" button on any card to regenerate its audio, image, and study tip
+- **Active/inactive pools** — Shelve cards you know to the inactive pool; bring them back when you need a refresher; only inactive cards can be deleted
+- **Quiz review** — Review in sessions of 10, 20, or endless cards with multiple-choice questions
+  - Both directions: Chinese-to-English and English-to-Chinese
+  - **Weighted selection** — Cards you get wrong appear more often
+  - **Visual hints** — English-to-Chinese questions show the card's image
+  - **Audio playback** — Clicking a Chinese answer plays the pronunciation
+  - **Pinyin on demand** — Chinese prompts hide pinyin by default; click to reveal
+  - **Sound effects** — Correct and incorrect answer sounds
+  - **Congratulations** — Perfect scores get a special image
+
+### Games
+
+Duolingo-style language games using your flash card vocabulary and HSK reference data.
+
+**Lobby** — Configure your HSK level (1-3) and number of rounds (10, 20, or 30), then pick a game type or hit Random to mix them up.
+
+**Matching** — Two columns of cards; match the English to the Chinese (or vice versa — the sides randomize each round).
+- Click one from each side to attempt a match
+- Correct matches fade out with a success sound and play the word's audio pronunciation
+- Wrong matches shake with an error sound
+- Pinyin is hidden by default; toggle it with a single "Show Pinyin" button
+- Round completes when all 4 pairs are matched
+
+**MadLibs** — Fill-in-the-blank sentence completion.
+- A Chinese sentence is displayed with one word replaced by a blank
+- Pick the correct word from 4 multiple-choice options
+- Wrong answers are marked and disabled; you keep trying, but the round is marked incorrect on first wrong attempt
+- Correct answers fill in the blank and briefly show the English translation
+- **Hints** — Two levels: first click shows pinyin for the sentence, second click shows the English translation
+- **Add to Flash Cards** — Checkboxes next to each option let you select words to add to your flash cards
+- Sentences are generated by the AI and cached in a local database for reuse (70% reuse, 30% new generation)
+- Sound effects on correct and incorrect answers
+
+**Session summary** — After all rounds, see your score, percentage, and a message. Perfect scores get a congratulations image.
+
+**Rate limit handling** — If the AI rate limit is hit during MadLibs, the game falls back to cached questions and shows an info notification. The chatbot also shows a clear message if rate limited.
 
 ## Requirements
 
@@ -88,8 +139,27 @@ Without `TRILINGO_TOKEN` set, auth is disabled.
 
 ## Project Structure
 
-Chinese language reference data (HSK curriculum, vocabulary lists) lives in `backend/chinese/hsk/`. See `.claude/HSK_LIBRARY_PLAN.md` for the schema and API design.
+```
+Trilingo/
+├── backend/
+│   ├── main.py              # FastAPI app, middleware, router registration
+│   ├── config.py             # Settings (API keys, DB path, etc.)
+│   ├── database.py           # SQLite schema & connection
+│   ├── routers/              # API endpoints (chat, flashcards, games)
+│   ├── services/             # Business logic (chat, flashcard, game, asset worker)
+│   ├── providers/            # AI provider abstraction (Gemini, swappable)
+│   ├── chinese/              # NLP utilities (pinyin, segmentation, HSK data)
+│   └── models/               # Pydantic request/response models
+├── frontend/
+│   ├── src/
+│   │   ├── components/       # React components (chat/, flashcards/, games/, shared/)
+│   │   ├── hooks/            # State management (useChat, useFlashcards, useGames, useSounds)
+│   │   ├── api/              # API client functions
+│   │   ├── types/            # TypeScript interfaces
+│   │   └── assets/           # Images and sound effects
+│   └── vite.config.ts
+├── .env                      # API keys (not committed)
+└── PLAN.md                   # Architecture & phasing overview
+```
 
-## Status
-
-The chatbot and flash cards are functional. Games tab coming next.
+Chinese language reference data (HSK curriculum, vocabulary lists) lives in `backend/chinese/hsk/`.
