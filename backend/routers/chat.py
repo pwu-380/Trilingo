@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import APIKeyHeader
 
+from backend.providers.base import RateLimitError
 from backend.models.chat import (
     ChatMessageCreate,
     ChatMessageResponse,
@@ -46,7 +47,10 @@ async def delete_session(session_id: int):
 
 @router.post("/sessions/{session_id}/messages")
 async def send_message(session_id: int, body: ChatMessageCreate):
-    result = await chat_service.send_message(session_id, body.content)
+    try:
+        result = await chat_service.send_message(session_id, body.content)
+    except RateLimitError:
+        raise HTTPException(status_code=429, detail="AI rate limit exceeded — please wait a moment and try again")
     if result is None:
         raise HTTPException(status_code=404, detail="Session not found")
     user_msg, assistant_msg = result

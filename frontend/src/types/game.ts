@@ -15,6 +15,7 @@ export interface MadLibsRound {
   pinyin_sentence: string;
   vocab_word: string;
   options: string[];
+  rate_limited: boolean;
 }
 
 export type GameType = "matching" | "madlibs" | "random";

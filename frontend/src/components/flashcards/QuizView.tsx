@@ -1,7 +1,9 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { authedUrl } from "../../api/client";
 import type { QuizQuestion, QuizAnswerResponse } from "../../types/flashcard";
 import type { ReviewMode } from "../../hooks/useFlashcards";
+import { playCorrect, playIncorrect } from "../../hooks/useSounds";
+import CongratulationImg from "../../assets/Congratulation.jpg";
 import "./QuizView.css";
 
 function parseImagePath(imagePath: string | null) {
@@ -39,6 +41,15 @@ export default function QuizView({
 }: Props) {
   const [pinyinRevealed, setPinyinRevealed] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const prevResult = useRef<QuizAnswerResponse | null>(null);
+
+  useEffect(() => {
+    if (review.lastResult && review.lastResult !== prevResult.current) {
+      if (review.lastResult.correct) playCorrect();
+      else playIncorrect();
+    }
+    prevResult.current = review.lastResult;
+  }, [review.lastResult]);
 
   const playAudio = useCallback((cardId: number) => {
     const audio = new Audio(authedUrl(`/api/flashcards/${cardId}/audio`));
@@ -53,6 +64,13 @@ export default function QuizView({
     return (
       <div className="qv">
         <div className="qv-finished">
+          {pct === 100 && (
+            <img
+              className="qv-congrats-img"
+              src={CongratulationImg}
+              alt="Congratulations"
+            />
+          )}
           <h2>Review Complete</h2>
           <div className="qv-score">
             {review.correct} / {review.answered} correct ({pct}%)

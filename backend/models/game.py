@@ -18,6 +18,7 @@ class MadLibsRound(BaseModel):
     pinyin_sentence: str
     vocab_word: str  # correct answer
     options: list[str]  # 4 choices including correct
+    rate_limited: bool = False
 
 
 class MadLibsGenerateReq(BaseModel):

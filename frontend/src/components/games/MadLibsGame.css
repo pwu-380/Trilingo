@@ -45,7 +45,22 @@
   width: 100%;
 }
 
+.madlibs-option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.madlibs-checkbox {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent-color, #646cff);
+  cursor: pointer;
+}
+
 .madlibs-option {
+  flex: 1;
   padding: 14px 16px;
   border: 1px solid var(--border-color, #333);
   border-radius: 10px;

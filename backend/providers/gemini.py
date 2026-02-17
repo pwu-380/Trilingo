@@ -4,7 +4,7 @@ from google import genai
 from google.genai import types
 
 from backend.config import GEMINI_API_KEY, CHAT_MODEL
-from backend.providers.base import ChatProvider, ChatResponse
+from backend.providers.base import ChatProvider, ChatResponse, RateLimitError
 
 _SYSTEM_PROMPT = """\
 You are Alister, an AI Mandarin Chinese tutor. Your tone is like a friendly high school tutor — approachable, clear, and encouraging without being over-the-top. You explain things simply and don't talk down to the user, but you also don't lecture like a professor.
@@ -73,11 +73,16 @@ class GeminiChatProvider(ChatProvider):
             temperature=0.7,
         )
 
-        resp = await self._client.aio.models.generate_content(
-            model=CHAT_MODEL,
-            contents=contents,
-            config=config,
-        )
+        try:
+            resp = await self._client.aio.models.generate_content(
+                model=CHAT_MODEL,
+                contents=contents,
+                config=config,
+            )
+        except genai.errors.ClientError as e:
+            if e.code == 429:
+                raise RateLimitError("AI rate limit exceeded") from e
+            raise
 
         data = json.loads(resp.text)
         return ChatResponse(
@@ -88,9 +93,14 @@ class GeminiChatProvider(ChatProvider):
         )
 
     async def generate_text(self, prompt: str) -> str:
-        resp = await self._client.aio.models.generate_content(
-            model=CHAT_MODEL,
-            contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
-            config=types.GenerateContentConfig(temperature=0.5),
-        )
+        try:
+            resp = await self._client.aio.models.generate_content(
+                model=CHAT_MODEL,
+                contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
+                config=types.GenerateContentConfig(temperature=0.5),
+            )
+        except genai.errors.ClientError as e:
+            if e.code == 429:
+                raise RateLimitError("AI rate limit exceeded") from e
+            raise
         return resp.text.strip()

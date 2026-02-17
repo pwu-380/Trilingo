@@ -94,6 +94,7 @@ function AuthenticatedApp() {
           onCompleteRound={games.completeRound}
           onEndSession={games.endSession}
           onAddCardFromWord={handleAddCardFromWord}
+          onToast={addToast}
         />
       }
       flashcardsContent={

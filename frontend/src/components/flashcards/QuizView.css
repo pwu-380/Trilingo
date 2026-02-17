@@ -217,6 +217,12 @@
   padding: 48px 24px;
 }
 
+.qv-congrats-img {
+  max-width: 480px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
 .qv-finished h2 {
   margin: 0 0 16px;
   font-size: 1.5em;

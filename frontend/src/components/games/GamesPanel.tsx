@@ -14,6 +14,7 @@ interface Props {
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
   onAddCardFromWord?: (word: string) => void;
+  onToast?: (message: string, type: "info" | "error" | "success") => void;
 }
 
 const GAME_BUTTONS: { type: GameType; label: string; desc: string }[] = [
@@ -32,6 +33,7 @@ export default function GamesPanel({
   onCompleteRound,
   onEndSession,
   onAddCardFromWord,
+  onToast,
 }: Props) {
   const [confirmQuit, setConfirmQuit] = useState(false);
 
@@ -44,6 +46,7 @@ export default function GamesPanel({
           onCompleteRound={onCompleteRound}
           onEndSession={onEndSession}
           onAddCardFromWord={onAddCardFromWord}
+          onToast={onToast}
         />
       );
     }
@@ -78,6 +81,7 @@ export default function GamesPanel({
           onCompleteRound={onCompleteRound}
           onEndSession={onEndSession}
           onAddCardFromWord={onAddCardFromWord}
+          onToast={onToast}
         />
       </div>
     );

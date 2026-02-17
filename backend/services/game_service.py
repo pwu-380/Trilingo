@@ -4,6 +4,7 @@ from backend.chinese.hsk import get_vocab
 from backend.chinese.pinyin import pinyin_for_text
 from backend.database import get_db
 from backend.models.game import MatchingPair, MatchingRound, MadLibsRound
+from backend.providers.base import RateLimitError
 
 
 # ---------------------------------------------------------------------------
@@ -126,16 +127,31 @@ def _build_madlibs_options(vocab_word: str, hsk_level: int) -> list[str]:
 
 
 async def get_madlibs_round(hsk_level: int) -> MadLibsRound:
-    """Get a MadLibs round: 50/50 generate new or reuse stored sentence."""
-    # 50/50 chance: try stored first, or generate
-    use_stored = random.random() < 0.5
+    """Get a MadLibs round: 70% reuse stored, 30% generate new."""
+    use_stored = random.random() < 0.7
     data = None
+    rate_limited = False
 
     if use_stored:
         data = await _pick_stored_sentence(hsk_level)
 
     if data is None:
-        data = await _generate_sentence(hsk_level)
+        try:
+            data = await _generate_sentence(hsk_level)
+        except RateLimitError:
+            rate_limited = True
+            data = await _pick_stored_sentence(hsk_level)
+
+    # If still no data (empty DB + rate limited), build a simple fallback
+    if data is None:
+        vocab = get_vocab(hsk_level)
+        entry = random.choice(vocab)
+        word = entry["chinese"]
+        data = {
+            "vocab_word": word,
+            "sentence_zh": f"我喜欢{word}。",
+            "sentence_en": f"I like {entry['english']}.",
+        }
 
     vocab_word = data["vocab_word"]
     sentence_zh = data["sentence_zh"]
@@ -156,4 +172,5 @@ async def get_madlibs_round(hsk_level: int) -> MadLibsRound:
         pinyin_sentence=pinyin_sentence,
         vocab_word=vocab_word,
         options=options,
+        rate_limited=rate_limited,
     )

@@ -12,6 +12,7 @@ interface Props {
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
   onAddCardFromWord?: (word: string) => void;
+  onToast?: (message: string, type: "info" | "error" | "success") => void;
 }
 
 export default function GameSession({
@@ -19,6 +20,7 @@ export default function GameSession({
   onCompleteRound,
   onEndSession,
   onAddCardFromWord,
+  onToast,
 }: Props) {
   const [matchingData, setMatchingData] = useState<MatchingRound | null>(null);
   const [madlibsData, setMadlibsData] = useState<MadLibsRound | null>(null);
@@ -47,6 +49,9 @@ export default function GameSession({
           setMatchingData(data);
         } else {
           const data = await getMadLibsRound(session.hskLevel);
+          if (data.rate_limited && onToast) {
+            onToast("AI rate limit reached — using saved questions", "info");
+          }
           setMadlibsData(data);
         }
       } catch (e: unknown) {
@@ -92,7 +97,7 @@ export default function GameSession({
       </div>
 
       <div className="game-session-content">
-        {loading && <div className="game-session-loading">Loading...</div>}
+        {loading && <div className="game-session-loading">Generating question<span className="ellipsis-anim" /></div>}
         {error && <div className="game-session-error">{error}</div>}
 
         {!loading && !error && currentGameType === "matching" && matchingData && (

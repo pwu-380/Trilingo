@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { authedUrl } from "../../api/client";
 import type { MatchingRound } from "../../types/game";
+import { playCorrect, playIncorrect } from "../../hooks/useSounds";
 import "./MatchingGame.css";
 
 interface Props {
@@ -49,7 +50,8 @@ export default function MatchingGame({ round, onComplete }: Props) {
         setSelectedLeft(null);
         setSelectedRight(null);
 
-        // Play audio on correct match
+        // Play audio and sound on correct match
+        playCorrect();
         playAudio(leftIdx);
 
         // Check if all matched
@@ -57,7 +59,8 @@ export default function MatchingGame({ round, onComplete }: Props) {
           setTimeout(() => onComplete(true), 400);
         }
       } else {
-        // Wrong match — shake
+        // Wrong match — shake + sound
+        playIncorrect();
         setShakeLeft(leftIdx);
         setShakeRight(rightIdx);
         setTimeout(() => {

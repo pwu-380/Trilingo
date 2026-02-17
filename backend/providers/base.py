@@ -3,6 +3,11 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
 
+class RateLimitError(Exception):
+    """Raised when the AI provider returns a rate limit / quota exceeded error."""
+    pass
+
+
 class ChatResponse(BaseModel):
     response: str
     translation: str

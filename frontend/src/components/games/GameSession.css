@@ -48,6 +48,18 @@
   font-size: 1em;
 }
 
+.ellipsis-anim::after {
+  content: "";
+  animation: ellipsis 1.2s steps(4, end) infinite;
+}
+
+@keyframes ellipsis {
+  0%  { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+}
+
 .game-session-error {
   color: #ff6b6b;
 }
@@ -74,7 +86,7 @@
 }
 
 .game-summary-img {
-  max-width: 240px;
+  max-width: 480px;
   border-radius: 12px;
 }
 

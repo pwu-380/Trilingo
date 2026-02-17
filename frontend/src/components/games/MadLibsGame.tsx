@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import type { MadLibsRound } from "../../types/game";
+import { playCorrect, playIncorrect } from "../../hooks/useSounds";
 import "./MadLibsGame.css";
 
 interface Props {
@@ -14,6 +15,7 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
   const [wasWrong, setWasWrong] = useState(false);
   const [hintLevel, setHintLevel] = useState(0); // 0=none, 1=pinyin, 2=english
   const [answered, setAnswered] = useState(false);
+  const [checked, setChecked] = useState<Set<string>>(new Set());
 
   const handleSelect = useCallback(
     (option: string) => {
@@ -24,10 +26,12 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
       if (option === round.vocab_word) {
         // Correct
         setAnswered(true);
-        setTimeout(() => onComplete(!wasWrong), 800);
+        playCorrect();
+        setTimeout(() => onComplete(!wasWrong), 1300);
       } else {
         // Wrong
         setWasWrong(true);
+        playIncorrect();
         setDisabled((prev) => new Set([...prev, option]));
         setTimeout(() => setSelected(null), 400);
       }
@@ -39,10 +43,30 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
     setHintLevel((prev) => Math.min(prev + 1, 2));
   }, []);
 
+  const toggleCheck = useCallback((option: string) => {
+    setChecked((prev) => {
+      const next = new Set(prev);
+      if (next.has(option)) next.delete(option);
+      else next.add(option);
+      return next;
+    });
+  }, []);
+
+  const handleAddCards = useCallback(() => {
+    if (!onAddCardFromWord) return;
+    for (const word of checked) {
+      onAddCardFromWord(word);
+    }
+    setChecked(new Set());
+  }, [checked, onAddCardFromWord]);
+
   // Build the display sentence, replacing ____ with the answer if correct
   const displaySentence = answered
     ? round.sentence_zh.replace("____", round.vocab_word)
     : round.sentence_zh;
+
+  // Show English on correct answer or if hint level >= 2
+  const showEnglish = answered || hintLevel >= 2;
 
   return (
     <div className="madlibs-game">
@@ -51,7 +75,7 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
           <div className="madlibs-pinyin">{round.pinyin_sentence}</div>
         )}
         <div className="madlibs-sentence">{displaySentence}</div>
-        {hintLevel >= 2 && (
+        {showEnglish && (
           <div className="madlibs-english">{round.sentence_en}</div>
         )}
       </div>
@@ -63,14 +87,23 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
           else if (selected === option && option !== round.vocab_word) cls += " wrong";
           if (disabled.has(option)) cls += " disabled";
           return (
-            <button
-              key={option}
-              className={cls}
-              onClick={() => handleSelect(option)}
-              disabled={disabled.has(option) || answered}
-            >
-              {option}
-            </button>
+            <div key={option} className="madlibs-option-row">
+              {onAddCardFromWord && (
+                <input
+                  type="checkbox"
+                  className="madlibs-checkbox"
+                  checked={checked.has(option)}
+                  onChange={() => toggleCheck(option)}
+                />
+              )}
+              <button
+                className={cls}
+                onClick={() => handleSelect(option)}
+                disabled={disabled.has(option) || answered}
+              >
+                {option}
+              </button>
+            </div>
           );
         })}
       </div>
@@ -81,12 +114,9 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
             Hint {hintLevel === 0 ? "(pinyin)" : "(english)"}
           </button>
         )}
-        {answered && onAddCardFromWord && (
-          <button
-            className="madlibs-add-btn"
-            onClick={() => onAddCardFromWord(round.vocab_word)}
-          >
-            Add to Flash Cards
+        {onAddCardFromWord && checked.size > 0 && (
+          <button className="madlibs-add-btn" onClick={handleAddCards}>
+            Add to Flash Cards ({checked.size})
           </button>
         )}
       </div>
