@@ -29,10 +29,11 @@
 - Phase 2B (flashcard frontend): COMPLETE
 - Phase 2C (asset worker): COMPLETE
 - Phase 3 (chat↔flashcard integration): COMPLETE
-- Phase 4 (games): NOT STARTED
+- Phase 4 (mobile compatibility & polish): NOT STARTED
+- Phase 5 (games): NOT STARTED
 
 ## What to Do Next
-1. **Phase 4** — Games tab implementation
+1. **Phase 5** — Games tab implementation (MVP before Phase 4)
 2. **Expand HSK data** — hsk3-6.json files have only 20 vocab entries each
 
 ## Key Decisions Made by User
