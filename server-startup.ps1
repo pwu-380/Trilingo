@@ -50,7 +50,7 @@ $env:TRILINGO_TOKEN = $token
 
 # Start backend (new console window)
 $backend = Start-Process -PassThru -FilePath "python.exe" `
-    -ArgumentList "-m", "uvicorn", "backend.main:app", "--reload", "--port", "8731" `
+    -ArgumentList "-m", "uvicorn", "backend.main:app", "--reload", "--host", "0.0.0.0", "--port", "8731" `
     -WorkingDirectory $projectRoot
 
 # Start frontend (new console window)
