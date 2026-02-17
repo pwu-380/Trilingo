@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { GameSession as GameSessionType } from "../../hooks/useGames";
 import type { MatchingRound, MadLibsRound } from "../../types/game";
 import { getMatchingRound, getMadLibsRound } from "../../api/games";
@@ -25,7 +25,9 @@ export default function GameSession({
   const [matchingData, setMatchingData] = useState<MatchingRound | null>(null);
   const [madlibsData, setMadlibsData] = useState<MadLibsRound | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showGenerating, setShowGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const generatingTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const currentGameType =
     session.currentRound < session.totalRounds
@@ -38,9 +40,14 @@ export default function GameSession({
     if (!currentGameType) return;
 
     setLoading(true);
+    setShowGenerating(false);
     setError(null);
     setMatchingData(null);
     setMadlibsData(null);
+
+    // Only show "Generating question..." if the request takes >500ms (i.e. LLM call)
+    clearTimeout(generatingTimer.current);
+    generatingTimer.current = setTimeout(() => setShowGenerating(true), 500);
 
     const fetchRound = async () => {
       try {
@@ -57,12 +64,15 @@ export default function GameSession({
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : "Failed to load round");
       } finally {
+        clearTimeout(generatingTimer.current);
+        setShowGenerating(false);
         setLoading(false);
       }
     };
 
     fetchRound();
-  }, [session.currentRound, session.totalRounds, session.hskLevel, currentGameType]);
+    return () => clearTimeout(generatingTimer.current);
+  }, [session.currentRound, session.totalRounds, session.hskLevel, currentGameType, onToast]);
 
   const handleComplete = useCallback(
     (correct: boolean) => {
@@ -97,7 +107,7 @@ export default function GameSession({
       </div>
 
       <div className="game-session-content">
-        {loading && <div className="game-session-loading">Generating question<span className="ellipsis-anim" /></div>}
+        {showGenerating && <div className="game-session-loading">Generating question<span className="ellipsis-anim" /></div>}
         {error && <div className="game-session-error">{error}</div>}
 
         {!loading && !error && currentGameType === "matching" && matchingData && (
