@@ -14,18 +14,18 @@ The top of the games tab is a configuration bar:
 |-----------------|----------------------|----------------------------------------------------|
 | HSK Level       | 1, 2, 3             | Dropdown. Filters vocab for games that use it.     |
 | Rounds          | 10, 20, 30          | Dropdown. Total rounds per play session.           |
-| Game Selection  | Per-game toggles     | Checkboxes for each game type + a "Random" option. |
+| Game Type       | Single select        | Dropdown: each game type + "Random".               |
 
 Below the config bar, a **Play** button starts the session. During play, a progress bar shows `round X / N` and a running score.
 
-**"Random" selection**: When enabled, each round picks uniformly at random from the other enabled game types. If Random is the only selection, it picks from all available games.
+**"Random" selection**: Each round picks uniformly at random from all available game types.
 
 ---
 
 ## Round System
 
 A "session" is N rounds. Each round:
-1. Pick a game type (from enabled types, or random).
+1. Pick a game type (the selected type, or random from all if "Random").
 2. Render that game's component with appropriate props.
 3. User completes the round (correct/incorrect).
 4. Show brief feedback, then advance to next round.
@@ -122,7 +122,7 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 ### Component Details
 
 **GamesPanel** (lobby):
-- Config bar: HSK level dropdown, rounds dropdown, game-type checkboxes
+- Config bar: HSK level dropdown, rounds dropdown, game type dropdown
 - Play button → starts GameSession
 - Back button during session → confirm abandon, return to lobby
 
@@ -191,26 +191,12 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 
 ## Future Games (Ideas Backlog)
 
-New games follow the same pattern: one backend function returning round data, one frontend component accepting `onComplete`. Add the game type to the lobby checkboxes and the session orchestrator's type map.
-
-### Listening Game
-- Play TTS audio, user picks the correct Chinese word from 4 options
-- Requires cards with audio assets
-- Variant: play audio, pick correct English translation
+New games follow the same pattern: one backend function returning round data, one frontend component accepting `onComplete`. Add the game type to the lobby dropdown and the session orchestrator's type map.
 
 ### Sentence Builder
 - Given English sentence + jumbled Chinese words, drag/tap to arrange in correct order
 - Could reuse `game_sentences` table
 - Variant: given Chinese audio, arrange characters
-
-### Typing Challenge
-- Show English word, user types the pinyin or Chinese characters
-- Difficulty levels: pinyin input (forgiving) vs character input (hard)
-- Could use IME-style matching
-
-### Tone Game
-- Show a Chinese word, pick the correct tone marks from options
-- Focuses on tone discrimination — a common weak spot
 
 ### Classifier Game
 - Show a noun, pick the correct measure word (量词) from options
