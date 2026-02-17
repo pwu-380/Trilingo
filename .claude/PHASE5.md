@@ -14,9 +14,8 @@ The top of the games tab is a configuration bar:
 |-----------------|----------------------|----------------------------------------------------|
 | HSK Level       | 1, 2, 3             | Dropdown. Filters vocab for games that use it.     |
 | Rounds          | 10, 20, 30          | Dropdown. Total rounds per play session.           |
-| Game Type       | Single select        | Dropdown: each game type + "Random".               |
 
-Below the config bar, a **Play** button starts the session. During play, a progress bar shows `round X / N` and a running score.
+Below the config bar, a grid of game-type buttons: one per game + a "Random" button. Clicking a button starts the session immediately with that game type. Each button acts as both selection and play trigger.
 
 **"Random" selection**: Each round picks uniformly at random from all available game types.
 
@@ -122,8 +121,8 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 ### Component Details
 
 **GamesPanel** (lobby):
-- Config bar: HSK level dropdown, rounds dropdown, game type dropdown
-- Play button → starts GameSession
+- Config bar: HSK level dropdown, rounds dropdown
+- Grid of game-type buttons (Matching, MadLibs, Random) — clicking starts the session
 - Back button during session → confirm abandon, return to lobby
 
 **GameSession** (orchestrator):
