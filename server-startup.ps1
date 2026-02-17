@@ -72,7 +72,12 @@ Write-Host ""
 Write-Host "  Password:  $token" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Local:     http://localhost:8732?token=$token" -ForegroundColor White
-Write-Host "  Phone:     http://$((Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch 'Loopback' -and $_.IPAddress -notmatch '^169\.' } | Select-Object -First 1).IPAddress):8732?token=$token" -ForegroundColor White
+$lanIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -match 'Wi-Fi|Ethernet' -and $_.InterfaceAlias -notmatch 'vEthernet|Virtual|Loopback' -and $_.IPAddress -notmatch '^169\.|^172\.(1[6-9]|2[0-9]|3[01])\.' } | Select-Object -First 1).IPAddress
+if ($lanIp) {
+    Write-Host "  Phone:     http://${lanIp}:8732?token=$token" -ForegroundColor White
+} else {
+    Write-Host "  Phone:     (no LAN IP detected)" -ForegroundColor DarkGray
+}
 Write-Host ""
 Write-Host "  Run .\server-shutdown.ps1 to stop." -ForegroundColor DarkGray
 Write-Host ""
