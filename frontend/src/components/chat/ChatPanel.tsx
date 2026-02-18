@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ChatMessage, ChatSession } from "../../types/chat";
 import MessageBubble from "./MessageBubble";
 import ChatInput from "./ChatInput";
@@ -35,6 +35,7 @@ export default function ChatPanel({
   onAddCardFromWord,
 }: Props) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -42,7 +43,23 @@ export default function ChatPanel({
 
   return (
     <div className="chat-panel">
-      <aside className="session-sidebar">
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay-backdrop"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      <aside className={`session-sidebar ${sidebarOpen ? "mobile-open" : ""}`}>
+        <div className="sidebar-mobile-header">
+          <span>Chats</span>
+          <button
+            className="sidebar-close-btn"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
+          >
+            &times;
+          </button>
+        </div>
         <button className="new-session-btn" onClick={onCreateSession}>
           + New Chat
         </button>
@@ -51,7 +68,10 @@ export default function ChatPanel({
             <div
               key={s.id}
               className={`session-item ${s.id === currentSessionId ? "active" : ""}`}
-              onClick={() => onSelectSession(s.id)}
+              onClick={() => {
+                onSelectSession(s.id);
+                setSidebarOpen(false);
+              }}
             >
               <span className="session-title">{s.title || "New conversation"}</span>
               <button
@@ -70,6 +90,18 @@ export default function ChatPanel({
       </aside>
 
       <main className="chat-main">
+        <div className="chat-header-mobile">
+          <button
+            className="sidebar-toggle-btn"
+            onClick={() => setSidebarOpen((v) => !v)}
+            aria-label="Toggle sessions"
+          >
+            ☰
+          </button>
+          <span className="chat-header-title">
+            {sessions.find((s) => s.id === currentSessionId)?.title || "Trilingo Chat"}
+          </span>
+        </div>
         {error && (
           <div className="chat-error" onClick={onClearError}>
             {error}

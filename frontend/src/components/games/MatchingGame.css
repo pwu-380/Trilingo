@@ -99,3 +99,14 @@
     transform: translateX(4px);
   }
 }
+
+@media (max-width: 768px) {
+  .matching-columns {
+    gap: 16px;
+  }
+
+  .matching-card {
+    padding: 10px 12px;
+    min-height: 56px;
+  }
+}

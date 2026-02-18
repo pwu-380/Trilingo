@@ -260,3 +260,26 @@
   color: var(--text-secondary, #aaa);
   padding: 48px 24px;
 }
+
+@media (max-width: 768px) {
+  .cm-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .cm-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cm-seed {
+    flex-wrap: wrap;
+  }
+
+  .cm-add-form {
+    flex-direction: column;
+  }
+
+  .cm-add-form button {
+    width: 100%;
+  }
+}

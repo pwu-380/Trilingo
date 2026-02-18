@@ -36,3 +36,11 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .chat-input button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px 16px;
+  }
+}

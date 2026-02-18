@@ -20,6 +20,17 @@ export async function checkAuth(): Promise<boolean> {
   return res.ok;
 }
 
+export async function loginWithToken(token: string): Promise<boolean> {
+  localStorage.setItem(TOKEN_KEY, token);
+  const res = await fetch("/api/auth/check", {
+    headers: { "x-trilingo-token": token },
+  });
+  if (!res.ok) {
+    localStorage.removeItem(TOKEN_KEY);
+  }
+  return res.ok;
+}
+
 export function authedUrl(path: string): string {
   const token = getToken();
   return token ? `${path}?token=${encodeURIComponent(token)}` : path;

@@ -123,3 +123,13 @@
 .madlibs-add-btn:hover {
   background: rgba(100, 108, 255, 0.15);
 }
+
+@media (max-width: 768px) {
+  .madlibs-options {
+    grid-template-columns: 1fr;
+  }
+
+  .madlibs-sentence {
+    font-size: 1.3em;
+  }
+}

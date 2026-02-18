@@ -123,3 +123,15 @@
 .game-summary-btn:hover {
   background: rgba(100, 108, 255, 0.15);
 }
+
+@media (max-width: 768px) {
+  .game-summary-card {
+    padding: 20px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .game-summary-img {
+    max-width: 100%;
+  }
+}

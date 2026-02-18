@@ -43,3 +43,9 @@
   background: #4d7df7;
 }
 
+@media (max-width: 768px) {
+  .word-popup {
+    max-width: calc(100vw - 32px);
+  }
+}
+

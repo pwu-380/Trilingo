@@ -183,3 +183,126 @@
   75%  { content: "..."; }
   100% { content: ""; }
 }
+
+.sidebar-toggle-btn {
+  display: none;
+}
+
+.sidebar-overlay-backdrop {
+  display: none;
+}
+
+.chat-header-mobile {
+  display: none;
+}
+
+.sidebar-mobile-header {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .session-sidebar {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    width: 100%;
+  }
+
+  .session-sidebar.mobile-open {
+    display: flex;
+  }
+
+  .sidebar-overlay-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--border-color, #333);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary, #aaa);
+    font-size: 1.2em;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .sidebar-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color, #333);
+    font-size: 1.1em;
+    color: var(--text-primary, #eee);
+    flex-shrink: 0;
+  }
+
+  .sidebar-close-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-secondary, #aaa);
+    font-size: 1.4em;
+    cursor: pointer;
+  }
+
+  .chat-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .chat-main {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .chat-header-mobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-color, #333);
+    flex-shrink: 0;
+    background: var(--bg-primary, #1a1a2e);
+  }
+
+  .chat-input {
+    flex-shrink: 0;
+  }
+
+  .messages-area {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .chat-header-title {
+    flex: 1;
+    font-size: 0.9em;
+    color: var(--text-secondary, #aaa);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .message-bubble {
+    max-width: 95%;
+  }
+}

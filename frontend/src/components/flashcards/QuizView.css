@@ -233,3 +233,21 @@
   color: var(--text-secondary, #aaa);
   margin-bottom: 24px;
 }
+
+@media (max-width: 768px) {
+  .qv {
+    padding: 12px;
+  }
+
+  .qv-congrats-img {
+    max-width: 100%;
+  }
+
+  .qv-prompt {
+    font-size: 1.3em;
+  }
+
+  .qv-prompt-chinese {
+    font-size: 1.8em;
+  }
+}

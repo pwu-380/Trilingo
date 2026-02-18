@@ -106,3 +106,18 @@
 .games-cancel-btn:hover {
   color: var(--text-primary, #eee);
 }
+
+@media (max-width: 768px) {
+  .games-lobby {
+    gap: 20px;
+  }
+
+  .games-config {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -58,3 +58,14 @@
     transform: translateY(-12px);
   }
 }
+
+@media (max-width: 768px) {
+  .toast-container {
+    left: 8px;
+    right: 8px;
+  }
+
+  .toast {
+    white-space: normal;
+  }
+}
