@@ -1,6 +1,6 @@
 import random
 
-from backend.chinese.hsk import get_vocab
+from backend.chinese.hsk import get_vocab, get_grammar
 from backend.chinese.pinyin import pinyin_for_text
 from backend.database import get_db
 from backend.models.game import MatchingPair, MatchingRound, MadLibsRound
@@ -59,6 +59,9 @@ You are a Mandarin Chinese teaching assistant.
 Generate a natural Chinese sentence using the word "{word}" (HSK {level}).
 The sentence should be simple and appropriate for HSK {level} learners.
 
+Here are the grammar patterns for HSK {level}. If possible, demonstrate one of these patterns in your sentence:
+{grammar_patterns}
+
 Reply in EXACTLY this format (two lines, nothing else):
 Chinese: <full Chinese sentence>
 English: <English translation>"""
@@ -70,9 +73,15 @@ async def _generate_sentence(hsk_level: int) -> dict:
     entry = random.choice(vocab)
     word = entry["chinese"]
 
+    grammar = get_grammar(hsk_level)
+    grammar_patterns = "\n".join(
+        f"- {g['pattern']} ({g['english']}), e.g. {g['example']}"
+        for g in grammar
+    )
+
     from backend.providers.registry import get_chat_provider
     provider = get_chat_provider()
-    prompt = _SENTENCE_PROMPT.format(word=word, level=hsk_level)
+    prompt = _SENTENCE_PROMPT.format(word=word, level=hsk_level, grammar_patterns=grammar_patterns)
     response = await provider.generate_text(prompt)
 
     # Parse response

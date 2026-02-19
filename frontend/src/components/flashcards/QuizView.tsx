@@ -43,18 +43,26 @@ export default function QuizView({
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const prevResult = useRef<QuizAnswerResponse | null>(null);
 
-  useEffect(() => {
-    if (review.lastResult && review.lastResult !== prevResult.current) {
-      if (review.lastResult.correct) playCorrect();
-      else playIncorrect();
-    }
-    prevResult.current = review.lastResult;
-  }, [review.lastResult]);
-
   const playAudio = useCallback((cardId: number) => {
     const audio = new Audio(authedUrl(`/api/flashcards/${cardId}/audio`));
     audio.play().catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (review.lastResult && review.lastResult !== prevResult.current) {
+      if (review.lastResult.correct) playCorrect();
+      else playIncorrect();
+      // Auto-play Chinese audio on correct answer in zh_to_en mode
+      if (
+        review.lastResult.correct &&
+        review.currentQuestion?.quiz_type === "zh_to_en" &&
+        review.currentQuestion?.audio_path
+      ) {
+        playAudio(review.currentQuestion.card_id);
+      }
+    }
+    prevResult.current = review.lastResult;
+  }, [review.lastResult, review.currentQuestion, playAudio]);
 
   const q = review.currentQuestion;
 

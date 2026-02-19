@@ -1,64 +1,64 @@
-# Session Context — 2026-02-17 (session 9)
+# Session Context — 2026-02-18 (session 10)
 
 ## What Was Done This Session
 
-### Phase 4 — Mobile Compatibility & Login Page (partial)
-- **Plan committed**: `.claude/PHASE4.md` pushed to main with full implementation plan
-- **Login page**: Created `LoginPage.tsx` + `LoginPage.css`, replaced 403 page in `App.tsx`, added `loginWithToken()` to `client.ts`
-  - Visible text input (not password type — user preference)
-  - Space→dash conversion via `onChange` handler (not `onKeyDown`, which doesn't fire reliably on mobile keyboards)
-  - Enter submits, error message on wrong passphrase, clears input on failure
-- **Responsive CSS**: Added `@media (max-width: 768px)` queries to 12 CSS files (TabShell, ChatPanel, ChatInput, FlashcardPanel, CardManager, QuizView, GamesPanel, MatchingGame, MadLibsGame, GameSession, Toast, WordPopup)
-- **Chat sidebar toggle**: Added hamburger menu button + mobile sidebar overlay with close button in `ChatPanel.tsx`
+### Flashcard Quiz — Auto-play audio on correct answer
+- In `zh_to_en` mode (Chinese prompt, English choices), Chinese audio now auto-plays when the user picks the correct answer (if audio is available)
+- Manual speaker button still available for on-demand playback
+- Fix: `playAudio` useCallback had to be moved above the useEffect that references it (was causing a crash due to use-before-define)
+
+### MadLibs — Grammar-aware sentence generation
+- Updated `_SENTENCE_PROMPT` in `game_service.py` to include HSK grammar patterns for the target level
+- The LLM is now instructed to demonstrate one of the grammar patterns in the generated sentence if possible
+- Imported `get_grammar` from `backend.chinese.hsk` and formats patterns as a bullet list in the prompt
+
+### Mobile chat header pinning — still broken (CSS changes attempted)
+- Replaced `position: fixed; inset: 0` diagnostic hack on `.chat-panel` with `flex: 1; min-height: 0; height: auto; overflow: hidden`
+- Added `flex: 1` to `.chat-main` in mobile query
+- Moved `display: flex; flex-direction: column; overflow: hidden` from TabShell.css mobile-only query to base `.tab-content` rule
+- **Still not working** — header still scrolls away on mobile. The height chain fix didn't resolve it.
 
 ## What Was Tried and Didn't Work
 
-### Mobile chat header pinning (UNRESOLVED)
-The hamburger menu header in the chat tab scrolls away with the messages on mobile instead of staying pinned at the top. Multiple approaches were tried:
+### Mobile chat header pinning (STILL UNRESOLVED — multiple sessions)
+Previous session tried: flex chain with min-height:0, position:sticky, position:fixed on header, position:fixed on chat-panel.
 
-1. **Flex chain with `min-height: 0` and `overflow: hidden`** — Added to `.chat-panel`, `.chat-main`, `.tab-content`. Didn't work.
-2. **`position: sticky; top: 0`** on the header — Partially worked: header was invisible until you scrolled to the top, then it pinned correctly when scrolling down. The `scrollIntoView()` on new messages scrolls past the sticky header initially.
-3. **`position: fixed`** on the header with padding offset — Didn't work either.
-4. **`position: fixed; inset: 0`** on `.chat-panel` as a diagnostic test — Still didn't work, suggesting either the CSS wasn't being served or the issue is deeper.
+This session tried: proper flex-based height chain (`flex: 1; min-height: 0` all the way down from `.tab-content` to `.chat-panel` to `.chat-main`). Still broken.
 
-**Root cause theory (from user's coworker)**: The height chain from viewport to `.chat-main` is broken. `.tab-content` gets its height from flex layout (not an explicit `height` property), so `height: 100%` on `.chat-panel` resolves to `auto`. This means `.chat-main` grows with content, making it the scroll container instead of `.messages-area`.
-
-**Key discovery**: The frontend dev server was stale — an old instance was running on port 8732 serving outdated code. A new dev server started on port 8733 but the user reported the same behavior, though it's possible the proxy to backend (port 8731) wasn't working correctly or the browser was still hitting the old server. **User is restarting their computer to kill all stale processes.**
-
-### Current state of the CSS (may need cleanup)
-The mobile media query in `ChatPanel.css` currently has these experimental overrides that should be reviewed:
+**Current CSS state** (mobile media query in ChatPanel.css):
 ```css
 .chat-panel {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
+  height: auto;
 }
 
 .chat-main {
+  flex: 1;
   min-height: 0;
   overflow: hidden;
 }
 ```
-The `position: fixed` on `.chat-panel` was meant as a diagnostic — it should either be confirmed working or reverted.
 
-`TabShell.css` mobile query also has:
+TabShell.css base `.tab-content` now has:
 ```css
 .tab-content {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 ```
 
+**Possible next steps**: Use browser devtools on the actual mobile device to inspect which element is the scroll container. The theory is `.messages-area` should be the only scrolling element, but something in the chain is still growing with content. Could also try an entirely different approach — e.g., making `.chat-main` use `position: absolute; inset: 0` within a `position: relative` parent.
+
 ## Outstanding Issues
-1. **Chat header pinning on mobile** — Still broken. Need to confirm with fresh dev server after reboot.
-2. **Beads repo ID mismatch** — Still present from prior sessions.
-3. **Debug print in main.py** — `Auth enabled (token: xxxx...)` diagnostic print still in lifespan.
-4. **HSK data gaps** — hsk3-6.json files have only 20 vocab entries each.
-5. **Stale dev server** — After reboot, make sure only ONE frontend dev server is running (port 8732) and ONE backend (port 8731).
+1. **Chat header pinning on mobile** — Still broken across two sessions
+2. **Beads repo ID mismatch** — Still present from prior sessions
+3. **Debug print in main.py** — `Auth enabled (token: xxxx...)` diagnostic print still in lifespan
+4. **HSK data gaps** — hsk3-6.json files have only 20 vocab entries each
 
 ## Current State
 
@@ -73,10 +73,9 @@ The `position: fixed` on `.chat-panel` was meant as a diagnostic — it should e
 - Phase 5 (games): COMPLETE
 
 ## What to Do Next
-1. **Fix chat header pinning** — After reboot, start fresh dev servers and test. If `position: fixed; inset: 0` on `.chat-panel` works, the fix is to properly constrain the height chain. If it still doesn't work, investigate further (maybe the mobile browser is hitting a cached service worker or similar).
-2. **Clean up diagnostic CSS** — Remove `position: fixed` from `.chat-panel` once proper fix is found
-3. **Test all responsive views** — Verify all tabs render properly at 375px width
-4. **Commit Phase 4 implementation** — Once chat header is fixed
+1. **Fix chat header pinning** — Inspect with mobile devtools to find which element is actually scrolling. Try absolute positioning approach as alternative.
+2. **Test all responsive views** — Verify all tabs render properly at 375px width
+3. **Commit Phase 4 implementation** — Once chat header is fixed
 
 ## Key Decisions Made by User
 - Login input should be `type="text"` (visible), NOT `type="password"` (masked)
