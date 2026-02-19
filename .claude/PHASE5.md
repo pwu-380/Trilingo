@@ -201,6 +201,18 @@ New games follow the same pattern: one backend function returning round data, on
 - Show a noun, pick the correct measure word (量词) from options
 - Uses HSK measure word data
 
+### Listen and Learn
+- Tap a "Play" button to hear a word spoken aloud
+- Pick the correct written Chinese from 4 options
+- Tests listening comprehension and character recognition
+- Reuses flashcard audio assets
+
+### Scrambler
+- A sentence is broken into individual word/character bubbles
+- Tap them in the correct order to rebuild the phrase
+- Could reuse `game_sentences` table for source sentences
+- Variant: show English translation as a hint
+
 ### Speed Round
 - Any game type but with a countdown timer
 - Bonus points for fast correct answers
