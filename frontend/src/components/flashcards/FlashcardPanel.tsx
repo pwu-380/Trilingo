@@ -30,6 +30,7 @@ interface Props {
   onDeactivateCard: (cardId: number) => void;
   onClearError: () => void;
   onSeedCards: (level: number, count: number) => Promise<number>;
+  onUpdateEnglish: (id: number, english: string) => void;
   onRegenerateAssets: (id: number) => void;
 }
 
@@ -49,6 +50,7 @@ export default function FlashcardPanel({
   onDeactivateCard,
   onClearError,
   onSeedCards,
+  onUpdateEnglish,
   onRegenerateAssets,
 }: Props) {
   const activeCount = cards.filter((c) => c.active).length;
@@ -89,6 +91,7 @@ export default function FlashcardPanel({
             onDeleteCard={onDeleteCard}
             onToggleActive={onToggleActive}
             onSeedCards={onSeedCards}
+            onUpdateEnglish={onUpdateEnglish}
             onRegenerateAssets={onRegenerateAssets}
           />
         </>

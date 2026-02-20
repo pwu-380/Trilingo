@@ -138,7 +138,6 @@ export default function SentenceBuilderGame({ round, onComplete }: Props) {
         <div className="sb-result">
           <div className="sb-result-zh">{round.full_sentence_zh}</div>
           <div className="sb-result-pinyin">{round.pinyin_sentence}</div>
-          <div className="sb-result-en">{round.sentence_en}</div>
         </div>
       )}
     </div>

@@ -100,6 +100,7 @@ function AuthenticatedApp() {
           onDeactivateCard={fc.deactivateDuringReview}
           onClearError={fc.clearError}
           onSeedCards={fc.seedCards}
+          onUpdateEnglish={fc.updateEnglish}
           onRegenerateAssets={(id: number) => {
             fc.regenerateAssets(id).then(() => {
               addToast("Regenerating assets...", "info");

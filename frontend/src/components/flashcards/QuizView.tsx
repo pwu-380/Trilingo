@@ -150,7 +150,7 @@ export default function QuizView({
           const img = parseImagePath(q.image_path);
           return img ? (
             <div className="qv-image">
-              <img src={`/assets/${img.path}`} alt="" />
+              <img src={`/assets/${img.path}?v=${encodeURIComponent(q.image_path || "")}`} alt="" />
             </div>
           ) : null;
         })()}

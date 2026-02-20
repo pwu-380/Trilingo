@@ -1,21 +1,19 @@
-# Session Context — 2026-02-19 (session 11)
+# Session Context — 2026-02-19 (session 12)
 
 ## What Was Done This Session
 
-### Sentence Builder game — full implementation
-- New game in Games tab: user arranges jumbled Chinese words into correct sentence order given an English prompt
-- **Backend**: `SentenceBuilderRound` and `SentenceCount` models, `get_sentence_count()` and `get_sentence_builder_round()` service functions, `/sentence-builder` and `/sentence-count` API endpoints
-- Reuses existing `game_sentences` table (populated by MadLibs play); segments sentences with jieba, strips punctuation, shuffles words
-- **Frontend**: `SentenceBuilderGame.tsx` component with tap-to-place interaction (no drag-and-drop), pinyin hint toggle, clear/check buttons, retry scoring
-- **Lobby lock**: Button locked until 10+ sentences exist for selected HSK level; Random mode excludes locked games via `excludeFromRandom` parameter
-- Grid changed from 3-column to 2x2 layout for 4 game buttons
+### Editable flash card English translations
+- English text on flash cards in CardManager is now inline-editable (click to edit, Enter/blur to save, Escape to cancel)
+- Added `EditableEnglish` component in `CardManager.tsx` with hover highlight and styled input
+- Added `updateEnglish` function to `useFlashcards` hook, threaded through `FlashcardPanel` → `CardManager`
+- Backend PATCH endpoint already supported `english` updates — no backend changes needed
 
-### Pinyin hint positioning fix
-- Moved pinyin hint from above the English prompt to above the Chinese answer tiles (where it belongs)
+### Image cache-busting fix
+- After regenerating assets, the new Openverse image wasn't displayed because the URL (`/assets/images/{id}.jpg`) never changed — browser served cached copy
+- Added `?v=` cache-busting query param using the full `image_path` value (includes creator/license metadata) in both `CardManager.tsx` and `QuizView.tsx`
 
-### CSS scrolling bug resolved
-- User fixed the mobile scrolling/header pinning issue that was broken across multiple sessions
-- Changes in: `index.css` (html/body `height:100%; overflow:hidden; position:fixed`; #root `height:100%`), `TabShell.css` (`height:100%`), `LoginPage.css` (`height:100%`), `ChatPanel.css` (`height:100%`), `ChatPanel.tsx` (scrollTo instead of scrollIntoView), `ChatInput.tsx` (removed autoFocus to prevent mobile keyboard viewport issues)
+### Sentence Builder: removed duplicate English
+- Removed the English sentence from the completion result area since it's already shown as the prompt at the top
 
 ## Outstanding Issues
 1. **Beads repo ID mismatch** — Still present from prior sessions
@@ -35,9 +33,9 @@
 - Phase 5 (games): COMPLETE (Matching, MadLibs, Sentence Builder)
 
 ## What to Do Next
-1. **Editable flash card English translations** — Allow user to manually edit the English translation text on flash cards
-2. Continue with any remaining backlog items
+1. Continue with any remaining backlog items
 
 ## Key Decisions Made by User
 - Login input should be `type="text"` (visible), NOT `type="password"` (masked)
 - Space→dash conversion must work on mobile (use `onChange`, not `onKeyDown`)
+- Sentence Builder: no need to show English in completion result (already visible as prompt)

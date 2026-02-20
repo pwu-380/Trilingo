@@ -91,6 +91,16 @@ export function useFlashcards() {
     }
   }, []);
 
+  const updateEnglish = useCallback(async (id: number, english: string) => {
+    setError(null);
+    try {
+      const updated = await flashcardsApi.updateCard(id, { english });
+      setCards((prev) => prev.map((c) => (c.id === id ? updated : c)));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to update card");
+    }
+  }, []);
+
   const regenerateAssets = useCallback(
     async (id: number) => {
       setError(null);
@@ -212,6 +222,7 @@ export function useFlashcards() {
     createCard,
     deleteCard,
     toggleActive,
+    updateEnglish,
     startReview,
     submitAnswer,
     nextQuestion,

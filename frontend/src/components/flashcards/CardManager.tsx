@@ -1,7 +1,49 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { authedUrl } from "../../api/client";
 import type { Flashcard } from "../../types/flashcard";
 import "./CardManager.css";
+
+function EditableEnglish({ card, onSave }: { card: Flashcard; onSave: (id: number, english: string) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [value, setValue] = useState(card.english);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const commit = () => {
+    const trimmed = value.trim();
+    if (trimmed && trimmed !== card.english) {
+      onSave(card.id, trimmed);
+    } else {
+      setValue(card.english);
+    }
+    setEditing(false);
+  };
+
+  if (!editing) {
+    return (
+      <div
+        className="cm-card-english cm-card-english-editable"
+        onClick={() => { setEditing(true); setTimeout(() => inputRef.current?.focus(), 0); }}
+        title="Click to edit"
+      >
+        {card.english}
+      </div>
+    );
+  }
+
+  return (
+    <input
+      ref={inputRef}
+      className="cm-card-english-input"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") commit();
+        if (e.key === "Escape") { setValue(card.english); setEditing(false); }
+      }}
+    />
+  );
+}
 
 function parseImagePath(imagePath: string | null) {
   if (!imagePath) return null;
@@ -16,6 +58,7 @@ interface Props {
   onDeleteCard: (id: number) => void;
   onToggleActive: (id: number, active: boolean) => void;
   onSeedCards: (level: number, count: number) => Promise<number>;
+  onUpdateEnglish: (id: number, english: string) => void;
   onRegenerateAssets: (id: number) => void;
 }
 
@@ -26,6 +69,7 @@ export default function CardManager({
   onDeleteCard,
   onToggleActive,
   onSeedCards,
+  onUpdateEnglish,
   onRegenerateAssets,
 }: Props) {
   const [chinese, setChinese] = useState("");
@@ -168,11 +212,11 @@ export default function CardManager({
             <div className="cm-card-pinyin">{card.pinyin}</div>
             {(() => { const img = parseImagePath(card.image_path); return img ? (
               <div className="cm-card-image">
-                <img src={`/assets/${img.path}`} alt={card.english} />
+                <img src={`/assets/${img.path}?v=${encodeURIComponent(card.image_path || "")}`} alt={card.english} />
                 <span className="cm-card-attribution">{img.creator} / {img.license}</span>
               </div>
             ) : null; })()}
-            <div className="cm-card-english">{card.english}</div>
+            <EditableEnglish card={card} onSave={onUpdateEnglish} />
             {card.notes && <div className="cm-card-notes">{card.notes}</div>}
             {card.source !== "manual" && (
               <div className="cm-card-source">{card.source}</div>

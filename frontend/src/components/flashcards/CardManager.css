@@ -196,6 +196,30 @@
   font-size: 0.95em;
 }
 
+.cm-card-english-editable {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.cm-card-english-editable:hover {
+  background: var(--sidebar-active, #2a2a4a);
+}
+
+.cm-card-english-input {
+  width: 100%;
+  padding: 2px 4px;
+  border: 1px solid var(--accent-color, #646cff);
+  border-radius: 4px;
+  background: var(--input-field-bg, #1a1a2e);
+  color: var(--text-primary, #eee);
+  font-size: 0.95em;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+
 .cm-card-notes {
   margin-top: 8px;
   padding-top: 8px;
