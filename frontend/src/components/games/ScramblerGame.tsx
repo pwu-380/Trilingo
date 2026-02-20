@@ -1,14 +1,14 @@
 import { useCallback, useState } from "react";
-import type { SentenceBuilderRound } from "../../types/game";
+import type { ScramblerRound } from "../../types/game";
 import { playCorrect, playIncorrect } from "../../hooks/useSounds";
-import "./SentenceBuilderGame.css";
+import "./ScramblerGame.css";
 
 interface Props {
-  round: SentenceBuilderRound;
+  round: ScramblerRound;
   onComplete: (correct: boolean) => void;
 }
 
-export default function SentenceBuilderGame({ round, onComplete }: Props) {
+export default function ScramblerGame({ round, onComplete }: Props) {
   const [placedIndices, setPlacedIndices] = useState<number[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);

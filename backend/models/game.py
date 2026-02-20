@@ -25,7 +25,7 @@ class MadLibsGenerateReq(BaseModel):
     hsk_level: int
 
 
-class SentenceBuilderRound(BaseModel):
+class ScramblerRound(BaseModel):
     sentence_en: str
     words: list[str]           # Scrambled Chinese word tiles (no punctuation)
     correct_order: list[str]   # Correct sequence of words

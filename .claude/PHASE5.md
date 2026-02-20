@@ -192,11 +192,6 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 
 New games follow the same pattern: one backend function returning round data, one frontend component accepting `onComplete`. Add the game type to the lobby dropdown and the session orchestrator's type map.
 
-### Sentence Builder
-- Given English sentence + jumbled Chinese words, drag/tap to arrange in correct order
-- Could reuse `game_sentences` table
-- Variant: given Chinese audio, arrange characters
-
 ### Classifier Game
 - Show a noun, pick the correct measure word (量词) from options
 - Uses HSK measure word data
@@ -206,12 +201,6 @@ New games follow the same pattern: one backend function returning round data, on
 - Pick the correct written Chinese from 4 options
 - Tests listening comprehension and character recognition
 - Reuses flashcard audio assets
-
-### Scrambler
-- A sentence is broken into individual word/character bubbles
-- Tap them in the correct order to rebuild the phrase
-- Could reuse `game_sentences` table for source sentences
-- Variant: show English translation as a hint
 
 ### Speed Round
 - Any game type but with a countdown timer

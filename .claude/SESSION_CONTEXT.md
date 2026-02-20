@@ -12,7 +12,7 @@
 - After regenerating assets, the new Openverse image wasn't displayed because the URL (`/assets/images/{id}.jpg`) never changed — browser served cached copy
 - Added `?v=` cache-busting query param using the full `image_path` value (includes creator/license metadata) in both `CardManager.tsx` and `QuizView.tsx`
 
-### Sentence Builder: removed duplicate English
+### Scrambler: removed duplicate English
 - Removed the English sentence from the completion result area since it's already shown as the prompt at the top
 
 ## Outstanding Issues
@@ -30,7 +30,7 @@
 - Phase 2C (asset worker): COMPLETE
 - Phase 3 (chat↔flashcard integration): COMPLETE
 - Phase 4 (mobile compatibility & polish): COMPLETE
-- Phase 5 (games): COMPLETE (Matching, MadLibs, Sentence Builder)
+- Phase 5 (games): COMPLETE (Matching, MadLibs, Scrambler)
 
 ## What to Do Next
 1. Continue with any remaining backlog items
@@ -38,4 +38,4 @@
 ## Key Decisions Made by User
 - Login input should be `type="text"` (visible), NOT `type="password"` (masked)
 - Space→dash conversion must work on mobile (use `onChange`, not `onKeyDown`)
-- Sentence Builder: no need to show English in completion result (already visible as prompt)
+- Scrambler: no need to show English in completion result (already visible as prompt)

@@ -11,14 +11,14 @@ interface Props {
   totalRounds: number;
   onSetHskLevel: (level: number) => void;
   onSetTotalRounds: (rounds: number) => void;
-  onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "sentence-builder")[]) => void;
+  onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "scrambler")[]) => void;
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
   onAddCardFromWord?: (word: string) => void;
   onToast?: (message: string, type: "info" | "error" | "success") => void;
 }
 
-const SENTENCE_BUILDER_MIN = 10;
+const SCRAMBLER_MIN = 10;
 
 interface GameButton {
   type: GameType;
@@ -30,7 +30,7 @@ interface GameButton {
 const GAME_BUTTONS: GameButton[] = [
   { type: "matching", label: "Matching", desc: "Match Chinese to English" },
   { type: "madlibs", label: "MadLibs", desc: "Fill in the blank" },
-  { type: "sentence-builder", label: "Sentence Builder", desc: "Arrange words in order", lockable: true },
+  { type: "scrambler", label: "Scrambler", desc: "Arrange words in order", lockable: true },
   { type: "random", label: "Random", desc: "Mix of all games" },
 ];
 
@@ -57,7 +57,7 @@ export default function GamesPanel({
       .catch(() => setSentenceCount(0));
   }, [hskLevel, session]);
 
-  const sentenceBuilderUnlocked = sentenceCount >= SENTENCE_BUILDER_MIN;
+  const scramblerUnlocked = sentenceCount >= SCRAMBLER_MIN;
 
   if (session) {
     if (session.currentRound >= session.totalRounds) {
@@ -139,15 +139,15 @@ export default function GamesPanel({
 
         <div className="games-grid">
           {GAME_BUTTONS.map((g) => {
-            const locked = g.lockable && !sentenceBuilderUnlocked;
+            const locked = g.lockable && !scramblerUnlocked;
             return (
               <button
                 key={g.type}
                 className={`games-type-btn${locked ? " locked" : ""}`}
                 disabled={locked}
                 onClick={() => {
-                  const exclude: ("matching" | "madlibs" | "sentence-builder")[] = [];
-                  if (!sentenceBuilderUnlocked) exclude.push("sentence-builder");
+                  const exclude: ("matching" | "madlibs" | "scrambler")[] = [];
+                  if (!scramblerUnlocked) exclude.push("scrambler");
                   onStartSession(g.type, exclude);
                 }}
               >
@@ -156,7 +156,7 @@ export default function GamesPanel({
                 </span>
                 <span className="games-type-desc">
                   {locked
-                    ? `${sentenceCount}/${SENTENCE_BUILDER_MIN} sentences needed`
+                    ? `${sentenceCount}/${SCRAMBLER_MIN} sentences needed`
                     : g.desc}
                 </span>
               </button>

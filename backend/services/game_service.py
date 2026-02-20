@@ -5,7 +5,7 @@ from backend.chinese.hsk import get_vocab, get_grammar
 from backend.chinese.pinyin import pinyin_for_text
 from backend.chinese.segmentation import segment_text
 from backend.database import get_db
-from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, SentenceBuilderRound, SentenceCount
+from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, ScramblerRound, SentenceCount
 from backend.providers.base import RateLimitError
 
 _ZH_PUNCT = re.compile(r'[，。！？、；：""''《》（）…—\s]+')
@@ -190,7 +190,7 @@ async def get_madlibs_round(hsk_level: int) -> MadLibsRound:
 
 
 # ---------------------------------------------------------------------------
-# Sentence Builder
+# Scrambler
 # ---------------------------------------------------------------------------
 
 async def get_sentence_count(hsk_level: int) -> SentenceCount:
@@ -204,7 +204,7 @@ async def get_sentence_count(hsk_level: int) -> SentenceCount:
     return SentenceCount(hsk_level=hsk_level, count=count)
 
 
-async def get_sentence_builder_round(hsk_level: int) -> SentenceBuilderRound:
+async def get_scrambler_round(hsk_level: int) -> ScramblerRound:
     """Pick a stored sentence and turn it into a word-ordering puzzle."""
     data = await _pick_stored_sentence(hsk_level)
     if data is None:
@@ -230,7 +230,7 @@ async def get_sentence_builder_round(hsk_level: int) -> SentenceBuilderRound:
 
     pinyin_sentence = pinyin_for_text(sentence_zh)
 
-    return SentenceBuilderRound(
+    return ScramblerRound(
         sentence_en=sentence_en,
         words=words,
         correct_order=correct_order,

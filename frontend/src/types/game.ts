@@ -18,7 +18,7 @@ export interface MadLibsRound {
   rate_limited: boolean;
 }
 
-export interface SentenceBuilderRound {
+export interface ScramblerRound {
   sentence_en: string;
   words: string[];
   correct_order: string[];
@@ -31,4 +31,4 @@ export interface SentenceCount {
   count: number;
 }
 
-export type GameType = "matching" | "madlibs" | "sentence-builder" | "random";
+export type GameType = "matching" | "madlibs" | "scrambler" | "random";
