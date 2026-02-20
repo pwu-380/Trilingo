@@ -18,4 +18,17 @@ export interface MadLibsRound {
   rate_limited: boolean;
 }
 
-export type GameType = "matching" | "madlibs" | "random";
+export interface SentenceBuilderRound {
+  sentence_en: string;
+  words: string[];
+  correct_order: string[];
+  full_sentence_zh: string;
+  pinyin_sentence: string;
+}
+
+export interface SentenceCount {
+  hsk_level: number;
+  count: number;
+}
+
+export type GameType = "matching" | "madlibs" | "sentence-builder" | "random";

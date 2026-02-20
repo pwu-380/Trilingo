@@ -23,3 +23,16 @@ class MadLibsRound(BaseModel):
 
 class MadLibsGenerateReq(BaseModel):
     hsk_level: int
+
+
+class SentenceBuilderRound(BaseModel):
+    sentence_en: str
+    words: list[str]           # Scrambled Chinese word tiles (no punctuation)
+    correct_order: list[str]   # Correct sequence of words
+    full_sentence_zh: str      # Original sentence with punctuation (shown after)
+    pinyin_sentence: str
+
+
+class SentenceCount(BaseModel):
+    hsk_level: int
+    count: int

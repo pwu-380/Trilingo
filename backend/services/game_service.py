@@ -1,10 +1,14 @@
 import random
+import re
 
 from backend.chinese.hsk import get_vocab, get_grammar
 from backend.chinese.pinyin import pinyin_for_text
+from backend.chinese.segmentation import segment_text
 from backend.database import get_db
-from backend.models.game import MatchingPair, MatchingRound, MadLibsRound
+from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, SentenceBuilderRound, SentenceCount
 from backend.providers.base import RateLimitError
+
+_ZH_PUNCT = re.compile(r'[，。！？、；：""''《》（）…—\s]+')
 
 
 # ---------------------------------------------------------------------------
@@ -182,4 +186,54 @@ async def get_madlibs_round(hsk_level: int) -> MadLibsRound:
         vocab_word=vocab_word,
         options=options,
         rate_limited=rate_limited,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Sentence Builder
+# ---------------------------------------------------------------------------
+
+async def get_sentence_count(hsk_level: int) -> SentenceCount:
+    """Return how many sentences exist for a given HSK level."""
+    async with get_db() as db:
+        rows = await db.execute_fetchall(
+            "SELECT COUNT(*) FROM game_sentences WHERE hsk_level = ?",
+            (hsk_level,),
+        )
+        count = rows[0][0] if rows else 0
+    return SentenceCount(hsk_level=hsk_level, count=count)
+
+
+async def get_sentence_builder_round(hsk_level: int) -> SentenceBuilderRound:
+    """Pick a stored sentence and turn it into a word-ordering puzzle."""
+    data = await _pick_stored_sentence(hsk_level)
+    if data is None:
+        raise ValueError("Not enough sentences")
+
+    sentence_zh: str = data["sentence_zh"]
+    sentence_en: str = data["sentence_en"]
+
+    # Segment and strip punctuation
+    segments = segment_text(sentence_zh)
+    correct_order = [seg for seg in segments if not _ZH_PUNCT.fullmatch(seg)]
+
+    if not correct_order:
+        raise ValueError("Sentence produced no word segments")
+
+    # Shuffle until different from correct (up to 10 attempts)
+    words = list(correct_order)
+    if len(words) > 1:
+        for _ in range(10):
+            random.shuffle(words)
+            if words != correct_order:
+                break
+
+    pinyin_sentence = pinyin_for_text(sentence_zh)
+
+    return SentenceBuilderRound(
+        sentence_en=sentence_en,
+        words=words,
+        correct_order=correct_order,
+        full_sentence_zh=sentence_zh,
+        pinyin_sentence=pinyin_sentence,
     )

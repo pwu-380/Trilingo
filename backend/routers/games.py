@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import APIKeyHeader
 
-from backend.models.game import MatchingRound, MadLibsRound
+from backend.models.game import MatchingRound, MadLibsRound, SentenceBuilderRound, SentenceCount
 from backend.services import game_service
 
 _token_header = APIKeyHeader(name="x-trilingo-token", auto_error=False)
@@ -24,3 +24,16 @@ async def get_madlibs(level: int = Query(1, ge=1, le=3)):
         return await game_service.get_madlibs_round(level)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to generate round: {e}")
+
+
+@router.get("/sentence-count", response_model=SentenceCount)
+async def get_sentence_count(level: int = Query(1, ge=1, le=3)):
+    return await game_service.get_sentence_count(level)
+
+
+@router.get("/sentence-builder", response_model=SentenceBuilderRound)
+async def get_sentence_builder(level: int = Query(1, ge=1, le=3)):
+    try:
+        return await game_service.get_sentence_builder_round(level)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

@@ -41,7 +41,7 @@
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   max-width: 480px;
   width: 100%;
@@ -61,10 +61,15 @@
   transition: border-color 0.15s, background 0.15s, transform 0.1s;
 }
 
-.games-type-btn:hover {
+.games-type-btn:hover:not(.locked) {
   border-color: var(--accent-color, #646cff);
   background: rgba(100, 108, 255, 0.1);
   transform: translateY(-2px);
+}
+
+.games-type-btn.locked {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .games-type-label {

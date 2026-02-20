@@ -1,13 +1,15 @@
 import { useCallback, useState } from "react";
 import type { GameType } from "../types/game";
 
+type ConcreteGame = "matching" | "madlibs" | "sentence-builder";
+
 export interface GameSession {
   hskLevel: number;
   totalRounds: number;
   gameType: GameType;
   currentRound: number;
   score: number;
-  gameSequence: ("matching" | "madlibs")[];
+  gameSequence: ConcreteGame[];
 }
 
 export function useGames() {
@@ -16,15 +18,16 @@ export function useGames() {
   const [totalRounds, setTotalRounds] = useState(10);
 
   const startSession = useCallback(
-    (gameType: GameType) => {
-      // Pre-generate the game type sequence
-      const sequence: ("matching" | "madlibs")[] = [];
-      const types: ("matching" | "madlibs")[] = ["matching", "madlibs"];
+    (gameType: GameType, excludeFromRandom: ConcreteGame[] = []) => {
+      const allTypes: ConcreteGame[] = ["matching", "madlibs", "sentence-builder"];
+      const available = allTypes.filter((t) => !excludeFromRandom.includes(t));
+
+      const sequence: ConcreteGame[] = [];
       for (let i = 0; i < totalRounds; i++) {
         if (gameType === "random") {
-          sequence.push(types[Math.floor(Math.random() * types.length)]);
+          sequence.push(available[Math.floor(Math.random() * available.length)]);
         } else {
-          sequence.push(gameType as "matching" | "madlibs");
+          sequence.push(gameType as ConcreteGame);
         }
       }
       setSession({

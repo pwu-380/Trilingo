@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GameSession as GameSessionType } from "../../hooks/useGames";
-import type { MatchingRound, MadLibsRound } from "../../types/game";
-import { getMatchingRound, getMadLibsRound } from "../../api/games";
+import type { MatchingRound, MadLibsRound, SentenceBuilderRound } from "../../types/game";
+import { getMatchingRound, getMadLibsRound, getSentenceBuilderRound } from "../../api/games";
 import MatchingGame from "./MatchingGame";
 import MadLibsGame from "./MadLibsGame";
+import SentenceBuilderGame from "./SentenceBuilderGame";
 import GameSummary from "./GameSummary";
 import "./GameSession.css";
 
@@ -24,6 +25,7 @@ export default function GameSession({
 }: Props) {
   const [matchingData, setMatchingData] = useState<MatchingRound | null>(null);
   const [madlibsData, setMadlibsData] = useState<MadLibsRound | null>(null);
+  const [sentenceBuilderData, setSentenceBuilderData] = useState<SentenceBuilderRound | null>(null);
   const [loading, setLoading] = useState(false);
   const [showGenerating, setShowGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -44,6 +46,7 @@ export default function GameSession({
     setError(null);
     setMatchingData(null);
     setMadlibsData(null);
+    setSentenceBuilderData(null);
 
     // Only show "Generating question..." if the request takes >500ms (i.e. LLM call)
     clearTimeout(generatingTimer.current);
@@ -54,6 +57,9 @@ export default function GameSession({
         if (currentGameType === "matching") {
           const data = await getMatchingRound(session.hskLevel);
           setMatchingData(data);
+        } else if (currentGameType === "sentence-builder") {
+          const data = await getSentenceBuilderRound(session.hskLevel);
+          setSentenceBuilderData(data);
         } else {
           const data = await getMadLibsRound(session.hskLevel);
           if (data.rate_limited && onToast) {
@@ -119,6 +125,13 @@ export default function GameSession({
             round={madlibsData}
             onComplete={handleComplete}
             onAddCardFromWord={onAddCardFromWord}
+          />
+        )}
+
+        {!loading && !error && currentGameType === "sentence-builder" && sentenceBuilderData && (
+          <SentenceBuilderGame
+            round={sentenceBuilderData}
+            onComplete={handleComplete}
           />
         )}
       </div>

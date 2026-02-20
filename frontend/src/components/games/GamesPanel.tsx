@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { GameType } from "../../types/game";
 import type { GameSession } from "../../hooks/useGames";
+import { getSentenceCount } from "../../api/games";
 import GameSessionComponent from "./GameSession";
 import "./GamesPanel.css";
 
@@ -10,16 +11,26 @@ interface Props {
   totalRounds: number;
   onSetHskLevel: (level: number) => void;
   onSetTotalRounds: (rounds: number) => void;
-  onStartSession: (gameType: GameType) => void;
+  onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "sentence-builder")[]) => void;
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
   onAddCardFromWord?: (word: string) => void;
   onToast?: (message: string, type: "info" | "error" | "success") => void;
 }
 
-const GAME_BUTTONS: { type: GameType; label: string; desc: string }[] = [
+const SENTENCE_BUILDER_MIN = 10;
+
+interface GameButton {
+  type: GameType;
+  label: string;
+  desc: string;
+  lockable?: boolean;
+}
+
+const GAME_BUTTONS: GameButton[] = [
   { type: "matching", label: "Matching", desc: "Match Chinese to English" },
   { type: "madlibs", label: "MadLibs", desc: "Fill in the blank" },
+  { type: "sentence-builder", label: "Sentence Builder", desc: "Arrange words in order", lockable: true },
   { type: "random", label: "Random", desc: "Mix of all games" },
 ];
 
@@ -36,10 +47,20 @@ export default function GamesPanel({
   onToast,
 }: Props) {
   const [confirmQuit, setConfirmQuit] = useState(false);
+  const [sentenceCount, setSentenceCount] = useState(0);
+
+  // Fetch sentence count when returning to lobby or HSK level changes
+  useEffect(() => {
+    if (session) return;
+    getSentenceCount(hskLevel)
+      .then((data) => setSentenceCount(data.count))
+      .catch(() => setSentenceCount(0));
+  }, [hskLevel, session]);
+
+  const sentenceBuilderUnlocked = sentenceCount >= SENTENCE_BUILDER_MIN;
 
   if (session) {
     if (session.currentRound >= session.totalRounds) {
-      // Show summary
       return (
         <GameSessionComponent
           session={session}
@@ -117,16 +138,30 @@ export default function GamesPanel({
         </div>
 
         <div className="games-grid">
-          {GAME_BUTTONS.map((g) => (
-            <button
-              key={g.type}
-              className="games-type-btn"
-              onClick={() => onStartSession(g.type)}
-            >
-              <span className="games-type-label">{g.label}</span>
-              <span className="games-type-desc">{g.desc}</span>
-            </button>
-          ))}
+          {GAME_BUTTONS.map((g) => {
+            const locked = g.lockable && !sentenceBuilderUnlocked;
+            return (
+              <button
+                key={g.type}
+                className={`games-type-btn${locked ? " locked" : ""}`}
+                disabled={locked}
+                onClick={() => {
+                  const exclude: ("matching" | "madlibs" | "sentence-builder")[] = [];
+                  if (!sentenceBuilderUnlocked) exclude.push("sentence-builder");
+                  onStartSession(g.type, exclude);
+                }}
+              >
+                <span className="games-type-label">
+                  {locked ? "\u{1F512} " : ""}{g.label}
+                </span>
+                <span className="games-type-desc">
+                  {locked
+                    ? `${sentenceCount}/${SENTENCE_BUILDER_MIN} sentences needed`
+                    : g.desc}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
