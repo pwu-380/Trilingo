@@ -38,7 +38,10 @@ export default function ChatPanel({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const parent = messagesEndRef.current?.parentElement;
+    if (parent) {
+      parent.scrollTo({ top: parent.scrollHeight, behavior: "smooth" });
+    }
   }, [messages]);
 
   return (
