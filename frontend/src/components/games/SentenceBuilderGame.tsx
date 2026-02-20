@@ -67,11 +67,13 @@ export default function SentenceBuilderGame({ round, onComplete }: Props) {
     <div className="sb-game">
       {/* English prompt */}
       <div className="sb-prompt-area">
-        {showHint && (
-          <div className="sb-pinyin">{round.pinyin_sentence}</div>
-        )}
         <div className="sb-english">{round.sentence_en}</div>
       </div>
+
+      {/* Pinyin hint above answer area */}
+      {showHint && (
+        <div className="sb-pinyin">{round.pinyin_sentence}</div>
+      )}
 
       {/* Answer area */}
       <div className="sb-answer-area">
