@@ -36,3 +36,26 @@ class ScramblerRound(BaseModel):
 class SentenceCount(BaseModel):
     hsk_level: int
     count: int
+
+
+class TuneInRound(BaseModel):
+    audio_path: str
+    correct: str
+    correct_pinyin: str
+    correct_english: str
+    options: list[str]
+
+
+class AudioCardCount(BaseModel):
+    count: int
+
+
+class ScrambleHarderRound(BaseModel):
+    direction: str               # "zh" or "en" — language to unscramble
+    prompt: str                  # the other language shown as the clue
+    words: list[str]             # all tiles (correct + distractors), shuffled
+    correct_order: list[str]     # correct sequence of words to place
+    num_correct: int             # how many tiles belong to the answer
+    full_sentence_zh: str
+    full_sentence_en: str
+    pinyin_sentence: str

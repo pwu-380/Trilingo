@@ -1,0 +1,136 @@
+.tunein-game {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.tunein-prompt-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--bg-secondary, #16213e);
+  border: 1px solid var(--border-color, #333);
+}
+
+.tunein-play-btn {
+  padding: 16px 32px;
+  border: 2px solid var(--accent-color, #646cff);
+  border-radius: 12px;
+  background: rgba(100, 108, 255, 0.1);
+  color: var(--accent-color, #646cff);
+  font-size: 1.2em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.tunein-play-btn:hover {
+  background: rgba(100, 108, 255, 0.2);
+}
+
+.tunein-play-btn:active {
+  transform: scale(0.97);
+}
+
+.tunein-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.tunein-reveal-pinyin {
+  font-size: 0.95em;
+  color: var(--text-secondary, #aaa);
+}
+
+.tunein-reveal-english {
+  font-size: 0.9em;
+  color: var(--text-secondary, #aaa);
+  font-style: italic;
+}
+
+.tunein-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.tunein-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 10px;
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-primary, #eee);
+  font-size: 1.3em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.tunein-option:hover:not(.disabled):not(.correct):not(.wrong) {
+  border-color: var(--accent-color, #646cff);
+}
+
+.tunein-option.correct {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.tunein-option.wrong {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.tunein-option.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.tunein-option-pinyin {
+  font-size: 0.6em;
+  color: var(--text-secondary, #aaa);
+  min-height: 1em;
+}
+
+.tunein-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.tunein-hint-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tunein-hint-btn:hover {
+  color: var(--text-primary, #eee);
+  border-color: var(--text-secondary, #aaa);
+}
+
+@media (max-width: 768px) {
+  .tunein-options {
+    grid-template-columns: 1fr;
+  }
+}

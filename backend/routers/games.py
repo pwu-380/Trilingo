@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import APIKeyHeader
 
-from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount
+from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound
 from backend.services import game_service
 
 _token_header = APIKeyHeader(name="x-trilingo-token", auto_error=False)
@@ -35,5 +35,26 @@ async def get_sentence_count(level: int = Query(1, ge=1, le=3)):
 async def get_scrambler(level: int = Query(1, ge=1, le=3)):
     try:
         return await game_service.get_scrambler_round(level)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/audio-card-count", response_model=AudioCardCount)
+async def get_audio_card_count():
+    return await game_service.get_audio_card_count()
+
+
+@router.get("/tunein", response_model=TuneInRound)
+async def get_tunein(level: int = Query(1, ge=1, le=3)):
+    try:
+        return await game_service.get_tunein_round(level)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/scramble-harder", response_model=ScrambleHarderRound)
+async def get_scramble_harder(level: int = Query(1, ge=1, le=3)):
+    try:
+        return await game_service.get_scramble_harder_round(level)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

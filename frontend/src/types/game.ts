@@ -31,4 +31,27 @@ export interface SentenceCount {
   count: number;
 }
 
-export type GameType = "matching" | "madlibs" | "scrambler" | "random";
+export interface TuneInRound {
+  audio_path: string;
+  correct: string;
+  correct_pinyin: string;
+  correct_english: string;
+  options: string[];
+}
+
+export interface AudioCardCount {
+  count: number;
+}
+
+export interface ScrambleHarderRound {
+  direction: string;         // "zh" or "en"
+  prompt: string;
+  words: string[];
+  correct_order: string[];
+  num_correct: number;
+  full_sentence_zh: string;
+  full_sentence_en: string;
+  pinyin_sentence: string;
+}
+
+export type GameType = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "random";

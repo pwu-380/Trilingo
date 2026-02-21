@@ -37,7 +37,7 @@ The round orchestrator (`GameSession` component) manages this loop. Individual g
 ## Database Schema
 
 ```sql
--- Stored sentences for MadLibs (and future sentence-based games)
+-- Stored sentences for Mad Libs (and future sentence-based games)
 CREATE TABLE game_sentences (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     hsk_level   INTEGER NOT NULL,
@@ -58,8 +58,8 @@ No session/score tracking table for now — scores are ephemeral, shown at end o
 
 ```
 MatchingRound       — 4 pairs of {chinese, pinyin, english, audio_path}
-MadLibsRound        — sentence_zh (with blank), sentence_en, pinyin_sentence, vocab_word, options[]
-MadLibsGenerateReq  — hsk_level: int
+Mad LibsRound        — sentence_zh (with blank), sentence_en, pinyin_sentence, vocab_word, options[]
+Mad LibsGenerateReq  — hsk_level: int
 GameConfig          — hsk_level, rounds, game_types[]
 ```
 
@@ -75,7 +75,7 @@ GameConfig          — hsk_level, rounds, game_types[]
 
 **Matching word source**: Query flashcards table for active cards. If fewer than 4 active cards exist, supplement from HSK reference data directly. This means matching works even with an empty flashcard pool.
 
-**MadLibs sentence generation prompt** (via `get_chat_provider().generate_text()`):
+**Mad Libs sentence generation prompt** (via `get_chat_provider().generate_text()`):
 - Input: a vocab word + HSK level
 - Ask LLM to produce a natural Chinese sentence using that word, plus English translation
 - Parse response, store in `game_sentences`
@@ -104,25 +104,25 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 | `frontend/src/components/games/GamesPanel.tsx`  | Lobby + session wrapper (top-level tab content) |
 | `frontend/src/components/games/GameSession.tsx` | Round orchestrator (progress, score, routing)|
 | `frontend/src/components/games/MatchingGame.tsx`| Matching game component                      |
-| `frontend/src/components/games/MadLibsGame.tsx` | MadLibs game component                      |
+| `frontend/src/components/games/Mad LibsGame.tsx` | Mad Libs game component                      |
 | `frontend/src/components/games/GameSummary.tsx` | End-of-session score screen                  |
 | `frontend/src/components/games/GamesPanel.css`  | Styles for lobby                             |
 | `frontend/src/components/games/GameSession.css` | Styles for session frame                     |
 | `frontend/src/components/games/MatchingGame.css`| Styles for matching                          |
-| `frontend/src/components/games/MadLibsGame.css` | Styles for madlibs                           |
+| `frontend/src/components/games/Mad LibsGame.css` | Styles for madlibs                           |
 
 ### Wiring
 
 - Enable the "Games" tab in `TabShell.tsx`
 - Add `gamesContent` prop to `TabShell`, render in tab panel
-- In `App.tsx`, create `useGames()` hook instance, pass `onAddCardFromWord` callback (same pattern as chat→flashcard integration) for the MadLibs "add to flashcards" button
+- In `App.tsx`, create `useGames()` hook instance, pass `onAddCardFromWord` callback (same pattern as chat→flashcard integration) for the Mad Libs "add to flashcards" button
 - Games components never import from `components/chat/` or `components/flashcards/`
 
 ### Component Details
 
 **GamesPanel** (lobby):
 - Config bar: HSK level dropdown, rounds dropdown
-- Grid of game-type buttons (Matching, MadLibs, Random) — clicking starts the session
+- Grid of game-type buttons (Matching, Mad Libs, Random) — clicking starts the session
 - Back button during session → confirm abandon, return to lobby
 
 **GameSession** (orchestrator):
@@ -142,7 +142,7 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 - Round completes when all 4 pairs matched; calls `onComplete(true)` — matching is always "correct" since user keeps going until done
 - No timer pressure for now
 
-**MadLibsGame**:
+**Mad LibsGame**:
 - Displays Chinese sentence with `____` where vocab word was
 - 4 multiple-choice buttons below
 - Selecting correct answer: highlight green, fill in blank, brief pause, `onComplete(true)`
@@ -175,8 +175,8 @@ Kept minimal — the frontend orchestrates rounds, the backend just serves indiv
 1. Build `MatchingGame.tsx` + CSS
 2. Test end-to-end with lobby → session → matching → summary
 
-### Step 4: MadLibs Game
-1. Build `MadLibsGame.tsx` + CSS
+### Step 4: Mad Libs Game
+1. Build `Mad LibsGame.tsx` + CSS
 2. Wire hint toggle and add-to-flashcards button
 3. Test sentence generation, stored sentence reuse, and full round flow
 

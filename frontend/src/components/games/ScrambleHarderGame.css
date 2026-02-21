@@ -1,0 +1,185 @@
+.shg-game {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.shg-prompt-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-secondary, #16213e);
+  border: 1px solid var(--border-color, #333);
+}
+
+.shg-direction-label {
+  font-size: 0.8em;
+  color: var(--text-secondary, #aaa);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.shg-prompt {
+  font-size: 1.2em;
+  color: var(--text-primary, #eee);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.shg-prompt-zh {
+  font-size: 1.4em;
+}
+
+.shg-pinyin {
+  font-size: 0.85em;
+  color: var(--text-secondary, #aaa);
+  letter-spacing: 0.5px;
+}
+
+/* Answer area */
+.shg-answer-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  min-height: 52px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px dashed var(--border-color, #333);
+  background: rgba(22, 33, 62, 0.5);
+}
+
+.shg-slot {
+  width: 60px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px dashed var(--border-color, #444);
+  background: transparent;
+}
+
+/* Tiles */
+.shg-tile {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #333);
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-primary, #eee);
+  font-size: 1.1em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, opacity 0.15s, transform 0.1s;
+}
+
+.shg-tile:hover:not(.used):not(:disabled) {
+  border-color: var(--accent-color, #646cff);
+  transform: translateY(-1px);
+}
+
+.shg-tile.shg-placed.correct {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.shg-tile.shg-placed.wrong {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.shg-tile.used {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/* Word bank */
+.shg-word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Actions */
+.shg-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.shg-action-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.shg-action-btn:hover {
+  color: var(--text-primary, #eee);
+  border-color: var(--text-secondary, #aaa);
+}
+
+.shg-check-btn {
+  color: var(--accent-color, #646cff);
+  border-color: var(--accent-color, #646cff);
+}
+
+.shg-check-btn:hover {
+  background: rgba(100, 108, 255, 0.15);
+}
+
+/* Result */
+.shg-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  width: 100%;
+}
+
+.shg-result-zh {
+  font-size: 1.4em;
+  color: #4caf50;
+}
+
+.shg-result-pinyin {
+  font-size: 0.85em;
+  color: var(--text-secondary, #aaa);
+}
+
+.shg-result-en {
+  font-size: 0.9em;
+  color: var(--text-secondary, #aaa);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .shg-prompt {
+    font-size: 1.05em;
+  }
+
+  .shg-prompt-zh {
+    font-size: 1.2em;
+  }
+
+  .shg-tile {
+    padding: 8px 12px;
+    font-size: 1em;
+  }
+}
