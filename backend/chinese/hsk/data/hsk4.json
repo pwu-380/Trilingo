@@ -24,61 +24,281 @@
   ],
   "grammar": [
     {
-      "pattern": "不管 A 都 B",
-      "english": "No matter A, still B",
-      "example": "不管多忙，他都坚持运动。"
+      "pattern": "得 (děi)",
+      "english": "Must / have to",
+      "example": "今天下课我得早点儿回家。"
     },
     {
-      "pattern": "只要 A 就 B",
-      "english": "As long as A, then B",
-      "example": "只要努力，就能成功。"
+      "pattern": "人家 (rénjia)",
+      "english": "Other people / others / him or her",
+      "example": "人家现在有困难,咱们应该帮他。"
     },
     {
-      "pattern": "既 A 又 B",
+      "pattern": "打、袋、根、卷、棵、批",
+      "english": "Noun classifiers (dozen, bag, long thin thing, roll, tree, batch)",
+      "example": "一打啤酒；一袋米；一根头发；一卷纸；一棵树；一批学生。"
+    },
+    {
+      "pattern": "格外 / 极 / 极其",
+      "english": "Adverbs of degree (especially / extremely / exceedingly)",
+      "example": "老师今天格外开心。"
+    },
+    {
+      "pattern": "共",
+      "english": "Altogether / in total",
+      "example": "共有三十人出席会议。"
+    },
+    {
+      "pattern": "按时 / 即将 / 急忙 / 渐渐 / 尽快",
+      "english": "Time adverbs (on time / soon / hurriedly / gradually / as soon as possible)",
+      "example": "春天来了,天气渐渐暖和起来。"
+    },
+    {
+      "pattern": "一再 / 再三",
+      "english": "Repeatedly / over and over again",
+      "example": "我再三解释,他还是不相信。"
+    },
+    {
+      "pattern": "却",
+      "english": "But / yet / however",
+      "example": "我来了,他却没来。"
+    },
+    {
+      "pattern": "未必",
+      "english": "May not / not necessarily",
+      "example": "这个消息未必可靠,咱们再等等吧。"
+    },
+    {
+      "pattern": "几乎 / 似乎",
+      "english": "Almost / seemingly",
+      "example": "她似乎对自己的表现很不满意。"
+    },
+    {
+      "pattern": "的确 / 反而 / 竟然 / 究竟",
+      "english": "Adverbs (indeed / on the contrary / unexpectedly / after all)",
+      "example": "风不但没停,反而越来越大。"
+    },
+    {
+      "pattern": "自 (zì)",
+      "english": "From (time or place)",
+      "example": "我们的航班准时自北京出发。"
+    },
+    {
+      "pattern": "对于",
+      "english": "Regarding / with regard to / for",
+      "example": "对于这个问题,我们还得认真讨论。"
+    },
+    {
+      "pattern": "关于",
+      "english": "About / concerning",
+      "example": "这是一部关于战争的电影。"
+    },
+    {
+      "pattern": "替",
+      "english": "For / on behalf of",
+      "example": "你别替我担心了,我自己处理。"
+    },
+    {
+      "pattern": "根据",
+      "english": "According to / based on",
+      "example": "学校根据学生的中文水平分班。"
+    },
+    {
+      "pattern": "作为",
+      "english": "As / in the capacity of",
+      "example": "作为学生,你应该按时完成作业。"
+    },
+    {
+      "pattern": "并 / 以及",
+      "english": "And / as well as (joining words or phrases)",
+      "example": "他们同意并支持我们的建议。"
+    },
+    {
+      "pattern": "此外 / 而 / 总之",
+      "english": "Conjunctions (besides / but / in short)",
+      "example": "我们要认真听讲,此外还要积极完成作业。"
+    },
+    {
+      "pattern": "……似的",
+      "english": "As if / just like",
+      "example": "这里的景色像画儿似的。"
+    },
+    {
+      "pattern": "看来",
+      "english": "It seems / it looks like",
+      "example": "看来明天不会再下雨了。"
+    },
+    {
+      "pattern": "来得及 / 来不及",
+      "english": "There is enough time / there is not enough time",
+      "example": "现在刚六点半,你马上去还来得及。"
+    },
+    {
+      "pattern": "说不定",
+      "english": "Perhaps / maybe",
+      "example": "下雨了,说不定他今天不来了。"
+    },
+    {
+      "pattern": "一般来说",
+      "english": "Generally speaking",
+      "example": "一般来说,跟青年人相比,老年人的经验更丰富。"
+    },
+    {
+      "pattern": "一 + 量词 + 比 + 一 + 量词",
+      "english": "One after another (progressive increase)",
+      "example": "天气一天比一天暖和。"
+    },
+    {
+      "pattern": "由 …… 组成",
+      "english": "To be composed of / consist of",
+      "example": "这篇文章由三个部分组成。"
+    },
+    {
+      "pattern": "在 …… 方面",
+      "english": "In terms of / in the aspect of",
+      "example": "在修理电脑方面,她是个专家。"
+    },
+    {
+      "pattern": "在 …… 上/下/中",
+      "english": "In / under / during",
+      "example": "在他的影响下,我喜欢上了中文。"
+    },
+    {
+      "pattern": "Verb + 上/出/起/下",
+      "english": "Directional complements indicating result",
+      "example": "他终于想起了当时的情况。"
+    },
+    {
+      "pattern": "把 (bǎ) Sentence",
+      "english": "Disposal construction",
+      "example": "你把地扫扫,我把桌子擦一擦。"
+    },
+    {
+      "pattern": "被 (bèi) Sentence",
+      "english": "Passive voice construction",
+      "example": "教室的灯早就被关上了。"
+    },
+    {
+      "pattern": "不是 …… 而是 ……",
+      "english": "Not A, but B",
+      "example": "我不是不想去,而是没时间。"
+    },
+    {
+      "pattern": "既 …… 又/也 ……",
       "english": "Both A and B",
-      "example": "他既聪明又努力。"
+      "example": "这件新衣服既好看,又暖和。"
     },
     {
-      "pattern": "与其 A 不如 B",
-      "english": "Rather than A, better to B",
-      "example": "与其抱怨，不如改变。"
+      "pattern": "首先 …… 其次 ……",
+      "english": "First of all... secondly...",
+      "example": "评价一个学生,首先看品质,其次看成绩。"
     },
     {
-      "pattern": "由于 A",
-      "english": "Due to / owing to A (formal cause)",
-      "example": "由于天气原因，航班取消了。"
+      "pattern": "…… 于是 ……",
+      "english": "Consequently / so / hence",
+      "example": "风停了,下起雨来,于是人们纷纷打起了雨伞。"
     },
     {
-      "pattern": "Verb + 出来 / 下来 / 起来",
-      "english": "Directional complements (resultative)",
-      "example": "我想起来了。"
+      "pattern": "…… 甚至 ……",
+      "english": "Even / to the extent that",
+      "example": "她病得很严重,甚至要做手术。"
+    },
+    {
+      "pattern": "或者 …… 或者 ……",
+      "english": "Either... or...",
+      "example": "暑假或者去上海,或者去杭州,反正得出去旅行。"
+    },
+    {
+      "pattern": "…… 然而 ……",
+      "english": "However / yet",
+      "example": "我知道中文很有用,然而中文也太难了。"
+    },
+    {
+      "pattern": "…… 否则 ……",
+      "english": "Otherwise",
+      "example": "记得带卡,否则进不了办公室。"
+    },
+    {
+      "pattern": "假如 …… (就)",
+      "english": "If... then...",
+      "example": "假如有困难,你一定要告诉我。"
+    },
+    {
+      "pattern": "万一 …… (就)",
+      "english": "Just in case / if by any chance",
+      "example": "万一我没来,你就自己先去吧。"
+    },
+    {
+      "pattern": "不管 …… 都/也 ……",
+      "english": "No matter... still...",
+      "example": "不管有多难,我也会坚持学下去。"
+    },
+    {
+      "pattern": "无论 …… 都/也 ……",
+      "english": "Regardless of... still...",
+      "example": "无论他怎么说,也没有人相信他。"
+    },
+    {
+      "pattern": "既然 …… 就 ……",
+      "english": "Since... then...",
+      "example": "既然外面下雨了,我们就明天再去吧。"
+    },
+    {
+      "pattern": "不 …… 也 ……",
+      "english": "Even if (not doing X), still (must do Y)",
+      "example": "他不吃饭也要帮我修电脑。"
+    },
+    {
+      "pattern": "数词 + 来 + 量词",
+      "english": "Approximate numbers (around / about)",
+      "example": "十来本；五十来斤。"
+    },
+    {
+      "pattern": "连 …… 也/都 ……",
+      "english": "Even (for emphasis)",
+      "example": "我连最简单的汉字都写不出来。"
+    },
+    {
+      "pattern": "说什么 / 怎么(着) 也得 X",
+      "english": "No matter what, must X",
+      "example": "这么重要的活动,你怎么也得来一下儿。"
     }
   ],
   "topics": [
     {
-      "id": "career",
-      "label": "Career & ambitions",
-      "description": "Job interviews, career plans, workplace communication"
+      "id": "professional_workplace",
+      "label": "Professional & Workplace",
+      "description": "Recruitment, job interviews, workplace ethics, and business operations/complaints."
     },
     {
-      "id": "education",
-      "label": "Education system",
-      "description": "University life, studying abroad, comparing education systems"
+      "id": "abstract_concepts",
+      "label": "Social Values & Emotions",
+      "description": "Discussing deep empathy, definitions of success, honesty (诚信), and interpersonal responsibility."
     },
     {
-      "id": "social_issues",
-      "label": "Social topics",
-      "description": "Population, technology's impact on life, generation differences"
+      "id": "digital_economy",
+      "label": "Modern Digital Life",
+      "description": "E-commerce impact, digital payment culture, and the influence of 'We-media' on lifestyle."
     },
     {
-      "id": "daily_dilemmas",
-      "label": "Everyday dilemmas",
-      "description": "Making choices, giving advice, weighing pros and cons"
+      "id": "education_parenting",
+      "label": "Education & Lifelong Learning",
+      "description": "Pedagogical methods, school-life balance, and the philosophy of continuous self-improvement."
     },
     {
-      "id": "chinese_society",
-      "label": "Chinese society & customs",
-      "description": "Gift-giving etiquette, dining customs, social norms"
+      "id": "environmental_issues",
+      "label": "Environment & Nature",
+      "description": "Environmental protection strategies, waste reduction, and the relationship between humans and ecosystems."
+    },
+    {
+      "id": "cultural_fluency",
+      "label": "Culture & National Context",
+      "description": "Traditional arts (Beijing Opera), tea culture, and navigating Chinese humor and indirect communication."
+    },
+    {
+      "id": "public_society",
+      "label": "Public Life & Health",
+      "description": "Community management, social service systems, and complex public health challenges."
     }
   ]
 }
