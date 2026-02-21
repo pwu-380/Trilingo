@@ -4,8 +4,8 @@ import re
 from backend.chinese.hsk import get_vocab, get_grammar
 from backend.chinese.pinyin import pinyin_for_text
 from backend.chinese.segmentation import segment_text
-from backend.database import get_db
-from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound
+from backend.database import get_db, get_dedede_audio_path
+from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound
 from backend.providers.base import RateLimitError
 
 _ZH_PUNCT = re.compile(r'[，。！？、；：""''《》（）…—\s]+')
@@ -395,4 +395,24 @@ async def get_scramble_harder_round(hsk_level: int) -> ScrambleHarderRound:
         full_sentence_zh=sentence_zh,
         full_sentence_en=sentence_en,
         pinyin_sentence=pinyin_sentence,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Dedede (的得地)
+# ---------------------------------------------------------------------------
+
+async def get_dedede_round() -> DededeRound:
+    """Pick a random 的/得/地 question."""
+    async with get_db() as db:
+        rows = await db.execute_fetchall(
+            "SELECT sentence, answer, english, pinyin "
+            "FROM dedede_questions ORDER BY RANDOM() LIMIT 1"
+        )
+    if not rows:
+        raise ValueError("No dedede questions available")
+    r = rows[0]
+    return DededeRound(
+        sentence=r[0], answer=r[1], english=r[2], pinyin=r[3],
+        audio_path=get_dedede_audio_path(r[1]),
     )

@@ -1,0 +1,113 @@
+.dedede-game {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.dedede-sentence-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-secondary, #16213e);
+  border: 1px solid var(--border-color, #333);
+}
+
+.dedede-pinyin {
+  font-size: 0.85em;
+  color: var(--text-secondary, #aaa);
+  letter-spacing: 0.5px;
+}
+
+.dedede-sentence {
+  font-size: 1.5em;
+  color: var(--text-primary, #eee);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.dedede-english {
+  font-size: 0.9em;
+  color: var(--text-secondary, #aaa);
+  font-style: italic;
+}
+
+.dedede-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+.dedede-option {
+  flex: 1;
+  max-width: 120px;
+  padding: 18px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 10px;
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-primary, #eee);
+  font-size: 1.6em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dedede-option:hover:not(.disabled):not(.correct):not(.wrong) {
+  border-color: var(--accent-color, #646cff);
+}
+
+.dedede-option.correct {
+  border-color: #4caf50;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+}
+
+.dedede-option.wrong {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.15);
+}
+
+.dedede-option.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.dedede-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.dedede-hint-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #aaa);
+  font-size: 0.85em;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.dedede-hint-btn:hover {
+  color: var(--text-primary, #eee);
+  border-color: var(--text-secondary, #aaa);
+}
+
+@media (max-width: 768px) {
+  .dedede-sentence {
+    font-size: 1.3em;
+  }
+
+  .dedede-option {
+    font-size: 1.4em;
+    padding: 14px 12px;
+  }
+}

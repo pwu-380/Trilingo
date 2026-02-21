@@ -70,6 +70,15 @@ Duolingo-style language games using your flash card vocabulary and HSK reference
 - Requires at least 10 flash cards with audio to unlock
 - Sound effects on correct and incorrect answers
 
+**Dedede** — Master the tricky 的/得/地 distinction.
+- A Chinese sentence is displayed with one of 的, 得, or 地 replaced by a blank
+- Pick the correct particle from three buttons
+- Wrong answers are disabled; you keep trying, but the round is marked incorrect on first wrong attempt
+- Correct answers fill in the blank
+- **Hints** — Two levels: first click shows pinyin, second click shows the English translation
+- 50 pre-loaded questions covering all three particles — no AI generation needed
+- Sound effects on correct and incorrect answers
+
 **Scrambler** — Arrange jumbled Chinese words into the correct sentence order.
 - An English sentence is shown as the prompt; tap Chinese word tiles to place them in order
 - Tap placed tiles to remove them; Clear button resets all placed tiles

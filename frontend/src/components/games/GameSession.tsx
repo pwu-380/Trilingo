@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GameSession as GameSessionType } from "../../hooks/useGames";
-import type { MatchingRound, MadLibsRound, ScramblerRound, TuneInRound, ScrambleHarderRound } from "../../types/game";
-import { getMatchingRound, getMadLibsRound, getScramblerRound, getTuneInRound, getScrambleHarderRound } from "../../api/games";
+import type { MatchingRound, MadLibsRound, ScramblerRound, TuneInRound, ScrambleHarderRound, DededeRound } from "../../types/game";
+import { getMatchingRound, getMadLibsRound, getScramblerRound, getTuneInRound, getScrambleHarderRound, getDededeRound } from "../../api/games";
 import MatchingGame from "./MatchingGame";
 import MadLibsGame from "./MadLibsGame";
 import ScramblerGame from "./ScramblerGame";
 import TuneInGame from "./TuneInGame";
 import ScrambleHarderGame from "./ScrambleHarderGame";
+import DededeGame from "./DededeGame";
 import GameSummary from "./GameSummary";
 import "./GameSession.css";
 
@@ -30,6 +31,7 @@ export default function GameSession({
   const [scramblerData, setScramblerData] = useState<ScramblerRound | null>(null);
   const [tuneinData, setTuneinData] = useState<TuneInRound | null>(null);
   const [scrambleHarderData, setScrambleHarderData] = useState<ScrambleHarderRound | null>(null);
+  const [dededeData, setDededeData] = useState<DededeRound | null>(null);
   const [loading, setLoading] = useState(false);
   const [showGenerating, setShowGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +55,7 @@ export default function GameSession({
     setScramblerData(null);
     setTuneinData(null);
     setScrambleHarderData(null);
+    setDededeData(null);
 
     // Only show "Generating question..." if the request takes >500ms (i.e. LLM call)
     clearTimeout(generatingTimer.current);
@@ -72,6 +75,9 @@ export default function GameSession({
         } else if (currentGameType === "scrambleharder") {
           const data = await getScrambleHarderRound(session.hskLevel);
           setScrambleHarderData(data);
+        } else if (currentGameType === "dedede") {
+          const data = await getDededeRound();
+          setDededeData(data);
         } else {
           const data = await getMadLibsRound(session.hskLevel);
           if (data.rate_limited && onToast) {
@@ -157,6 +163,13 @@ export default function GameSession({
         {!loading && !error && currentGameType === "scrambleharder" && scrambleHarderData && (
           <ScrambleHarderGame
             round={scrambleHarderData}
+            onComplete={handleComplete}
+          />
+        )}
+
+        {!loading && !error && currentGameType === "dedede" && dededeData && (
+          <DededeGame
+            round={dededeData}
             onComplete={handleComplete}
           />
         )}

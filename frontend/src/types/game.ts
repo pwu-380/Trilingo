@@ -54,4 +54,12 @@ export interface ScrambleHarderRound {
   pinyin_sentence: string;
 }
 
-export type GameType = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "random";
+export interface DededeRound {
+  sentence: string;
+  english: string;
+  pinyin: string;
+  answer: string;   // "的", "得", or "地"
+  audio_path: string | null;
+}
+
+export type GameType = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede" | "random";

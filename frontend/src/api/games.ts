@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import type { MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound } from "../types/game";
+import type { MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound } from "../types/game";
 
 export function getMatchingRound(level: number): Promise<MatchingRound> {
   return apiFetch(`/api/games/matching?level=${level}`);
@@ -27,4 +27,8 @@ export function getAudioCardCount(): Promise<AudioCardCount> {
 
 export function getScrambleHarderRound(level: number): Promise<ScrambleHarderRound> {
   return apiFetch(`/api/games/scramble-harder?level=${level}`);
+}
+
+export function getDededeRound(): Promise<DededeRound> {
+  return apiFetch(`/api/games/dedede`);
 }

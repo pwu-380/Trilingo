@@ -50,6 +50,14 @@ class AudioCardCount(BaseModel):
     count: int
 
 
+class DededeRound(BaseModel):
+    sentence: str              # sentence with ____ blank
+    english: str
+    pinyin: str
+    answer: str                # correct: 的, 得, or 地
+    audio_path: str | None = None  # TTS audio for the correct particle
+
+
 class ScrambleHarderRound(BaseModel):
     direction: str               # "zh" or "en" — language to unscramble
     prompt: str                  # the other language shown as the clue

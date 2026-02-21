@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import APIKeyHeader
 
-from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound
+from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound
 from backend.services import game_service
 
 _token_header = APIKeyHeader(name="x-trilingo-token", auto_error=False)
@@ -56,5 +56,13 @@ async def get_tunein(level: int = Query(1, ge=1, le=3)):
 async def get_scramble_harder(level: int = Query(1, ge=1, le=3)):
     try:
         return await game_service.get_scramble_harder_round(level)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/dedede", response_model=DededeRound)
+async def get_dedede():
+    try:
+        return await game_service.get_dedede_round()
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

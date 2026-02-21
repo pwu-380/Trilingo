@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import type { GameType } from "../types/game";
 
-type ConcreteGame = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder";
+type ConcreteGame = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede";
 
 export interface GameSession {
   hskLevel: number;
@@ -19,7 +19,7 @@ export function useGames() {
 
   const startSession = useCallback(
     (gameType: GameType, excludeFromRandom: ConcreteGame[] = []) => {
-      const allTypes: ConcreteGame[] = ["matching", "madlibs", "scrambler", "tunein", "scrambleharder"];
+      const allTypes: ConcreteGame[] = ["matching", "madlibs", "scrambler", "tunein", "scrambleharder", "dedede"];
       const available = allTypes.filter((t) => !excludeFromRandom.includes(t));
 
       const sequence: ConcreteGame[] = [];

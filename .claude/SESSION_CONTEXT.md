@@ -18,6 +18,14 @@
 - Backend: `ScrambleHarderRound` model, `get_scramble_harder_round()` service (fetches 3 sentences, picks direction, segments, adds distractors), `GET /api/games/scramble-harder` route
 - Frontend: types, API, hook update, GamesPanel button with sentences20 lock, GameSession wiring, `ScrambleHarderGame.tsx` component + CSS
 
+### Added "Dedede" game (的/得/地 distinction)
+- 50 pre-loaded questions in `backend/chinese/hsk/data/dedede.json` covering all three particles
+- `dedede_questions` DB table, auto-seeded from JSON on first `init_db()` call
+- TTS audio for each particle (的/得/地) auto-generated at startup via edge-tts, stored as `audio/dedede_de{1,2,3}.mp3`
+- Backend: `DededeRound` model with `audio_path`, `get_dedede_round()` service, `GET /api/games/dedede` route
+- Frontend: `DededeGame.tsx` with three large character buttons, sentence display, 2-level hints, plays particle audio on correct answer
+- Always unlocked; lobby button ordered before lockable games (Matching, Mad Libs, Dedede, then locked games, then Random)
+
 ### Fixed Mad Libs blank bug
 - Bug: LLM sometimes generated sentences that didn't contain the vocab word as an exact substring; `replace(vocab_word, "____")` did nothing, so the full sentence was shown with no blank and no correct answer
 - Fix 1 (generation time): added `word not in sentence_zh` check in `_generate_sentence()` — bad sentences now fall back to safe template instead of being stored
@@ -39,7 +47,7 @@
 - Phase 2C (asset worker): COMPLETE
 - Phase 3 (chat↔flashcard integration): COMPLETE
 - Phase 4 (mobile compatibility & polish): COMPLETE
-- Phase 5 (games): COMPLETE (Matching, Mad Libs, Scrambler, Tune In, Scramble Harder)
+- Phase 5 (games): COMPLETE (Matching, Mad Libs, Dedede, Scrambler, Tune In, Scramble Harder)
 
 ## What to Do Next
 1. Continue with any remaining backlog items
@@ -49,3 +57,4 @@
 - Space→dash conversion must work on mobile (use `onChange`, not `onKeyDown`)
 - Scrambler: no need to show English in completion result (already visible as prompt)
 - Scramble Harder: uses half the correct word count as number of distractor words; locked at 20 sentences
+- Lobby button order: unlocked games first, then lockable games, then Random

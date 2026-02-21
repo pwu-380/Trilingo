@@ -11,7 +11,7 @@ interface Props {
   totalRounds: number;
   onSetHskLevel: (level: number) => void;
   onSetTotalRounds: (rounds: number) => void;
-  onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder")[]) => void;
+  onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede")[]) => void;
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
   onAddCardFromWord?: (word: string) => void;
@@ -32,6 +32,7 @@ interface GameButton {
 const GAME_BUTTONS: GameButton[] = [
   { type: "matching", label: "Matching", desc: "Match Chinese to English" },
   { type: "madlibs", label: "Mad Libs", desc: "Fill in the blank" },
+  { type: "dedede", label: "Dedede", desc: "Pick 的, 得, or 地" },
   { type: "scrambler", label: "Scrambler", desc: "Arrange words in order", lockable: "sentences" },
   { type: "tunein", label: "Tune In", desc: "Listen and pick the word", lockable: "audio" },
   { type: "scrambleharder", label: "Scramble Harder", desc: "Unscramble with decoys", lockable: "sentences20" },
@@ -165,7 +166,7 @@ export default function GamesPanel({
                 className={`games-type-btn${locked ? " locked" : ""}`}
                 disabled={locked}
                 onClick={() => {
-                  const exclude: ("matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder")[] = [];
+                  const exclude: ("matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede")[] = [];
                   if (!scramblerUnlocked) exclude.push("scrambler");
                   if (!tuneinUnlocked) exclude.push("tunein");
                   if (!scrambleHarderUnlocked) exclude.push("scrambleharder");
