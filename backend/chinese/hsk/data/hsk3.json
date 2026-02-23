@@ -1014,7 +1014,6 @@
     {"chinese": "作者", "pinyin": "zuòzhě", "english": "author"},
     {"chinese": "做客", "pinyin": "zuò kè", "english": "be a guest"}
   ],
-  {
   "grammar": [
     { "pattern": "把 + Object + Verb + Result/Direction", "english": "The 'Ba' construction (Moving or disposing of something)", "example": "请把书放在桌子上。" },
     { "pattern": "被 + Agent + Verb + Result", "english": "Passive voice (The subject is acted upon)", "example": "我的蛋糕被弟弟吃了。" },
@@ -1079,5 +1078,4 @@
       "description": "University majors (专业), library research, and learning strategies (预习/复习)."
     }
   ]
-}
 }
