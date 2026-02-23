@@ -132,7 +132,7 @@ export default function GameSession({
           <span>
             Round {session.currentRound + 1} / {session.totalRounds}
           </span>
-          {currentGameType && currentGameType !== "dedede" && (
+          {currentGameType && currentGameType !== "dedede" && currentGameType !== "matching" && (
             <span className="game-session-hsk">HSK {roundHskLevel}</span>
           )}
           <span>Score: {session.score}</span>
