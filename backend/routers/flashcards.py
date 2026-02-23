@@ -83,6 +83,16 @@ async def submit_answer(body: QuizAnswerRequest):
     return result
 
 
+@router.get("/{card_id}/example-sentence")
+async def get_example_sentence(card_id: int):
+    try:
+        return await flashcard_service.get_example_sentence(card_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate sentence: {e}")
+
+
 @router.post("/{card_id}/regenerate", response_model=FlashcardResponse)
 async def regenerate_assets(card_id: int):
     card = await flashcard_service.regenerate_card_assets(card_id)

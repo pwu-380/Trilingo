@@ -46,8 +46,8 @@ function AuthenticatedApp() {
   }, []);
 
   const handleAddCardFromWord = useCallback(
-    (word: string) => {
-      createCardFromWord(word)
+    (word: string, source?: string) => {
+      createCardFromWord(word, source)
         .then((result) => {
           if (result.duplicate) {
             addToast(`'${word}' already in flash cards`, "info");

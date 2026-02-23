@@ -1,7 +1,16 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { authedUrl } from "../../api/client";
-import type { Flashcard } from "../../types/flashcard";
+import { getExampleSentence } from "../../api/flashcards";
+import type { Flashcard, ExampleSentence } from "../../types/flashcard";
 import "./CardManager.css";
+
+function formatSource(source: string): string {
+  const m = source.match(/^madlibs-hsk(\d+)$/);
+  if (m) return `Mad Libs - HSK ${m[1]}`;
+  if (source === "chat") return "Chat";
+  if (source === "seed") return "Seed";
+  return source;
+}
 
 function EditableEnglish({ card, onSave }: { card: Flashcard; onSave: (id: number, english: string) => void }) {
   const [editing, setEditing] = useState(false);
@@ -45,6 +54,79 @@ function EditableEnglish({ card, onSave }: { card: Flashcard; onSave: (id: numbe
   );
 }
 
+function CardMenu({ card, onToggleActive, onRegenerateAssets, onDeleteCard, onGenerateExample }: {
+  card: Flashcard;
+  onToggleActive: (id: number, active: boolean) => void;
+  onRegenerateAssets: (id: number) => void;
+  onDeleteCard: (id: number) => void;
+  onGenerateExample: (id: number) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  return (
+    <div className="cm-menu-wrap" ref={menuRef}>
+      <button className="cm-menu-btn" onClick={() => setOpen((o) => !o)} title="Actions">
+        &#x22ee;
+      </button>
+      {open && (
+        <div className="cm-menu-dropdown">
+          <button onClick={() => { onToggleActive(card.id, !card.active); setOpen(false); }}>
+            {card.active ? "Shelve" : "Activate"}
+          </button>
+          <button onClick={() => { onRegenerateAssets(card.id); setOpen(false); }}>
+            Regenerate Assets
+          </button>
+          <button onClick={() => { onGenerateExample(card.id); setOpen(false); }}>
+            Make Example Sentence
+          </button>
+          {!card.active && (
+            <button className="cm-menu-danger" onClick={() => { onDeleteCard(card.id); setOpen(false); }}>
+              Delete
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ExampleSentenceDisplay({ cardId, examples, setExamples }: {
+  cardId: number;
+  examples: Map<number, ExampleSentence | "loading">;
+  setExamples: React.Dispatch<React.SetStateAction<Map<number, ExampleSentence | "loading">>>;
+}) {
+  const state = examples.get(cardId);
+  if (!state || state === "loading") return null;
+
+  return (
+    <div className="cm-example">
+      <div className="cm-example-header">
+        <button
+          className="cm-example-close"
+          onClick={() => setExamples((prev) => { const next = new Map(prev); next.delete(cardId); return next; })}
+          title="Close"
+        >&times;</button>
+      </div>
+      <div className="cm-example-zh">{state.sentence_zh}</div>
+      <div className="cm-example-pinyin">{state.pinyin_sentence}</div>
+      <div className="cm-example-en">{state.sentence_en}</div>
+      <div className="cm-example-annotation">(Added to Mad Libs question bank)</div>
+    </div>
+  );
+}
+
 function parseImagePath(imagePath: string | null) {
   if (!imagePath) return null;
   const [path, creator, license] = imagePath.split("|");
@@ -76,6 +158,7 @@ export default function CardManager({
   const [english, setEnglish] = useState("");
   const [creating, setCreating] = useState(false);
   const [showPool, setShowPool] = useState<"active" | "inactive">("active");
+  const [examples, setExamples] = useState<Map<number, ExampleSentence | "loading">>(new Map());
   const [seedLevel, setSeedLevel] = useState(1);
   const [seeding, setSeeding] = useState(false);
 
@@ -170,56 +253,48 @@ export default function CardManager({
       <div className="cm-grid">
         {displayCards.map((card) => (
           <div key={card.id} className="cm-card">
-            <div className="cm-card-top">
-              <div className="cm-card-chinese">
-                {card.chinese}
-                {card.audio_path && (
-                  <button
-                    className="cm-card-speaker"
-                    onClick={() => playAudio(card.id)}
-                    title="Play audio"
-                  >
-                    &#x1f50a;
-                  </button>
-                )}
+            <div className="cm-card-body">
+              <div className="cm-card-top">
+                <div className="cm-card-left">
+                  <div className="cm-card-pinyin">{card.pinyin}</div>
+                  <div className="cm-card-chinese">
+                    {card.chinese}
+                    {card.audio_path && (
+                      <button
+                        className="cm-card-speaker"
+                        onClick={() => playAudio(card.id)}
+                        title="Play audio"
+                      >
+                        &#x1f50a;
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <CardMenu
+                  card={card}
+                  onToggleActive={onToggleActive}
+                  onRegenerateAssets={onRegenerateAssets}
+                  onDeleteCard={onDeleteCard}
+                  onGenerateExample={(id) => {
+                    setExamples((prev) => new Map(prev).set(id, "loading"));
+                    getExampleSentence(id)
+                      .then((data) => setExamples((prev) => new Map(prev).set(id, data)))
+                      .catch(() => setExamples((prev) => { const next = new Map(prev); next.delete(id); return next; }));
+                  }}
+                />
               </div>
-              <div className="cm-card-actions">
-                <button
-                  className="cm-card-toggle"
-                  onClick={() => onToggleActive(card.id, !card.active)}
-                  title={card.active ? "Move to inactive" : "Reactivate"}
-                >
-                  {card.active ? "Shelve" : "Activate"}
-                </button>
-                <button
-                  className="cm-card-toggle"
-                  onClick={() => onRegenerateAssets(card.id)}
-                  title="Regenerate audio, image, and tip"
-                >
-                  Regen
-                </button>
-                {!card.active && (
-                  <button
-                    className="cm-card-delete"
-                    onClick={() => onDeleteCard(card.id)}
-                    title="Delete card"
-                  >
-                    &times;
-                  </button>
-                )}
-              </div>
+              {(() => { const img = parseImagePath(card.image_path); return img ? (
+                <div className="cm-card-image">
+                  <img src={`/assets/${img.path}?v=${encodeURIComponent(card.image_path || "")}`} alt={card.english} />
+                  <span className="cm-card-attribution">{img.creator} / {img.license}</span>
+                </div>
+              ) : null; })()}
+              <EditableEnglish card={card} onSave={onUpdateEnglish} />
+              {card.notes && <div className="cm-card-notes">{card.notes}</div>}
+              <ExampleSentenceDisplay cardId={card.id} examples={examples} setExamples={setExamples} />
             </div>
-            <div className="cm-card-pinyin">{card.pinyin}</div>
-            {(() => { const img = parseImagePath(card.image_path); return img ? (
-              <div className="cm-card-image">
-                <img src={`/assets/${img.path}?v=${encodeURIComponent(card.image_path || "")}`} alt={card.english} />
-                <span className="cm-card-attribution">{img.creator} / {img.license}</span>
-              </div>
-            ) : null; })()}
-            <EditableEnglish card={card} onSave={onUpdateEnglish} />
-            {card.notes && <div className="cm-card-notes">{card.notes}</div>}
             {card.source !== "manual" && (
-              <div className="cm-card-source">{card.source}</div>
+              <div className="cm-card-source">Source: {formatSource(card.source)}</div>
             )}
           </div>
         ))}

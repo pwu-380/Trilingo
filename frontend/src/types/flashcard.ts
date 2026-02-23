@@ -30,3 +30,9 @@ export interface FromWordResponse {
   card: Flashcard;
   duplicate: boolean;
 }
+
+export interface ExampleSentence {
+  sentence_zh: string;
+  sentence_en: string;
+  pinyin_sentence: string;
+}

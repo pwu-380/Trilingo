@@ -130,6 +130,12 @@
   border: 1px solid var(--border-color, #333);
   border-radius: 10px;
   background: var(--assistant-bubble-bg, #252538);
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-card-body {
+  flex: 1;
 }
 
 .cm-card-top {
@@ -143,52 +149,69 @@
   font-size: 1.6em;
 }
 
-.cm-card-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* Hamburger menu */
+
+.cm-menu-wrap {
+  position: relative;
   flex-shrink: 0;
-  align-items: flex-end;
 }
 
-.cm-card-toggle {
-  padding: 2px 8px;
-  border: 1px solid var(--border-color, #444);
-  border-radius: 4px;
+.cm-menu-btn {
+  padding: 0 4px;
+  border: none;
   background: transparent;
   color: var(--text-secondary, #888);
-  font-size: 0.75em;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.cm-card-toggle:hover {
-  color: var(--accent-color, #646cff);
-  border-color: var(--accent-color, #646cff);
-}
-
-.cm-card-delete {
-  width: 22px;
-  height: 22px;
-  padding: 0;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--text-secondary, #666);
-  font-size: 1.2em;
+  font-size: 1.3em;
   line-height: 1;
   cursor: pointer;
 }
 
-.cm-card-delete:hover {
-  background: #5c2a2a;
-  color: #faa;
+.cm-menu-btn:hover {
+  color: var(--text-primary, #eee);
+}
+
+.cm-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  border: 1px solid var(--border-color, #444);
+  border-radius: 6px;
+  background: var(--input-field-bg, #1a1a2e);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.cm-menu-dropdown button {
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary, #eee);
+  font-size: 0.85em;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cm-menu-dropdown button:hover {
+  background: var(--sidebar-active, #2a2a4a);
+}
+
+.cm-menu-danger {
+  color: #faa !important;
+}
+
+.cm-menu-danger:hover {
+  background: #3a1a1a !important;
 }
 
 .cm-card-pinyin {
   color: var(--pinyin-color, #8888cc);
   font-size: 0.85em;
-  margin-bottom: 6px;
 }
 
 .cm-card-english {
@@ -230,7 +253,8 @@
 }
 
 .cm-card-source {
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 8px;
   color: var(--text-secondary, #666);
   font-size: 0.7em;
   text-transform: uppercase;
@@ -277,6 +301,56 @@
   color: var(--text-secondary, #666);
   padding: 2px 4px;
   text-align: right;
+}
+
+/* Example sentence */
+
+.cm-example {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color, #333);
+}
+
+.cm-example-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cm-example-close {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #666);
+  font-size: 1.1em;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cm-example-close:hover {
+  color: var(--text-primary, #eee);
+}
+
+.cm-example-zh {
+  font-size: 1.05em;
+  margin-bottom: 2px;
+}
+
+.cm-example-pinyin {
+  color: var(--pinyin-color, #8888cc);
+  font-size: 0.8em;
+  margin-bottom: 4px;
+}
+
+.cm-example-en {
+  color: var(--text-secondary, #aaa);
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.cm-example-annotation {
+  color: var(--text-secondary, #666);
+  font-size: 0.7em;
+  margin-top: 4px;
 }
 
 .cm-empty {

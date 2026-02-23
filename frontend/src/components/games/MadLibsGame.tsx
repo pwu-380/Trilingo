@@ -6,10 +6,11 @@ import "./MadLibsGame.css";
 interface Props {
   round: MadLibsRound;
   onComplete: (correct: boolean) => void;
-  onAddCardFromWord?: (word: string) => void;
+  onAddCardFromWord?: (word: string, source?: string) => void;
+  hskLevel?: number;
 }
 
-export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Props) {
+export default function MadLibsGame({ round, onComplete, onAddCardFromWord, hskLevel }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const [disabled, setDisabled] = useState<Set<string>>(new Set());
   const [wasWrong, setWasWrong] = useState(false);
@@ -54,11 +55,12 @@ export default function MadLibsGame({ round, onComplete, onAddCardFromWord }: Pr
 
   const handleAddCards = useCallback(() => {
     if (!onAddCardFromWord) return;
+    const source = hskLevel ? `madlibs-hsk${hskLevel}` : undefined;
     for (const word of checked) {
-      onAddCardFromWord(word);
+      onAddCardFromWord(word, source);
     }
     setChecked(new Set());
-  }, [checked, onAddCardFromWord]);
+  }, [checked, onAddCardFromWord, hskLevel]);
 
   // Build the display sentence, replacing ____ with the answer if correct
   const displaySentence = answered

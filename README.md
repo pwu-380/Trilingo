@@ -26,7 +26,9 @@ Build and review Chinese vocabulary with auto-generated multimedia cards.
 - **Autoseed** — Bulk-add HSK vocabulary (levels 1-3) with the toolbar button; cards are shuffled and duplicates are skipped
 - **Auto-generated assets** — Each card gets TTS audio pronunciation (via edge-tts) and a Creative Commons image (via Openverse) generated in the background; cards work immediately while assets load
 - **Study tips** — AI-generated usage notes appear on each card (e.g. "More casual than 您好; common in everyday greetings")
-- **Regenerate** — Hit the "Regen" button on any card to regenerate its audio, image, and study tip
+- **Example sentences** — Generate an AI-powered example sentence for any card via the card menu; for cards added from Mad Libs, the sentence uses the known HSK level for grammar patterns and is added to the Mad Libs question bank
+- **Card menu** — Each card has a ⋮ menu with Shelve, Regenerate Assets, Make Example Sentence, and Delete (inactive cards only)
+- **Source tracking** — Cards show where they came from (e.g. "Source: Mad Libs - HSK 1", "Source: Chat")
 - **Active/inactive pools** — Shelve cards you know to the inactive pool; bring them back when you need a refresher; only inactive cards can be deleted
 - **Quiz review** — Review in sessions of 10, 20, or endless cards with multiple-choice questions
   - Both directions: Chinese-to-English and English-to-Chinese

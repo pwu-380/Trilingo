@@ -2,6 +2,7 @@ import asyncio
 import json
 import random
 
+from backend.chinese.hsk import get_vocab
 from backend.chinese.pinyin import pinyin_for_text
 from backend.database import get_db
 from backend.models.flashcard import (
@@ -10,6 +11,7 @@ from backend.models.flashcard import (
     QuizAnswerResponse,
     QuizQuestion,
 )
+from backend.providers.base import RateLimitError
 
 
 # ---------------------------------------------------------------------------
@@ -395,8 +397,6 @@ async def seed_cards(level: int = 2, count: int = 10) -> int:
 
     Returns the number of new cards actually seeded.
     """
-    from backend.chinese.hsk import get_vocab
-
     vocab = get_vocab(level)
     random.shuffle(vocab)
 
@@ -420,3 +420,115 @@ async def seed_cards(level: int = 2, count: int = 10) -> int:
             seeded += 1
         await db.commit()
     return seeded
+
+
+# ---------------------------------------------------------------------------
+# Example sentence for a specific flashcard
+# ---------------------------------------------------------------------------
+
+import re as _re
+
+_MADLIBS_SOURCE_RE = _re.compile(r'^madlibs-hsk(\d+)$')
+
+_EXAMPLE_SENTENCE_PROMPT = """\
+You are a Mandarin Chinese teaching assistant.
+
+Generate a natural Chinese sentence using the word "{word}" ({pinyin}, "{english}").
+The sentence should be simple and appropriate for HSK {level} learners.
+
+{grammar_section}\
+Reply in EXACTLY this format (two lines, nothing else):
+Chinese: <full Chinese sentence>
+English: <English translation>"""
+
+_EXAMPLE_SENTENCE_PROMPT_NOLEVEL = """\
+You are a Mandarin Chinese teaching assistant.
+
+Generate a natural Chinese sentence using the word "{word}" ({pinyin}, "{english}").
+The sentence should be simple and natural.
+
+Reply in EXACTLY this format (two lines, nothing else):
+Chinese: <full Chinese sentence>
+English: <English translation>"""
+
+
+def _hsk_level_from_source(source: str) -> int | None:
+    """Extract HSK level from a madlibs source string, e.g. 'madlibs-hsk1' -> 1."""
+    m = _MADLIBS_SOURCE_RE.match(source)
+    return int(m.group(1)) if m else None
+
+
+async def get_example_sentence(card_id: int) -> dict:
+    """Generate an example sentence for a specific flashcard word.
+
+    If the card originated from Mad Libs (source like 'madlibs-hsk1'),
+    uses the known HSK level for grammar patterns and stores the
+    sentence in the Mad Libs question bank.
+    """
+    card = await get_card(card_id)
+    if card is None:
+        raise ValueError("Card not found")
+
+    word = card.chinese
+    hsk_level = _hsk_level_from_source(card.source)
+
+    from backend.providers.registry import get_chat_provider
+    provider = get_chat_provider()
+
+    if hsk_level is not None:
+        from backend.chinese.hsk import get_grammar
+        grammar = get_grammar(hsk_level)
+        grammar_section = ""
+        if grammar:
+            patterns = "\n".join(
+                f"- {g['pattern']} ({g['english']}), e.g. {g['example']}"
+                for g in grammar
+            )
+            grammar_section = (
+                f"Here are the grammar patterns for HSK {hsk_level}. "
+                f"If possible, demonstrate one of these patterns:\n{patterns}\n\n"
+            )
+        prompt = _EXAMPLE_SENTENCE_PROMPT.format(
+            word=word, pinyin=card.pinyin, english=card.english,
+            level=hsk_level, grammar_section=grammar_section,
+        )
+    else:
+        prompt = _EXAMPLE_SENTENCE_PROMPT_NOLEVEL.format(
+            word=word, pinyin=card.pinyin, english=card.english,
+        )
+
+    sentence_zh = ""
+    sentence_en = ""
+
+    try:
+        response = await provider.generate_text(prompt)
+        for line in response.strip().split("\n"):
+            line = line.strip()
+            if line.lower().startswith("chinese:"):
+                sentence_zh = line.split(":", 1)[1].strip()
+            elif line.lower().startswith("english:"):
+                sentence_en = line.split(":", 1)[1].strip()
+    except RateLimitError:
+        pass
+
+    if not sentence_zh or not sentence_en or word not in sentence_zh:
+        sentence_zh = f"我喜欢{word}。"
+        sentence_en = f"I like {card.english}."
+
+    pinyin_sentence = pinyin_for_text(sentence_zh)
+
+    # Store in Mad Libs question bank if we know the HSK level
+    if hsk_level is not None and word in sentence_zh:
+        async with get_db() as db:
+            await db.execute(
+                "INSERT INTO game_sentences (hsk_level, vocab_word, sentence_zh, sentence_en) "
+                "VALUES (?, ?, ?, ?)",
+                (hsk_level, word, sentence_zh, sentence_en),
+            )
+            await db.commit()
+
+    return {
+        "sentence_zh": sentence_zh,
+        "sentence_en": sentence_en,
+        "pinyin_sentence": pinyin_sentence,
+    }

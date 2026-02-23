@@ -1,36 +1,41 @@
-# Session Context — 2026-02-20 (session 13)
+# Session Context — 2026-02-22 (session 14)
 
 ## What Was Done This Session
 
-### Renamed "MadLibs" → "Mad Libs" (user-facing text)
-- Updated display label in GamesPanel.tsx, README.md, PLAN.md, PHASE5.md, SESSION_CONTEXT.md, and game_service.py comments/docstrings
-- Internal identifiers (MadLibsRound, madlibsData, CSS classes, API routes) left unchanged
+### Added example sentence generation on flash cards
+- New backend endpoint `GET /api/flashcards/{card_id}/example-sentence` generates a Chinese sentence using the card's word via LLM
+- When the card originated from Mad Libs (source like `madlibs-hsk1`), uses the known HSK level for grammar patterns and stores the generated sentence in the Mad Libs question bank (`game_sentences` table)
+- Cards without a known level get a simpler prompt with no HSK level reference
+- Falls back to "我喜欢{word}。" if LLM fails or word not in generated sentence
 
-### Added "Tune In" game (listening comprehension)
-- Backend: `TuneInRound` + `AudioCardCount` models, `get_tunein_round()` + `get_audio_card_count()` service functions, `GET /api/games/tunein` + `GET /api/games/audio-card-count` routes
-- Frontend: types, API, hook update, GamesPanel button with audio-card lock (10 minimum), GameSession wiring, `TuneInGame.tsx` component + CSS
-- Player hears a word's audio, picks correct Chinese from 4 options; auto-plays on load, replay button, pinyin hint, correct/wrong feedback with sounds
+### Flash card UI overhaul — hamburger menu
+- Replaced the stacked Shelve/Regen/Example action buttons with a ⋮ hamburger menu
+- Dropdown contains: "Shelve" (or "Activate"), "Regenerate Assets", "Make Example Sentence", and "Delete" (only for inactive cards, styled red)
+- Dropdown closes on outside click
+- Pinyin moved above the Chinese word on each card
 
-### Added "Scramble Harder" game
-- Like Scrambler but harder: randomly asks to unscramble either the Chinese or English translation
-- Decoy words from 2 other random sentences are mixed into the tile pool — forces translation, not just unscrambling
-- Locked until 20 generated sentences at the HSK level
-- Backend: `ScrambleHarderRound` model, `get_scramble_harder_round()` service (fetches 3 sentences, picks direction, segments, adds distractors), `GET /api/games/scramble-harder` route
-- Frontend: types, API, hook update, GamesPanel button with sentences20 lock, GameSession wiring, `ScrambleHarderGame.tsx` component + CSS
+### Example sentence display
+- Clicking "Make Example Sentence" in the menu generates and shows a sentence inline on the card
+- Shows Chinese, pinyin, and English translation
+- × close button to dismiss
+- Annotated "(Added to Mad Libs question bank)" at the bottom
 
-### Added "Dedede" game (的/得/地 distinction)
-- 50 pre-loaded questions in `backend/chinese/hsk/data/dedede.json` covering all three particles
-- `dedede_questions` DB table, auto-seeded from JSON on first `init_db()` call
-- TTS audio for each particle (的/得/地) auto-generated at startup via edge-tts, stored as `audio/dedede_de{1,2,3}.mp3`
-- Backend: `DededeRound` model with `audio_path`, `get_dedede_round()` service, `GET /api/games/dedede` route
-- Frontend: `DededeGame.tsx` with three large character buttons, sentence display, 2-level hints, plays particle audio on correct answer
-- Always unlocked; lobby button ordered before lockable games (Matching, Mad Libs, Dedede, then locked games, then Random)
+### Mad Libs → flash card source tracking
+- Cards added from Mad Libs now tagged with source `madlibs-hsk{level}` (e.g. `madlibs-hsk1`) instead of generic `chat`
+- Source displayed as "Source: Mad Libs - HSK 1" format on cards; "Source: Chat" for chat-origin cards, "Source: Seed" for seeded cards
+- Source text bottom-aligned on each card (pushed to bottom via `margin-top: auto` in flex column layout)
 
-### Fixed Mad Libs blank bug
-- Bug: LLM sometimes generated sentences that didn't contain the vocab word as an exact substring; `replace(vocab_word, "____")` did nothing, so the full sentence was shown with no blank and no correct answer
-- Fix 1 (generation time): added `word not in sentence_zh` check in `_generate_sentence()` — bad sentences now fall back to safe template instead of being stored
-- Fix 2 (serve time): `_pick_stored_sentence()` gained `require_word_in_sentence` param — fetches up to 10 candidates and filters; Mad Libs passes `True`
-- Cleaned 1 bad sentence from the database
+### Files changed
+- `backend/services/flashcard_service.py` — added `get_example_sentence()`, `_hsk_level_from_source()`
+- `backend/routers/flashcards.py` — added `GET /{card_id}/example-sentence` endpoint
+- `frontend/src/types/flashcard.ts` — added `ExampleSentence` interface
+- `frontend/src/api/flashcards.ts` — added `getExampleSentence()`, updated `createCardFromWord()` to accept optional source
+- `frontend/src/components/flashcards/CardManager.tsx` — hamburger menu, example sentence display, source formatting, pinyin-above-chinese layout
+- `frontend/src/components/flashcards/CardManager.css` — menu styles, flex card layout, bottom-aligned source
+- `frontend/src/App.tsx` — `handleAddCardFromWord` accepts optional source
+- `frontend/src/components/games/MadLibsGame.tsx` — passes `madlibs-hsk{level}` source when adding cards
+- `frontend/src/components/games/GameSession.tsx` — passes `hskLevel` to MadLibsGame
+- `frontend/src/components/games/GamesPanel.tsx` — updated `onAddCardFromWord` type signature
 
 ## Outstanding Issues
 1. **Beads repo ID mismatch** — Still present from prior sessions
@@ -58,3 +63,7 @@
 - Scrambler: no need to show English in completion result (already visible as prompt)
 - Scramble Harder: uses half the correct word count as number of distractor words; locked at 20 sentences
 - Lobby button order: unlocked games first, then lockable games, then Random
+- Flash card action buttons should be a hamburger menu, not stacked buttons
+- Do NOT annotate flash cards with inferred HSK levels — only use known levels from source
+- Example sentence button label should be short ("Example" in menu form)
+- Source text should be bottom-aligned on cards, not line-broken from tip

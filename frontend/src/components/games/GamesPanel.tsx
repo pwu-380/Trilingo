@@ -14,7 +14,7 @@ interface Props {
   onStartSession: (gameType: GameType, excludeFromRandom?: ("matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede")[]) => void;
   onCompleteRound: (correct: boolean) => void;
   onEndSession: () => void;
-  onAddCardFromWord?: (word: string) => void;
+  onAddCardFromWord?: (word: string, source?: string) => void;
   onToast?: (message: string, type: "info" | "error" | "success") => void;
 }
 
