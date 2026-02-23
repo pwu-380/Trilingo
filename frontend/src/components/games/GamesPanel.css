@@ -13,6 +13,64 @@
   flex: 1;
   gap: 32px;
   padding: 24px;
+  position: relative;
+}
+
+.games-hamburger-wrap {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.games-hamburger-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-secondary, #aaa);
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.games-hamburger-btn:hover {
+  border-color: var(--accent-color, #646cff);
+  color: var(--text-primary, #eee);
+}
+
+.games-hamburger-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  min-width: 170px;
+  background: var(--bg-secondary, #16213e);
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.games-hamburger-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary, #eee);
+  font-size: 0.9em;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.games-hamburger-dropdown button:hover {
+  background: rgba(100, 108, 255, 0.15);
 }
 
 .games-config {

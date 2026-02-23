@@ -1,46 +1,45 @@
-# Session Context — 2026-02-22 (session 14)
+# Session Context — 2026-02-23 (session 15)
 
 ## What Was Done This Session
 
-### Added example sentence generation on flash cards
-- New backend endpoint `GET /api/flashcards/{card_id}/example-sentence` generates a Chinese sentence using the card's word via LLM
-- When the card originated from Mad Libs (source like `madlibs-hsk1`), uses the known HSK level for grammar patterns and stores the generated sentence in the Mad Libs question bank (`game_sentences` table)
-- Cards without a known level get a simpler prompt with no HSK level reference
-- Falls back to "我喜欢{word}。" if LLM fails or word not in generated sentence
+### Sentence Browser for Games tab
+- New hamburger menu (☰) in top-right corner of games lobby with "Sentence Browser" option
+- Sentence Browser shows all `game_sentences` DB entries in a centered table with columns: HSK level, Word, Chinese, English, delete (✕)
+- HSK level filter dropdown (All / 1 / 2 / 3)
+- Pagination with configurable page size (10, 25, 50, 100)
+- Delete with inline confirm (✓/✗), shows toast on success/failure
+- Sorted by HSK level ascending, then newest first within each level
+- Back button returns to lobby
 
-### Flash card UI overhaul — hamburger menu
-- Replaced the stacked Shelve/Regen/Example action buttons with a ⋮ hamburger menu
-- Dropdown contains: "Shelve" (or "Activate"), "Regenerate Assets", "Make Example Sentence", and "Delete" (only for inactive cards, styled red)
-- Dropdown closes on outside click
-- Pinyin moved above the Chinese word on each card
+### Bug fix: Random mode unlock logic
+- Changed `Math.min` → `Math.max` when computing sentence count for Random mode
+- Games are now unlocked if *any* HSK level meets the sentence threshold, not only if *all* do
 
-### Example sentence display
-- Clicking "Make Example Sentence" in the menu generates and shows a sentence inline on the card
-- Shows Chinese, pinyin, and English translation
-- × close button to dismiss
-- Annotated "(Added to Mad Libs question bank)" at the bottom
+### Bug fix: Gemini JSON parse error crashing Mad Libs
+- `get_madlibs_round` now catches all exceptions from `_generate_sentence` (not just `RateLimitError`) and falls back to stored sentences
+- Added fallback in Gemini provider's `generate_text` to extract text from raw response parts if `resp.text` raises a JSON parse error
+- Game error messages now prefixed with game type (e.g. `[madlibs] Failed to generate round: ...`) for easier debugging
 
-### Mad Libs → flash card source tracking
-- Cards added from Mad Libs now tagged with source `madlibs-hsk{level}` (e.g. `madlibs-hsk1`) instead of generic `chat`
-- Source displayed as "Source: Mad Libs - HSK 1" format on cards; "Source: Chat" for chat-origin cards, "Source: Seed" for seeded cards
-- Source text bottom-aligned on each card (pushed to bottom via `margin-top: auto` in flex column layout)
+### Backend changes
+- `backend/models/game.py` — added `GameSentence`, `GameSentenceList` models
+- `backend/services/game_service.py` — added `list_sentences()`, `delete_sentence()`, broadened exception handling in `get_madlibs_round`
+- `backend/routers/games.py` — added `GET /api/games/sentences`, `DELETE /api/games/sentences/{id}`
+- `backend/providers/gemini.py` — added fallback for `resp.text` JSON parse failures
 
-### Files changed
-- `backend/services/flashcard_service.py` — added `get_example_sentence()`, `_hsk_level_from_source()`
-- `backend/routers/flashcards.py` — added `GET /{card_id}/example-sentence` endpoint
-- `frontend/src/types/flashcard.ts` — added `ExampleSentence` interface
-- `frontend/src/api/flashcards.ts` — added `getExampleSentence()`, updated `createCardFromWord()` to accept optional source
-- `frontend/src/components/flashcards/CardManager.tsx` — hamburger menu, example sentence display, source formatting, pinyin-above-chinese layout
-- `frontend/src/components/flashcards/CardManager.css` — menu styles, flex card layout, bottom-aligned source
-- `frontend/src/App.tsx` — `handleAddCardFromWord` accepts optional source
-- `frontend/src/components/games/MadLibsGame.tsx` — passes `madlibs-hsk{level}` source when adding cards
-- `frontend/src/components/games/GameSession.tsx` — passes `hskLevel` to MadLibsGame
-- `frontend/src/components/games/GamesPanel.tsx` — updated `onAddCardFromWord` type signature
+### Frontend changes
+- `frontend/src/types/game.ts` — added `GameSentence`, `GameSentenceList` interfaces
+- `frontend/src/api/games.ts` — added `getSentences()`, `deleteSentence()`
+- `frontend/src/components/games/SentenceBrowser.tsx` — new component
+- `frontend/src/components/games/SentenceBrowser.css` — new stylesheet
+- `frontend/src/components/games/GamesPanel.tsx` — hamburger menu, sentence browser toggle, fixed Random unlock logic
+- `frontend/src/components/games/GamesPanel.css` — hamburger menu styles
+- `frontend/src/components/games/GameSession.tsx` — error messages now include game type
 
 ## Outstanding Issues
 1. **Beads repo ID mismatch** — Still present from prior sessions
 2. **Debug print in main.py** — `Auth enabled (token: xxxx...)` diagnostic print still in lifespan
 3. **HSK data gaps** — hsk3-6.json files have only 20 vocab entries each
+4. **Gemini JSON parse errors** — Now handled gracefully but root cause is in the Gemini SDK; may recur
 
 ## Current State
 
@@ -55,7 +54,8 @@
 - Phase 5 (games): COMPLETE (Matching, Mad Libs, Dedede, Scrambler, Tune In, Scramble Harder)
 
 ## What to Do Next
-1. Continue with any remaining backlog items
+1. User testing the Sentence Browser and bug fixes
+2. Continue with any remaining backlog items
 
 ## Key Decisions Made by User
 - Login input should be `type="text"` (visible), NOT `type="password"` (masked)
@@ -67,3 +67,4 @@
 - Do NOT annotate flash cards with inferred HSK levels — only use known levels from source
 - Example sentence button label should be short ("Example" in menu form)
 - Source text should be bottom-aligned on cards, not line-broken from tip
+- Sentence Browser: plain text HSK level numbers (no colored badges/emojis), table layout, paginated

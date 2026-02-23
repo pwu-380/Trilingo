@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -67,3 +69,17 @@ class ScrambleHarderRound(BaseModel):
     full_sentence_zh: str
     full_sentence_en: str
     pinyin_sentence: str
+
+
+class GameSentence(BaseModel):
+    id: int
+    hsk_level: int
+    vocab_word: str
+    sentence_zh: str
+    sentence_en: str
+    created_at: str
+
+
+class GameSentenceList(BaseModel):
+    sentences: list[GameSentence]
+    total: int

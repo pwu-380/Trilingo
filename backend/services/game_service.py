@@ -5,7 +5,7 @@ from backend.chinese.hsk import get_vocab, get_grammar
 from backend.chinese.pinyin import pinyin_for_text
 from backend.chinese.segmentation import segment_text
 from backend.database import get_db, get_dedede_audio_path
-from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound
+from backend.models.game import MatchingPair, MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound, GameSentence, GameSentenceList
 from backend.providers.base import RateLimitError
 
 _ZH_PUNCT = re.compile(r'[，。！？、；：""''《》（）…—\s]+')
@@ -162,6 +162,9 @@ async def get_madlibs_round(hsk_level: int) -> MadLibsRound:
             data = await _generate_sentence(hsk_level)
         except RateLimitError:
             rate_limited = True
+            data = await _pick_stored_sentence(hsk_level, require_word_in_sentence=True)
+        except Exception:
+            # LLM or SDK error (e.g. Gemini JSON parse failure) — fall back to stored
             data = await _pick_stored_sentence(hsk_level, require_word_in_sentence=True)
 
     # If still no data (empty DB + rate limited), build a simple fallback
@@ -396,6 +399,45 @@ async def get_scramble_harder_round(hsk_level: int) -> ScrambleHarderRound:
         full_sentence_en=sentence_en,
         pinyin_sentence=pinyin_sentence,
     )
+
+
+# ---------------------------------------------------------------------------
+# Sentence Browser
+# ---------------------------------------------------------------------------
+
+async def list_sentences(hsk_level: int | None = None) -> GameSentenceList:
+    """List all game sentences, optionally filtered by HSK level."""
+    async with get_db() as db:
+        if hsk_level and hsk_level > 0:
+            rows = await db.execute_fetchall(
+                "SELECT id, hsk_level, vocab_word, sentence_zh, sentence_en, created_at "
+                "FROM game_sentences WHERE hsk_level = ? ORDER BY created_at DESC",
+                (hsk_level,),
+            )
+        else:
+            rows = await db.execute_fetchall(
+                "SELECT id, hsk_level, vocab_word, sentence_zh, sentence_en, created_at "
+                "FROM game_sentences ORDER BY created_at DESC"
+            )
+    sentences = [
+        GameSentence(
+            id=r[0], hsk_level=r[1], vocab_word=r[2],
+            sentence_zh=r[3], sentence_en=r[4],
+            created_at=r[5] or "",
+        )
+        for r in rows
+    ]
+    return GameSentenceList(sentences=sentences, total=len(sentences))
+
+
+async def delete_sentence(sentence_id: int) -> bool:
+    """Delete a game sentence by ID. Returns True if a row was deleted."""
+    async with get_db() as db:
+        cursor = await db.execute(
+            "DELETE FROM game_sentences WHERE id = ?", (sentence_id,)
+        )
+        await db.commit()
+        return cursor.rowcount > 0
 
 
 # ---------------------------------------------------------------------------

@@ -103,4 +103,13 @@ class GeminiChatProvider(ChatProvider):
             if e.code == 429:
                 raise RateLimitError("AI rate limit exceeded") from e
             raise
-        return resp.text.strip()
+        try:
+            return resp.text.strip()
+        except (json.JSONDecodeError, ValueError) as e:
+            # Gemini SDK sometimes fails to parse its own response internally
+            # Try to extract text from raw parts as a fallback
+            for candidate in (resp.candidates or []):
+                for part in (candidate.content.parts or []):
+                    if part.text:
+                        return part.text.strip()
+            raise ValueError("Failed to parse Gemini response") from e

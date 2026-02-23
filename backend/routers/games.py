@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.security import APIKeyHeader
 
-from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound
+from backend.models.game import MatchingRound, MadLibsRound, ScramblerRound, SentenceCount, TuneInRound, AudioCardCount, ScrambleHarderRound, DededeRound, GameSentenceList
 from backend.services import game_service
 
 _token_header = APIKeyHeader(name="x-trilingo-token", auto_error=False)
@@ -66,3 +66,16 @@ async def get_dedede():
         return await game_service.get_dedede_round()
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
+
+
+@router.get("/sentences", response_model=GameSentenceList)
+async def list_sentences(level: int = Query(0, ge=0, le=3)):
+    return await game_service.list_sentences(level if level > 0 else None)
+
+
+@router.delete("/sentences/{sentence_id}")
+async def delete_sentence(sentence_id: int):
+    deleted = await game_service.delete_sentence(sentence_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Sentence not found")
+    return {"ok": True}

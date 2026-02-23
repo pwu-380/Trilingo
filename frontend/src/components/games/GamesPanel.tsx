@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { GameType } from "../../types/game";
 import type { GameSession } from "../../hooks/useGames";
 import { getSentenceCount, getAudioCardCount } from "../../api/games";
 import GameSessionComponent from "./GameSession";
+import SentenceBrowser from "./SentenceBrowser";
 import "./GamesPanel.css";
 
 interface Props {
@@ -54,13 +55,36 @@ export default function GamesPanel({
   const [confirmQuit, setConfirmQuit] = useState(false);
   const [sentenceCount, setSentenceCount] = useState(0);
   const [audioCardCount, setAudioCardCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showBrowser, setShowBrowser] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close hamburger menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
 
   // Fetch sentence count and audio card count when returning to lobby or HSK level changes
   useEffect(() => {
     if (session) return;
-    getSentenceCount(hskLevel)
-      .then((data) => setSentenceCount(data.count))
-      .catch(() => setSentenceCount(0));
+    if (hskLevel === 0) {
+      // Random: use the maximum sentence count across all levels
+      // (a game is playable if *any* level meets the threshold)
+      Promise.all([getSentenceCount(1), getSentenceCount(2), getSentenceCount(3)])
+        .then((results) => setSentenceCount(Math.max(...results.map((r) => r.count))))
+        .catch(() => setSentenceCount(0));
+    } else {
+      getSentenceCount(hskLevel)
+        .then((data) => setSentenceCount(data.count))
+        .catch(() => setSentenceCount(0));
+    }
     getAudioCardCount()
       .then((data) => setAudioCardCount(data.count))
       .catch(() => setAudioCardCount(0));
@@ -69,6 +93,14 @@ export default function GamesPanel({
   const scramblerUnlocked = sentenceCount >= SCRAMBLER_MIN;
   const tuneinUnlocked = audioCardCount >= TUNEIN_MIN;
   const scrambleHarderUnlocked = sentenceCount >= SCRAMBLE_HARDER_MIN;
+
+  if (showBrowser) {
+    return (
+      <div className="games-panel">
+        <SentenceBrowser onBack={() => setShowBrowser(false)} onToast={onToast} />
+      </div>
+    );
+  }
 
   if (session) {
     if (session.currentRound >= session.totalRounds) {
@@ -123,6 +155,22 @@ export default function GamesPanel({
   return (
     <div className="games-panel">
       <div className="games-lobby">
+        <div className="games-hamburger-wrap" ref={menuRef}>
+          <button
+            className="games-hamburger-btn"
+            onClick={() => setMenuOpen((o) => !o)}
+            title="Menu"
+          >
+            &#x2630;
+          </button>
+          {menuOpen && (
+            <div className="games-hamburger-dropdown">
+              <button onClick={() => { setShowBrowser(true); setMenuOpen(false); }}>
+                Sentence Browser
+              </button>
+            </div>
+          )}
+        </div>
         <div className="games-config">
           <label className="games-config-item">
             <span>HSK Level</span>
@@ -133,6 +181,7 @@ export default function GamesPanel({
               <option value={1}>HSK 1</option>
               <option value={2}>HSK 2</option>
               <option value={3}>HSK 3</option>
+              <option value={0}>Random</option>
             </select>
           </label>
           <label className="games-config-item">

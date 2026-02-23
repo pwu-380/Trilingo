@@ -62,4 +62,18 @@ export interface DededeRound {
   audio_path: string | null;
 }
 
+export interface GameSentence {
+  id: number;
+  hsk_level: number;
+  vocab_word: string;
+  sentence_zh: string;
+  sentence_en: string;
+  created_at: string;
+}
+
+export interface GameSentenceList {
+  sentences: GameSentence[];
+  total: number;
+}
+
 export type GameType = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede" | "random";

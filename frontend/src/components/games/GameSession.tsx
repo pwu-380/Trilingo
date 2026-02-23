@@ -42,6 +42,11 @@ export default function GameSession({
       ? session.gameSequence[session.currentRound]
       : null;
 
+  const roundHskLevel =
+    session.currentRound < session.totalRounds
+      ? session.hskLevelSequence[session.currentRound]
+      : session.hskLevel;
+
   // Fetch round data when the round changes
   useEffect(() => {
     if (session.currentRound >= session.totalRounds) return;
@@ -64,29 +69,30 @@ export default function GameSession({
     const fetchRound = async () => {
       try {
         if (currentGameType === "matching") {
-          const data = await getMatchingRound(session.hskLevel);
+          const data = await getMatchingRound(roundHskLevel);
           setMatchingData(data);
         } else if (currentGameType === "scrambler") {
-          const data = await getScramblerRound(session.hskLevel);
+          const data = await getScramblerRound(roundHskLevel);
           setScramblerData(data);
         } else if (currentGameType === "tunein") {
-          const data = await getTuneInRound(session.hskLevel);
+          const data = await getTuneInRound(roundHskLevel);
           setTuneinData(data);
         } else if (currentGameType === "scrambleharder") {
-          const data = await getScrambleHarderRound(session.hskLevel);
+          const data = await getScrambleHarderRound(roundHskLevel);
           setScrambleHarderData(data);
         } else if (currentGameType === "dedede") {
           const data = await getDededeRound();
           setDededeData(data);
         } else {
-          const data = await getMadLibsRound(session.hskLevel);
+          const data = await getMadLibsRound(roundHskLevel);
           if (data.rate_limited && onToast) {
             onToast("AI rate limit reached — using saved questions", "info");
           }
           setMadlibsData(data);
         }
       } catch (e: unknown) {
-        setError(e instanceof Error ? e.message : "Failed to load round");
+        const msg = e instanceof Error ? e.message : "Failed to load round";
+        setError(`[${currentGameType}] ${msg}`);
       } finally {
         clearTimeout(generatingTimer.current);
         setShowGenerating(false);
@@ -96,7 +102,7 @@ export default function GameSession({
 
     fetchRound();
     return () => clearTimeout(generatingTimer.current);
-  }, [session.currentRound, session.totalRounds, session.hskLevel, currentGameType, onToast]);
+  }, [session.currentRound, session.totalRounds, roundHskLevel, currentGameType, onToast]);
 
   const handleComplete = useCallback(
     (correct: boolean) => {
@@ -126,6 +132,9 @@ export default function GameSession({
           <span>
             Round {session.currentRound + 1} / {session.totalRounds}
           </span>
+          {currentGameType && currentGameType !== "dedede" && (
+            <span className="game-session-hsk">HSK {roundHskLevel}</span>
+          )}
           <span>Score: {session.score}</span>
         </div>
       </div>
@@ -143,7 +152,7 @@ export default function GameSession({
             round={madlibsData}
             onComplete={handleComplete}
             onAddCardFromWord={onAddCardFromWord}
-            hskLevel={session.hskLevel}
+            hskLevel={roundHskLevel}
           />
         )}
 
