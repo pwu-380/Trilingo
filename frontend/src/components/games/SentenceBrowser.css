@@ -51,6 +51,22 @@
   font-size: 0.85em;
 }
 
+.sb-search {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #333);
+  background: var(--bg-secondary, #16213e);
+  color: var(--text-primary, #eee);
+  font-size: 0.85em;
+  font-family: inherit;
+  width: 140px;
+}
+
+.sb-search::placeholder {
+  color: var(--text-secondary, #aaa);
+  opacity: 0.6;
+}
+
 .sb-control select {
   padding: 4px 8px;
   border-radius: 6px;

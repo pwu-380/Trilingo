@@ -17,6 +17,7 @@ export default function SentenceBrowser({ onBack, onToast }: Props) {
   const [confirmId, setConfirmId] = useState<number | null>(null);
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -33,9 +34,16 @@ export default function SentenceBrowser({ onBack, onToast }: Props) {
     setPage(0);
   }, [level]);
 
-  const totalPages = Math.max(1, Math.ceil(sentences.length / pageSize));
+  const filtered = search
+    ? sentences.filter((s) => {
+        const q = search.toLowerCase();
+        return s.sentence_zh.includes(search) || s.sentence_en.toLowerCase().includes(q) || s.vocab_word.includes(search);
+      })
+    : sentences;
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const clampedPage = Math.min(page, totalPages - 1);
-  const pageRows = sentences.slice(clampedPage * pageSize, (clampedPage + 1) * pageSize);
+  const pageRows = filtered.slice(clampedPage * pageSize, (clampedPage + 1) * pageSize);
 
   const handleDelete = async (id: number) => {
     if (confirmId !== id) {
@@ -58,6 +66,13 @@ export default function SentenceBrowser({ onBack, onToast }: Props) {
         <button className="sb-back-btn" onClick={onBack}>Back</button>
         <span className="sb-title">Sentence Browser</span>
         <div className="sb-controls">
+          <input
+            className="sb-search"
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(0); }}
+          />
           <label className="sb-control">
             <span>Level:</span>
             <select value={level} onChange={(e) => setLevel(Number(e.target.value))}>
@@ -83,7 +98,10 @@ export default function SentenceBrowser({ onBack, onToast }: Props) {
         {!loading && sentences.length === 0 && (
           <div className="sb-empty">No sentences found. Play Mad Libs to generate some!</div>
         )}
-        {!loading && sentences.length > 0 && (
+        {!loading && sentences.length > 0 && filtered.length === 0 && (
+          <div className="sb-empty">No sentences match "{search}"</div>
+        )}
+        {!loading && filtered.length > 0 && (
           <table className="sb-table">
             <thead>
               <tr>
@@ -122,9 +140,9 @@ export default function SentenceBrowser({ onBack, onToast }: Props) {
         )}
       </div>
 
-      {!loading && sentences.length > 0 && (
+      {!loading && filtered.length > 0 && (
         <div className="sb-pagination">
-          <span className="sb-page-info">{sentences.length} sentences</span>
+          <span className="sb-page-info">{search && filtered.length !== sentences.length ? `${filtered.length} / ${sentences.length}` : sentences.length} sentences</span>
           <div className="sb-page-nav">
             <button disabled={clampedPage === 0} onClick={() => setPage(clampedPage - 1)}>&lsaquo; Prev</button>
             <span>{clampedPage + 1} / {totalPages}</span>

@@ -3,6 +3,8 @@ import type { GameType } from "../types/game";
 
 type ConcreteGame = "matching" | "madlibs" | "scrambler" | "tunein" | "scrambleharder" | "dedede";
 
+const HSK_LEVELS = [1, 2, 3];
+
 export interface GameSession {
   hskLevel: number;
   totalRounds: number;
@@ -10,6 +12,7 @@ export interface GameSession {
   currentRound: number;
   score: number;
   gameSequence: ConcreteGame[];
+  hskLevelSequence: number[];
 }
 
 export function useGames() {
@@ -23,11 +26,17 @@ export function useGames() {
       const available = allTypes.filter((t) => !excludeFromRandom.includes(t));
 
       const sequence: ConcreteGame[] = [];
+      const hskSequence: number[] = [];
       for (let i = 0; i < totalRounds; i++) {
         if (gameType === "random") {
           sequence.push(available[Math.floor(Math.random() * available.length)]);
         } else {
           sequence.push(gameType as ConcreteGame);
+        }
+        if (hskLevel === 0) {
+          hskSequence.push(HSK_LEVELS[Math.floor(Math.random() * HSK_LEVELS.length)]);
+        } else {
+          hskSequence.push(hskLevel);
         }
       }
       setSession({
@@ -37,6 +46,7 @@ export function useGames() {
         currentRound: 0,
         score: 0,
         gameSequence: sequence,
+        hskLevelSequence: hskSequence,
       });
     },
     [hskLevel, totalRounds],
