@@ -6,6 +6,12 @@ import "./DededeGame.css";
 
 const OPTIONS = ["的", "得", "地"] as const;
 
+const GRAMMAR_RULES: Record<string, { rule: string; pattern: string }> = {
+  "的": { rule: "Possessive / noun modifier", pattern: "A 的 B — A's B, or adjective 的 noun" },
+  "得": { rule: "Degree / result complement", pattern: "verb 得 complement — describes how well or to what degree" },
+  "地": { rule: "Adverbial modifier", pattern: "adverb 地 verb — describes how an action is done" },
+};
+
 interface Props {
   round: DededeRound;
   onComplete: (correct: boolean) => void;
@@ -85,6 +91,16 @@ export default function DededeGame({ round, onComplete }: Props) {
             Hint {hintLevel === 0 ? "(pinyin)" : "(english)"}
           </button>
         )}
+      </div>
+
+      <div className="dedede-explainer">
+        {OPTIONS.map((p) => (
+          <div key={p} className="dedede-explainer-row">
+            <span className="dedede-explainer-char">{p}</span>
+            <span className="dedede-explainer-rule">{GRAMMAR_RULES[p].rule}</span>
+            <span className="dedede-explainer-pattern">{GRAMMAR_RULES[p].pattern}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
