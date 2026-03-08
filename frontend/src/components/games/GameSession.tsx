@@ -36,6 +36,8 @@ export default function GameSession({
   const [showGenerating, setShowGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const generatingTimer = useRef<ReturnType<typeof setTimeout>>();
+  const onToastRef = useRef(onToast);
+  onToastRef.current = onToast;
 
   const currentGameType =
     session.currentRound < session.totalRounds
@@ -85,8 +87,8 @@ export default function GameSession({
           setDededeData(data);
         } else {
           const data = await getMadLibsRound(roundHskLevel);
-          if (data.rate_limited && onToast) {
-            onToast("AI rate limit reached — using saved questions", "info");
+          if (data.rate_limited && onToastRef.current) {
+            onToastRef.current("AI rate limit reached — using saved questions", "info");
           }
           setMadlibsData(data);
         }
@@ -102,7 +104,8 @@ export default function GameSession({
 
     fetchRound();
     return () => clearTimeout(generatingTimer.current);
-  }, [session.currentRound, session.totalRounds, roundHskLevel, currentGameType, onToast]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session.currentRound, session.totalRounds, roundHskLevel, currentGameType]);
 
   const handleComplete = useCallback(
     (correct: boolean) => {
