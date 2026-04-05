@@ -1072,61 +1072,301 @@
   ],
   "grammar": [
     {
-      "pattern": "以 A 为 B",
-      "english": "Take A as B / regard A as B",
-      "example": "我们以质量为标准。"
+      "pattern": "彼此",
+      "english": "Each other / one another (mutual relationship between equals)",
+      "example": "朋友之间应该彼此信任。"
     },
     {
-      "pattern": "即使 A 也 B",
-      "english": "Even if A, still B",
-      "example": "即使失败，也不要放弃。"
+      "pattern": "如此 + Adj/Verb",
+      "english": "So / like this / in such a way",
+      "example": "十年后，两座城市的发展状况如此不同。"
     },
     {
-      "pattern": "A 是 A，不过/但 B",
-      "english": "A is A (concessive), but B",
-      "example": "好是好，不过太贵了。"
+      "pattern": "Measure words: 册、朵、幅、届、颗、匹、扇、行、架、群、支、根、批、束、副、集、周",
+      "english": "册=volumes; 朵=flowers; 幅=paintings; 届=sessions/terms; 颗=small round objects; 匹=horses/cloth; 扇=doors/windows; 行=rows; 架=machines/planes; 群=groups; 支=sticks/pens; 根=long thin objects; 批=batches; 束=bundles; 副=pairs/sets; 集=episodes; 周=weeks",
+      "example": "一册书 / 一朵花 / 一幅画 / 一届学生 / 一颗糖 / 一匹马 / 一扇窗户"
     },
     {
-      "pattern": "否则 / 不然",
-      "english": "Otherwise / or else",
-      "example": "你快走吧，否则要迟到了。"
+      "pattern": "动量词: 眼",
+      "english": "Verbal measure word: one glance/look",
+      "example": "他看了我一眼就走了。"
     },
     {
-      "pattern": "所 + Verb (+ 的)",
-      "english": "What is [verb]-ed (nominalization)",
-      "example": "我所了解的情况。"
+      "pattern": "过于 + Adj",
+      "english": "Excessively / too (stronger and more formal than 太)",
+      "example": "这件事发生得过于突然了。"
     },
     {
-      "pattern": "至于",
-      "english": "As for / regarding",
-      "example": "至于价格，我们再讨论。"
+      "pattern": "可 + Adj + 了",
+      "english": "Really / so very (colloquial intensifier)",
+      "example": "他女朋友可漂亮了！"
+    },
+    {
+      "pattern": "稍 / 稍微 + Adj/Verb + 一点儿",
+      "english": "Slightly / a little bit",
+      "example": "这幅画再挂得稍高一点儿。"
+    },
+    {
+      "pattern": "尤其是 + Noun/VP",
+      "english": "Especially / particularly",
+      "example": "她喜欢运动，尤其是游泳。"
+    },
+    {
+      "pattern": "格外 / 极其 + Adj",
+      "english": "Exceptionally / extremely (written/formal intensifiers)",
+      "example": "今天格外冷。/ 这项任务极其重要。"
+    },
+    {
+      "pattern": "大都 + Verb/Adj",
+      "english": "Mostly / for the most part (scope adverb)",
+      "example": "参加划船比赛的大都是女生。"
+    },
+    {
+      "pattern": "不时 + Verb",
+      "english": "From time to time / now and then",
+      "example": "我不时想起过去的事情。"
+    },
+    {
+      "pattern": "将 / 将要 / 即将 + Verb",
+      "english": "Will / be about to (formal future markers)",
+      "example": "明年我们将去国外考察。/ 电视剧即将开始了。"
+    },
+    {
+      "pattern": "仍旧 / 依旧 + Verb/Adj",
+      "english": "Still / as before (unchanged state)",
+      "example": "二十年过去了，他仍旧没结婚。"
+    },
+    {
+      "pattern": "时常 / 老是 / 通常 + Verb",
+      "english": "Often / frequently / usually (recurring action)",
+      "example": "她时常一个人出去散步。/ 他老是迟到。"
+    },
+    {
+      "pattern": "一向 + Verb/Adj",
+      "english": "Always / consistently (long-standing habit or trait)",
+      "example": "他一向对人很热情。"
+    },
+    {
+      "pattern": "立刻 / 连忙 / 急忙 + Verb",
+      "english": "立刻: immediately; 连忙: promptly react to something; 急忙: urgently due to worry or time pressure",
+      "example": "见到客人进来，他们连忙说"欢迎光临"。/ 还有五分钟就开会了，她急忙收拾好资料。"
+    },
+    {
+      "pattern": "渐渐 + Verb/Adj",
+      "english": "Gradually / little by little",
+      "example": "天渐渐黑了。"
+    },
+    {
+      "pattern": "始终 vs 一直",
+      "english": "Both mean 'from beginning to end'; 始终 is more formal/literary; 一直 can refer to the future and combine with time words",
+      "example": "我们始终坚持正确的做法。/ 他不出来见我，我就一直在这里等。"
+    },
+    {
+      "pattern": "尽量 / 尽快 + Verb",
+      "english": "As much as possible / as quickly as possible",
+      "example": "请尽量早点来。/ 请尽快回复。"
+    },
+    {
+      "pattern": "似乎 / 仿佛 + Clause",
+      "english": "It seems / as if (expressing a subjective impression)",
+      "example": "他似乎不太高兴。/ 她仿佛回到了童年。"
+    },
+    {
+      "pattern": "毕竟 / 居然 / 果然 / 简直",
+      "english": "毕竟: after all; 居然: surprisingly; 果然: sure enough; 简直: simply/utterly",
+      "example": "他毕竟是个孩子。/ 他居然通过了考试！/ 果然不出我所料。/ 这简直太好了！"
+    },
+    {
+      "pattern": "反而 + Verb/Adj",
+      "english": "On the contrary / instead (unexpected reversal)",
+      "example": "我帮了他，他反而生气了。"
+    },
+    {
+      "pattern": "自从 + Time + 以来",
+      "english": "Ever since [time]",
+      "example": "自从来中国以来，他学了很多东西。"
+    },
+    {
+      "pattern": "朝 / 沿（着）+ direction + Verb",
+      "english": "朝: toward/facing (direction or object); 沿: along (a path or route)",
+      "example": "你朝前走，10分钟后就到了。/ 沿着这条路走就到了。"
+    },
+    {
+      "pattern": "朝 vs 向 vs 往",
+      "english": "All mean 'toward'; 朝 & 向 can indicate facing; 往 focuses on destination of movement",
+      "example": "朝前走 / 向前看 / 往北走"
+    },
+    {
+      "pattern": "凭 / 据 / 依据 + Noun",
+      "english": "On the basis of / according to / based on",
+      "example": "凭他的能力，一定能成功。/ 据报道，…"
+    },
+    {
+      "pattern": "以及",
+      "english": "Written 'and': connects parallel items; earlier/more important item comes first; a pause before 以及 is allowed",
+      "example": "这篇论文介绍了背景、意义、现状以及影响。"
+    },
+    {
+      "pattern": "从而 / 因而 + Result clause",
+      "english": "Thus / thereby / as a result (formal cause-effect connector)",
+      "example": "他努力学习，从而取得了好成绩。"
+    },
+    {
+      "pattern": "可见 + Conclusion",
+      "english": "It can be seen that / this shows that (drawing a logical conclusion)",
+      "example": "他连饭都顾不上吃，可见工作有多忙。"
+    },
+    {
+      "pattern": "假如 / 一旦 + Condition，（就）+ Result",
+      "english": "假如: if (hypothetical); 一旦: once / if ever (often for serious or irreversible events)",
+      "example": "假如明天下雨，比赛就取消。/ 一旦决定了，就不要后悔。"
+    },
+    {
+      "pattern": "便 vs 就",
+      "english": "Both mean 'then/immediately after'; 便 is written only; 就 is both spoken and written",
+      "example": "如果你有问题，便/就来找我。"
+    },
+    {
+      "pattern": "或是……，或是……",
+      "english": "Either… or… (presenting alternatives)",
+      "example": "你或是今天来，或是明天来，都可以。"
+    },
+    {
+      "pattern": "所 + Verb + 的",
+      "english": "Nominalization: 'what is [verb]-ed' (formal written Chinese)",
+      "example": "别动，你所站的位置很危险！"
+    },
+    {
+      "pattern": "数量词 + 所 + Noun",
+      "english": "'所' as a measure word for institutions/buildings",
+      "example": "这所大学已经有一百多年历史了。"
+    },
+    {
+      "pattern": "A 令 B + Verb/Adj",
+      "english": "Pivotal sentence: A causes/makes B feel or do something",
+      "example": "他的行为令我感到很失望。"
+    },
+    {
+      "pattern": "A 派 B + Verb",
+      "english": "Pivotal sentence: A (superior) dispatches B to do something",
+      "example": "经理派我去机场接客户。"
+    },
+    {
+      "pattern": "A 不如/没有 B（这么/那么）+ Adj",
+      "english": "Comparison: A is not as [adjective] as B",
+      "example": "深圳的历史不如/没有西安那么长。"
+    },
+    {
+      "pattern": "于 + time/place/object",
+      "english": "Formal preposition with 5 uses: time (at), place (in), object (toward), starting point (from), comparison (than)",
+      "example": "中华人民共和国成立于1949年。/ 他致力于科学研究。"
+    },
+    {
+      "pattern": "突然 vs 忽然",
+      "english": "突然 can modify nouns and take degree adverbs (很突然); 忽然 is adverbial only",
+      "example": "这是一起突然的事故。/ 我忽然明白了。"
+    },
+    {
+      "pattern": "多亏 vs 幸亏",
+      "english": "Both mean 'fortunately'; 多亏 = grateful (thanks to a person); 幸亏 = lucky relief (due to an objective condition)",
+      "example": "多亏了你，我才完成了任务。/ 幸亏带了雨伞，没淋湿。"
+    },
+    {
+      "pattern": "匆忙 + Verb",
+      "english": "In a hurry / hastily (adjective, takes degree adverbs)",
+      "example": "昨天走得太匆忙，没来得及和你说一声。"
+    },
+    {
+      "pattern": "不但不/没有 A，反而 B",
+      "english": "Not only did A not happen, but the opposite (B) occurred instead",
+      "example": "吃了这药，感冒不但没好，反而更严重了。"
+    },
+    {
+      "pattern": "宁可 A，也不 B",
+      "english": "Would rather A than B (choosing the lesser of two undesirable options)",
+      "example": "我宁可离婚，也不愿意将就过日子。"
+    },
+    {
+      "pattern": "宁可 A，也要 B",
+      "english": "Would rather endure A in order to do/have B",
+      "example": "小孩子宁可不吃饭，也要继续玩。"
+    },
+    {
+      "pattern": "与其 A，不如 B",
+      "english": "Rather than A, it's better to B (speaker prefers B)",
+      "example": "与其坐火车，不如坐飞机更快。"
+    },
+    {
+      "pattern": "万一 A，（就）B",
+      "english": "In the unlikely/unfortunate event that A, then B (low-probability contingency)",
+      "example": "万一他不在家，你就自己开门。"
+    },
+    {
+      "pattern": "幸亏 A，不然 B",
+      "english": "Fortunately A happened; otherwise B (bad outcome) would have occurred",
+      "example": "幸亏车来了，不然我们都得迟到。"
+    },
+    {
+      "pattern": "除非 A，不然 B",
+      "english": "Unless A (the only condition), otherwise B will happen",
+      "example": "除非是他邀请我，不然我是不会去的。"
+    },
+    {
+      "pattern": "哪怕 A，也/还 B",
+      "english": "Even if A (hypothetical extreme), B remains true or unchanged",
+      "example": "哪怕只有一个观众，她也要演下去。"
+    },
+    {
+      "pattern": "为 + Noun + 所 + Verb",
+      "english": "Formal passive voice: [subject] is [verb]-ed by [noun]",
+      "example": "法官为这个孩子的诚实所感动。"
+    },
+    {
+      "pattern": "省略主语 (Subject ellipsis)",
+      "english": "Omitting the subject when it is already clear from context",
+      "example": "（我）决定出国留学，（我）不得不和父母告别。"
+    },
+    {
+      "pattern": "省略宾语 (Object ellipsis)",
+      "english": "Omitting the object when it is recoverable from context",
+      "example": "语言的变化，短时间内不容易发现（这些变化），日子长了就表现出来了。"
     }
   ],
   "topics": [
     {
-      "id": "economics",
-      "label": "Economy & business",
-      "description": "Market trends, entrepreneurship, economic development"
+      "id": "daily_life",
+      "label": "Daily Life",
+      "description": "Daily affairs, dining, transportation, shopping, medical & mental health, leisure, community, and family life"
     },
     {
-      "id": "technology",
-      "label": "Science & technology",
-      "description": "Internet, AI, smartphones, scientific discoveries"
+      "id": "education",
+      "label": "Education",
+      "description": "Academic courses, teaching and learning, campus life, and family, school, social and vocational education"
     },
     {
-      "id": "philosophy",
-      "label": "Values & philosophy",
-      "description": "Life philosophy, success, happiness, traditional vs modern values"
+      "id": "workplace",
+      "label": "Workplace & Career",
+      "description": "Work content, professional experience, teamwork, personnel management, and enterprise development"
     },
     {
-      "id": "global_issues",
-      "label": "Global issues",
-      "description": "Climate change, globalization, cultural exchange"
+      "id": "nature_environment",
+      "label": "Nature & Environment",
+      "description": "Natural resources, terrain, natural phenomena, flora and fauna, ecological balance, urban/rural environments, and environmental protection"
     },
     {
-      "id": "literature",
-      "label": "Literature & arts",
-      "description": "Chinese literature, poetry, calligraphy, modern art"
+      "id": "science_technology",
+      "label": "Science & Technology",
+      "description": "Product introductions and applications, popular science knowledge, and scientific research achievements"
+    },
+    {
+      "id": "contemporary_society",
+      "label": "Contemporary Society",
+      "description": "Demographics, characteristics of the era, trade and commerce, economic development, social trends, infrastructure, arts and culture, sports, and China-foreign exchanges"
+    },
+    {
+      "id": "culture_tradition",
+      "label": "Culture & Tradition",
+      "description": "Language and script, folk customs, traditional festivals, cultural landscapes, philosophical thought, traditional arts, history, and ancient science and technology"
     }
   ]
 }
